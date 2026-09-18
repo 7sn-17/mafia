@@ -28,27 +28,23 @@ jobs:
         mkdir mafia-app
         cd mafia-app
         npm init -y
-        npm install @capacitor/core @capacitor/cli @capacitor/android
+        npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
         
-        # إنشاء إعدادات Capacitor الأساسية
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        # إنشاء مجلد الويب ونسخ ملفاتك والأيقونة إليه
         mkdir www
         cp ../index.html www/
         if [ -f ../icon.png ]; then
           cp ../icon.png www/icon.png
         fi
         
-        # إضافة منصة الأندرويد
         npx cap add android
-        
-        # مزامنة الملفات
         npx cap sync android
         
-        # الانتقال لمجلد الأندرويد وبناء ملف الـ APK
+        # الانتقال لمجلد الأندرويد وتنظيف أي ملفات مؤقتة قد تسبب خطأ البناء
         cd android
-        ./gradlew assembleDebug
+        ./gradlew clean
+        ./gradlew assembleDebug --no-daemon
 
     - name: Find and Rename APK
       run: |
