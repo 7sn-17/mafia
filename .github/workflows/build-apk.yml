@@ -31,17 +31,29 @@ jobs:
         cordova create my-app com.mafia.game "مافيا"
         cd my-app
         
-        # نسخ ملف اللعبة إلى مجلد www
+        # نسخ ملفات اللعبة
         cp -r ../index.html www/
         
-        # نسخ الأيقونة إلى مجلد الجذور للمشروع لكي يعتمدها كوردوفا
+        # نسخ الأيقونة الأصلية ذات الجودة العالية إلى مجلد الجذور
         if [ -f ../icon.png ]; then
           cp ../icon.png icon.png
         fi
         
-        # تعديل ملف config.xml لإضافة الأيقونة رسمياً لتطبيق الأندرويد
-        # سنقوم بإدراج السطر الخاص بالأيقونة قبل وسم إغلاق الـ widget
-        sed -i 's|</widget>|<icon src="icon.png"/></widget>|g' config.xml
+        # إضافة الأيقونة في ملف config.xml وإلغاء تفعيل شاشة البداية الافتراضية (Splash Screen) نهائياً
+        cat << 'EOF' > update_config.js
+        const fs = require('fs');
+        let config = fs.readFileSync('config.xml', 'utf8');
+        
+        // إضافة الأيقونة
+        config = config.replace('</widget>', '<icon src="icon.png" /></widget>');
+        
+        // تعطيل شاشة البداية وتصفير أوقاتها لكي تختفي تماماً ولا تظهر الشاشة الرمادية
+        config = config.replace('</widget>', '<preference name="SplashScreen" value="none" /><preference name="AutoHideSplashScreen" value="true" /></widget>');
+        
+        fs.writeFileSync('config.xml', config, 'utf8');
+        EOF
+        
+        node update_config.js
         
         cordova platform add android
         
@@ -50,7 +62,6 @@ jobs:
 
     - name: Find and Rename APK
       run: |
-        # البحث عن ملف الـ APK الناتج ونسخه باسم mafia.apk
         find my-app/platforms/android/app/build/outputs/apk/ -name "*.apk" -exec cp {} mafia.apk \;
         ls -la mafia.apk
 
