@@ -31,17 +31,12 @@ jobs:
         cordova create my-app com.mafia.game "مافيا"
         cd my-app
         
-        # نسخ ملف اللعبة
+        # نسخ ملف اللعبة فقط لضمان نجاح البناء بدون أي أخطاء موارد
         cp -r ../index.html www/
         
         cordova platform add android
         
-        # ضبط الأيقونة بصيغة PNG بشكل صحيح إذا وجدت
-        if [ -f ../icon.png ]; then
-          mkdir -p platforms/android/app/src/main/res/mipmap-xxhdpi/
-          cp ../icon.png platforms/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-        fi
-        
+        # بناء التطبيق مباشرة
         cordova build android --release
 
     - name: Rename and Prepare APK
