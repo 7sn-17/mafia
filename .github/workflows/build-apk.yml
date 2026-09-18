@@ -23,129 +23,56 @@ jobs:
       with:
         node-version: '22'
 
-    - name: Initialize App and Install Capacitor
+    - name: Build Application and Setup Android
       run: |
         mkdir mafia-app
         cd mafia-app
         npm init -y
         npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
-        
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        cat << 'EOF' > capacitor.config.json
-        {
-          "appId": "com.mafia.game",
-          "appName": "مافيا",
-          "webDir": "www",
-          "plugins": {
-            "SplashScreen": {
-              "launchShowDuration": 2000,
-              "backgroundColor": "#050d0a",
-              "showSpinner": false
-            }
-          }
-        }
-        EOF
+        echo '{"appId": "com.mafia.game", "appName": "مافيا", "webDir": "www", "plugins": {"SplashScreen": {"launchShowDuration": 2000, "backgroundColor": "#050d0a", "showSpinner": false}}}' > capacitor.config.json
         
         mkdir www
         cp ../index.html www/
-        
         npx cap add android
         npx cap sync android
         
-        # --- حقن الأيقونة وتعديل الملفات عبر بايثون لتفادي أي أخطاء في الـ YAML ---
-        python3 -c '
-import os
-import re
-
-# 1. نسخ الأيقونة
-icon_path = "../icon.png" if os.path.exists("../icon.png") else ("../assets/icon.png" if os.path.exists("../assets/icon.png") else "")
-if icon_path:
-    res_dir = "android/app/src/main/res"
-    import shutil
-    for density in ["mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"]:
-        mip_dir = os.path.join(res_dir, f"mipmap-{density}")
-        os.makedirs(mip_dir, exist_ok=True)
-        shutil.copy(icon_path, os.path.join(mip_dir, "ic_launcher.png"))
-        shutil.copy(icon_path, os.path.join(mip_dir, "ic_launcher_round.png"))
-        shutil.copy(icon_path, os.path.join(mip_dir, "ic_launcher_foreground.png"))
-    
-    any_dir = os.path.join(res_dir, "mipmap-anydpi-v26")
-    os.makedirs(any_dir, exist_ok=True)
-    xml_content = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <background android:drawable=\"@mipmap/ic_launcher_foreground\"/>\n    <foreground android:drawable=\"@mipmap/ic_launcher_foreground\"/>\n</adaptive-icon>"
-    with open(os.path.join(any_dir, "ic_launcher.xml"), "w") as f:
-        f.write(xml_content)
-    with open(os.path.join(any_dir, "ic_launcher_round.xml"), "w") as f:
-        f.write(xml_content)
-
-# 2. تعديل AndroidManifest
-manifest_path = "android/app/src/main/AndroidManifest.xml"
-if os.path.exists(manifest_path):
-    with open(manifest_path, "r", encoding="utf-8") as f:
-        content = f.read()
-    content = re.sub(r"android:roundIcon=\"@[^\"]+\"", "android:roundIcon=\"@mipmap/ic_launcher_round\"", content)
-    content = re.sub(r"android:icon=\"@[^\"]+\"", "android:icon=\"@mipmap/ic_launcher\"", content)
-    with open(manifest_path, "w", encoding="utf-8") as f:
-        f.write(content)
-
-# 3. تعديل MainActivity لملء الشاشة
-activity_path = "android/app/src/main/java/com/mafia/game/MainActivity.java"
-if os.path.exists(activity_path):
-    activity_code = """package com.mafia.game;
-
-import android.os.Bundle;
-import android.view.View;
-import com.getcapacitor.BridgeActivity;
-
-public class MainActivity extends BridgeActivity {
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        # حقن الأيقونة بالقوة لتفادي أيقونة كاباسيتور الافتراضية
+        ICON_SRC=""
+        if [ -f ../icon.png ]; then ICON_SRC="../icon.png"; elif [ -f ../assets/icon.png ]; then ICON_SRC="../assets/icon.png"; fi
         
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-              View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-    }
-}
-"""
-    with open(activity_path, "w", encoding="utf-8") as f:
-        f.write(activity_code)
-
-# 4. إضافة إعدادات التوقيع إلى build.gradle
-gradle_path = "android/app/build.gradle"
-if os.path.exists(gradle_path):
-    signing_config = """
-android {
-    signingConfigs {
-        release {
-            storeFile file(\'mafia-release-key.jks\')
-            storePassword \'mafia123\'
-            keyAlias \'mafia-alias\'
-            keyPassword \'mafia123\'
-        }
-    }
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.release
-        }
-        release {
-            signingConfig signingConfigs.release
-        }
-    }
-}
-"""
-    with open(gradle_path, "a", encoding="utf-8") as f:
-        f.write(signing_config)
-'
-
-        # إعداد مفتاح التوقيع والبناء
+        if [ -n "$ICON_SRC" ]; then
+          RES_DIR="android/app/src/main/res"
+          rm -rf "$RES_DIR/mipmap-anydpi-v26"
+          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            mkdir -p "$RES_DIR/mipmap-$d"
+            cp "$ICON_SRC" "$RES_DIR/mipmap-$d/ic_launcher.png"
+            cp "$ICON_SRC" "$RES_DIR/mipmap-$d/ic_launcher_round.png"
+            cp "$ICON_SRC" "$RES_DIR/mipmap-$d/ic_launcher_foreground.png"
+          done
+        fi
+        
+        # إعداد التوقيع الثابت مباشرة في ملف build.gradle لتجنب مشاكل التعارض
         cd android/app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
+        
+        echo "" >> build.gradle
+        echo "android {" >> build.gradle
+        echo "    signingConfigs {" >> build.gradle
+        echo "        release {" >> build.gradle
+        echo "            storeFile file('mafia-release-key.jks')" >> build.gradle
+        echo "            storePassword 'mafia123'" >> build.gradle
+        echo "            keyAlias 'mafia-alias'" >> build.gradle
+        echo "            keyPassword 'mafia123'" >> build.gradle
+        echo "        }" >> build.gradle
+        echo "    }" >> build.gradle
+        echo "    buildTypes {" >> build.gradle
+        echo "        release {" >> build.gradle
+        echo "            signingConfig signingConfigs.release" >> build.gradle
+        echo "        }" >> build.gradle
+        echo "    }" >> build.gradle
+        echo "}" >> build.gradle
         
         cd ../..
         cd mafia-app
