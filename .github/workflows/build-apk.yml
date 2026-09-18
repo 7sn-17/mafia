@@ -31,17 +31,19 @@ jobs:
         cordova create my-app com.mafia.game "مافيا"
         cd my-app
         
-        # نسخ ملف اللعبة فقط لضمان نجاح البناء بدون أي أخطاء موارد
+        # نسخ ملف اللعبة
         cp -r ../index.html www/
         
         cordova platform add android
         
-        # بناء التطبيق مباشرة
-        cordova build android --release
+        # بناء التطبيق بصيغة ديباك أو ريليس لضمان توفر الملف فوراً
+        cordova build android --debug
 
-    - name: Rename and Prepare APK
+    - name: Find and Rename APK
       run: |
-        cp my-app/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk mafia.apk
+        # البحث عن ملف الـ APK الناتج أينما كان ونسخه باسم mafia.apk
+        find my-app/platforms/android/app/build/outputs/apk/ -name "*.apk" -exec cp {} mafia.apk \;
+        ls -la mafia.apk
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
