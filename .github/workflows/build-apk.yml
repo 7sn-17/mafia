@@ -19,7 +19,7 @@ jobs:
         java-version: '17'
 
     - name: Set up Node.js
-      uses: node/setup-node@v4
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
 
@@ -37,23 +37,22 @@ jobs:
           cp ../icon.png icon.png
         fi
         
-        # إضافة إعدادات صارمة لتعطيل الشاشة الرمادية وتصفير وقتها في config.xml
+        # إضافة إعدادات config.xml لتعطيل أي شاشة بداية افتراضية وضبط الأيقونة
         cat << 'EOF' > update_config.js
         const fs = require('fs');
         let config = fs.readFileSync('config.xml', 'utf8');
         
-        // ضبط الأيقونة
+        // ربط الأيقونة
         config = config.replace('</widget>', '<icon src="icon.png" /></widget>');
         
-        // تعطيل شاشة البداية كلياً وتصفير أي تأخير
-        const splashPrefs = `
+        // تعطيل شاشة البداية بالكامل
+        const splashFix = `
             <preference name="SplashScreen" value="none" />
             <preference name="SplashScreenDelay" value="0" />
             <preference name="AutoHideSplashScreen" value="true" />
             <preference name="FadeSplashScreen" value="false" />
-            <preference name="FadeSplashScreenDuration" value="0" />
         </widget>`;
-        config = config.replace('</widget>', splashPrefs);
+        config = config.replace('</widget>', splashFix);
         
         fs.writeFileSync('config.xml', config, 'utf8');
         EOF
@@ -62,10 +61,11 @@ jobs:
         
         cordova platform add android
         
-        # الخطوة الجذرية: إزالة إضافة شاشة البداية برمجياً لضمان عدم ظهورها أبداً في ملف الـ APK
-        cordova plugin remove cordova-plugin-splashscreen || true
+        # حذف إضافة السبلاش سكرين نهائياً من منصة أندرويد لضمان عدم ظهور الشاشة الرمادية
+        rm -rf platforms/android/app/src/main/res/drawable*splash* || true
+        rm -rf plugins/cordova-plugin-splashscreen || true
         
-        # بناء التطبيق بصيغة ديباك
+        # بناء التطبيق
         cordova build android --debug
 
     - name: Find and Rename APK
