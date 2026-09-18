@@ -31,17 +31,26 @@ jobs:
         cordova create my-app com.mafia.game "مافيا"
         cd my-app
         
-        # نسخ ملف اللعبة
+        # نسخ ملف اللعبة إلى مجلد www
         cp -r ../index.html www/
+        
+        # نسخ الأيقونة إلى مجلد الجذور للمشروع لكي يعتمدها كوردوفا
+        if [ -f ../icon.png ]; then
+          cp ../icon.png icon.png
+        fi
+        
+        # تعديل ملف config.xml لإضافة الأيقونة رسمياً لتطبيق الأندرويد
+        # سنقوم بإدراج السطر الخاص بالأيقونة قبل وسم إغلاق الـ widget
+        sed -i 's|</widget>|<icon src="icon.png"/></widget>|g' config.xml
         
         cordova platform add android
         
-        # بناء التطبيق بصيغة ديباك أو ريليس لضمان توفر الملف فوراً
+        # بناء التطبيق بصيغة ديباك
         cordova build android --debug
 
     - name: Find and Rename APK
       run: |
-        # البحث عن ملف الـ APK الناتج أينما كان ونسخه باسم mafia.apk
+        # البحث عن ملف الـ APK الناتج ونسخه باسم mafia.apk
         find my-app/platforms/android/app/build/outputs/apk/ -name "*.apk" -exec cp {} mafia.apk \;
         ls -la mafia.apk
 
