@@ -29,11 +29,10 @@ jobs:
         cd mafia-app
         npm init -y
         npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
-        npm install -g cordova-res
         
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        # ضبط ملف إعدادات كاباسيتور ليكون متوافقاً تماماً
+        # إنشاء إعدادات الكاباسيتور
         cat << 'EOF' > capacitor.config.json
         {
           "appId": "com.mafia.game",
@@ -52,16 +51,17 @@ jobs:
         mkdir www
         cp ../index.html www/
         
+        # إضافة منصة أندرويد
+        npx cap add android
+        
+        # نسخ الأيقونة المخصصة إذا وجدت في الجذر الرئيسي مباشرة إلى مجلد الـ res في أندرويد
         if [ -f ../icon.png ]; then
-          cp ../icon.png icon.png
-          cp ../icon.png www/icon.png
+          cp ../icon.png android/app/src/main/res/drawable/icon.png || true
         fi
         
-        npx cap add android
-        cordova-res android --skip-config --icon-source=icon.png
         npx cap sync android
         
-        # تعديل MainActivity.java لجعل التطبيق يملأ الشاشة بالكامل ويخفي أشرطة النظام المزعجة
+        # تعديل MainActivity لضمان ملء الشاشة بالكامل وإخفاء الأشرطة
         MAIN_ACTIVITY="android/app/src/main/java/com/mafia/game/MainActivity.java"
         if [ -f "$MAIN_ACTIVITY" ]; then
           cat << 'EOF' > "$MAIN_ACTIVITY"
@@ -76,7 +76,6 @@ jobs:
               public void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
                   
-                  // إخفاء الأشرطة وجعل اللعبة تملأ الشاشة بالكامل (Immersive Mode)
                   View decorView = getWindow().getDecorView();
                   decorView.setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -90,7 +89,7 @@ jobs:
         EOF
         fi
         
-        # بناء الـ APK بشكل نظيف
+        # بناء الـ APK
         cd android
         ./gradlew clean
         ./gradlew assembleDebug --no-daemon
