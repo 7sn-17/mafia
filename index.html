@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة مافيا - الموقع الرسمي للتحميل</title>
+    <!-- استيراد خط Cairo العربي الجميل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- استيراد مكتبة أيقونات Font Awesome الاحترافية -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0b1d15 0%, #050e0a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo-box {
+            width: 110px;
+            height: 110px;
+            background: rgba(46, 204, 113, 0.1);
+            border: 2px solid #2ecc71;
+            border-radius: 30px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #2ecc71;
+            box-shadow: 0 0 25px rgba(46, 204, 113, 0.25);
+        }
+        h1 {
+            color: #2ecc71;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+        .subtitle {
+            color: #a0aec0;
+            font-size: 1.1rem;
+            margin-bottom: 35px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        /* بطاقة الإحصائيات الاحترافية */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            padding: 18px 10px;
+            border-radius: 18px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(46, 204, 113, 0.3);
+        }
+        .stat-number {
+            color: #2ecc71;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            color: #a0aec0;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        /* زر التحميل الرئيسي */
+        .download-btn {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: #0b1d15;
+            padding: 18px 30px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(46, 204, 113, 0.4);
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(46, 204, 113, 0.6);
+            background: linear-gradient(135deg, #34db80 0%, #2ecc71 100%);
+        }
+        /* أزرار التواصل الاجتماعي */
+        .social-box {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .social-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        .social-btn.whatsapp:hover { 
+            background: #25d366; 
+            color: #fff; 
+            border-color: #25d366; 
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        .social-btn.instagram:hover { 
+            background: #e1306c; 
+            color: #fff; 
+            border-color: #e1306c; 
+            box-shadow: 0 5px 15px rgba(225, 48, 108, 0.3);
+        }
+        
+        footer {
+            margin-top: 40px;
+            color: #718096;
+            font-size: 0.9rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        footer span { color: #2ecc71; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- أيقونة الشعار مع مكتبة Font Awesome -->
+        <div class="logo-box">
+            <i class="fa-solid fa-user-secret"></i>
+        </div>
+        
+        <h1>لعبة مافيا</h1>
+        <p class="subtitle">تجربة الغموض والذكاء الجماعية الأقوى مع أصدقائك. حمل النسخة الرسمية الآن واستمتع باللعب!</p>
+
+        <!-- قسم الإحصائيات -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">v1.2</div>
+                <div class="stat-label">الإصدار الحالي</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5.2 MB</div>
+                <div class="stat-label">حجم خفيف</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">آمن ومجاني</div>
+            </div>
+        </div>
+
+        <!-- زر التحميل المباشر مع أيقونة تنزيل -->
+        <a href="https://github.com/7sn-17/mafia/releases/latest/download/Mafia.apk" class="download-btn">
+            <i class="fa-solid fa-download"></i> تحميل التطبيق (APK)
+        </a>
+
+        <!-- أزرار التواصل الاجتماعي النظيفة بمعرفات صحيحة وأيقونات -->
+        <div class="social-box">
+            <a href="https://wa.me/17862927607" target="_blank" class="social-btn whatsapp">
+                <i class="fa-brands fa-whatsapp fa-lg"></i> واتساب
+            </a>
+            <a href="https://www.instagram.com/7sn__08" target="_blank" class="social-btn instagram">
+                <i class="fa-brands fa-instagram fa-lg"></i> إنستغرام
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        تم تطوير اللعبة بواسطة <span>حسن المحمد</span> © 2026
+    </footer>
+
+</body>
+</html>
