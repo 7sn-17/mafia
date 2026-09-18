@@ -32,8 +32,8 @@ jobs:
         
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        # إعدادات الكاباسيتور الأساسية
-        echo '{
+        cat << 'EOF' > capacitor.config.json
+        {
           "appId": "com.mafia.game",
           "appName": "مافيا",
           "webDir": "www",
@@ -44,87 +44,33 @@ jobs:
               "showSpinner": false
             }
           }
-        }' > capacitor.config.json
+        }
+        EOF
         
         mkdir www
         cp ../index.html www/
         
         npx cap add android
         
-        # التجهيز الهندسي المتكامل للأيقونات
+        # وضع الأيقونة مباشرة وبدون تعقيد الـ XML
         if [ -f ../icon.png ]; then
           RES_DIR="android/app/src/main/res"
+          rm -rf "$RES_DIR"/mipmap-anydpi-v26
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             MIP_DIR="$RES_DIR/mipmap-$density"
             mkdir -p "$MIP_DIR"
             cp ../icon.png "$MIP_DIR/ic_launcher.png"
             cp ../icon.png "$MIP_DIR/ic_launcher_round.png"
-            cp ../icon.png "$MIP_DIR/ic_launcher_foreground.png"
           done
-          
-          ANY_DIR="$RES_DIR/mipmap-anydpi-v26"
-          mkdir -p "$ANY_DIR"
-          
-          echo '<?xml version="1.0" encoding="utf-8"?>
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@mipmap/ic_launcher_foreground"/>
-              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
-          </adaptive-icon>' > "$ANY_DIR/ic_launcher.xml"
-
-          echo '<?xml version="1.0" encoding="utf-8"?>
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@mipmap/ic_launcher_foreground"/>
-              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
-          </adaptive-icon>' > "$ANY_DIR/ic_launcher_round.xml"
         fi
-        
-        # تعديل الـ Manifest
-        python3 -c '
-import re
-path = "android/app/src/main/AndroidManifest.xml"
-with open(path, "r", encoding="utf-8") as f:
-    content = f.read()
-
-if "android:roundIcon" not in content:
-    content = content.replace("android:icon=\"@mipmap/ic_launcher\"", "android:icon=\"@mipmap/ic_launcher\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"")
-else:
-    content = re.sub(r"android:roundIcon=\"@[^\"]+\"", "android:roundIcon=\"@mipmap/ic_launcher_round\"", content)
-
-content = re.sub(r"android:icon=\"@[^\"]+\"", "android:icon=\"@mipmap/ic_launcher\"", content)
-
-with open(path, "w", encoding="utf-8") as f:
-    f.write(content)
-'
         
         npx cap sync android
         
-        # إعادة التأكيد بعد الـ sync
-        if [ -f ../icon.png ]; then
-          RES_DIR="android/app/src/main/res"
-          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher.png"
-            cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_round.png"
-            cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_foreground.png"
-          done
-          
-          ANY_DIR="$RES_DIR/mipmap-anydpi-v26"
-          mkdir -p "$ANY_DIR"
-          echo '<?xml version="1.0" encoding="utf-8"?>
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@mipmap/ic_launcher_foreground"/>
-              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
-          </adaptive-icon>' > "$ANY_DIR/ic_launcher.xml"
-          echo '<?xml version="1.0" encoding="utf-8"?>
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@mipmap/ic_launcher_foreground"/>
-              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
-          </adaptive-icon>' > "$ANY_DIR/ic_launcher_round.xml"
-        fi
-        
-        # تعديل MainActivity لملء الشاشة الكامل
+        # تعديل MainActivity لملء الشاشة
         MAIN_ACTIVITY="android/app/src/main/java/com/mafia/game/MainActivity.java"
         if [ -f "$MAIN_ACTIVITY" ]; then
-          echo 'package com.mafia.game;
+          cat << 'EOF' > "$MAIN_ACTIVITY"
+          package com.mafia.game;
 
           import android.os.Bundle;
           import android.view.View;
@@ -144,22 +90,24 @@ with open(path, "w", encoding="utf-8") as f:
                       | View.SYSTEM_UI_FLAG_FULLSCREEN
                       | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
               }
-          }' > "$MAIN_ACTIVITY"
+          }
+        EOF
         fi
         
-        # إعداد مفتاح التوقيع الثابت
+        # إعداد التوقيع الثابت
         cd android/app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
         BUILD_GRADLE="build.gradle"
-        echo '
+        cat << 'EOF' >> "$BUILD_GRADLE"
+
         android {
             signingConfigs {
                 release {
-                    storeFile file("mafia-release-key.jks")
-                    storePassword "mafia123"
-                    keyAlias "mafia-alias"
-                    keyPassword "mafia123"
+                    storeFile file('mafia-release-key.jks')
+                    storePassword 'mafia123'
+                    keyAlias 'mafia-alias'
+                    keyPassword 'mafia123'
                 }
             }
             buildTypes {
@@ -170,7 +118,8 @@ with open(path, "w", encoding="utf-8") as f:
                     signingConfig signingConfigs.release
                 }
             }
-        }' >> "$BUILD_GRADLE"
+        }
+        EOF
         
         cd ..
         ./gradlew clean
