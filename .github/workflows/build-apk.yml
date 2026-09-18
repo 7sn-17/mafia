@@ -29,19 +29,68 @@ jobs:
         cd mafia-app
         npm init -y
         npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
+        npm install -g cordova-res
         
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
+        # ضبط ملف إعدادات كاباسيتور ليكون متوافقاً تماماً
+        cat << 'EOF' > capacitor.config.json
+        {
+          "appId": "com.mafia.game",
+          "appName": "مافيا",
+          "webDir": "www",
+          "plugins": {
+            "SplashScreen": {
+              "launchShowDuration": 2000,
+              "backgroundColor": "#050d0a",
+              "showSpinner": false
+            }
+          }
+        }
+        EOF
+        
         mkdir www
         cp ../index.html www/
+        
         if [ -f ../icon.png ]; then
+          cp ../icon.png icon.png
           cp ../icon.png www/icon.png
         fi
         
         npx cap add android
+        cordova-res android --skip-config --icon-source=icon.png
         npx cap sync android
         
-        # تنظيف مجلد أندرويد والبناء بشكل نظيف تماماً بدون مشاكل الكاش أو الـ Daemons
+        # تعديل MainActivity.java لجعل التطبيق يملأ الشاشة بالكامل ويخفي أشرطة النظام المزعجة
+        MAIN_ACTIVITY="android/app/src/main/java/com/mafia/game/MainActivity.java"
+        if [ -f "$MAIN_ACTIVITY" ]; then
+          cat << 'EOF' > "$MAIN_ACTIVITY"
+          package com.mafia.game;
+
+          import android.os.Bundle;
+          import android.view.View;
+          import com.getcapacitor.BridgeActivity;
+
+          public class MainActivity extends BridgeActivity {
+              @Override
+              public void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  
+                  // إخفاء الأشرطة وجعل اللعبة تملأ الشاشة بالكامل (Immersive Mode)
+                  View decorView = getWindow().getDecorView();
+                  decorView.setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                      | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                      | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                      | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                      | View.SYSTEM_UI_FLAG_FULLSCREEN
+                      | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+              }
+          }
+        EOF
+        fi
+        
+        # بناء الـ APK بشكل نظيف
         cd android
         ./gradlew clean
         ./gradlew assembleDebug --no-daemon
