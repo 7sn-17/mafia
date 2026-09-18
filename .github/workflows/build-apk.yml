@@ -51,79 +51,104 @@ jobs:
         cp ../index.html www/
         
         npx cap add android
-        
-        # تنفيذ الـ sync أولاً
         npx cap sync android
         
-        # --- الحقن اليدوي المباشر للأيقونة من المكانين لضمان نجاحها 100% ---
-        TARGET_ICON=""
-        if [ -f ../icon.png ]; then
-          TARGET_ICON="../icon.png"
-        elif [ -f ../assets/icon.png ]; then
-          TARGET_ICON="../assets/icon.png"
-        fi
-        
-        if [ -n "$TARGET_ICON" ]; then
-          RES_DIR="android/app/src/main/res"
-          
-          # حذف مجلد أيقونات كاباسيتور الزرقاء التكيفية لمنع التداخل
-          rm -rf "$RES_DIR"/mipmap-anydpi-v26
-          
-          # نسخ صورتك لجميع مقاسات الميبماپ
-          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            MIP_DIR="$RES_DIR/mipmap-$density"
-            mkdir -p "$MIP_DIR"
-            cp "$TARGET_ICON" "$MIP_DIR/ic_launcher.png"
-            cp "$TARGET_ICON" "$MIP_DIR/ic_launcher_round.png"
-            cp "$TARGET_ICON" "$MIP_DIR/ic_launcher_foreground.png"
-          done
-          
-          # إنشاء مجلد anydpi يدويًا برمجياً ليتطابق مع صورتك تماماً
-          ANY_DIR="$RES_DIR/mipmap-anydpi-v26"
-          mkdir -p "$ANY_DIR"
-          echo '<?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@mipmap/ic_launcher_foreground"/><foreground android:drawable="@mipmap/ic_launcher_foreground"/></adaptive-icon>' > "$ANY_DIR/ic_launcher.xml"
-          echo '<?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@mipmap/ic_launcher_foreground"/><foreground android:drawable="@mipmap/ic_launcher_foreground"/></adaptive-icon>' > "$ANY_DIR/ic_launcher_round.xml"
-        fi
-        
-        # تعديل الـ AndroidManifest لربط الأيقونات بشكل صحيح
+        # --- حقن الأيقونة وتعديل الملفات عبر بايثون لتفادي أي أخطاء في الـ YAML ---
         python3 -c '
+import os
 import re
-path = "android/app/src/main/AndroidManifest.xml"
-with open(path, "r", encoding="utf-8") as f:
-    content = f.read()
 
-content = re.sub(r"android:roundIcon=\"@[^\"]+\"", "android:roundIcon=\"@mipmap/ic_launcher_round\"", content)
-content = re.sub(r"android:icon=\"@[^\"]+\"", "android:icon=\"@mipmap/ic_launcher\"", content)
+# 1. نسخ الأيقونة
+icon_path = "../icon.png" if os.path.exists("../icon.png") else ("../assets/icon.png" if os.path.exists("../assets/icon.png") else "")
+if icon_path:
+    res_dir = "android/app/src/main/res"
+    import shutil
+    for density in ["mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"]:
+        mip_dir = os.path.join(res_dir, f"mipmap-{density}")
+        os.makedirs(mip_dir, exist_ok=True)
+        shutil.copy(icon_path, os.path.join(mip_dir, "ic_launcher.png"))
+        shutil.copy(icon_path, os.path.join(mip_dir, "ic_launcher_round.png"))
+        shutil.copy(icon_path, os.path.join(mip_dir, "ic_launcher_foreground.png"))
+    
+    any_dir = os.path.join(res_dir, "mipmap-anydpi-v26")
+    os.makedirs(any_dir, exist_ok=True)
+    xml_content = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <background android:drawable=\"@mipmap/ic_launcher_foreground\"/>\n    <foreground android:drawable=\"@mipmap/ic_launcher_foreground\"/>\n</adaptive-icon>"
+    with open(os.path.join(any_dir, "ic_launcher.xml"), "w") as f:
+        f.write(xml_content)
+    with open(os.path.join(any_dir, "ic_launcher_round.xml"), "w") as f:
+        f.write(xml_content)
 
-with open(path, "w", encoding="utf-8") as f:
-    f.write(content)
+# 2. تعديل AndroidManifest
+manifest_path = "android/app/src/main/AndroidManifest.xml"
+if os.path.exists(manifest_path):
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    content = re.sub(r"android:roundIcon=\"@[^\"]+\"", "android:roundIcon=\"@mipmap/ic_launcher_round\"", content)
+    content = re.sub(r"android:icon=\"@[^\"]+\"", "android:icon=\"@mipmap/ic_launcher\"", content)
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+# 3. تعديل MainActivity لملء الشاشة
+activity_path = "android/app/src/main/java/com/mafia/game/MainActivity.java"
+if os.path.exists(activity_path):
+    activity_code = """package com.mafia.game;
+
+import android.os.Bundle;
+import android.view.View;
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+              View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+}
+"""
+    with open(activity_path, "w", encoding="utf-8") as f:
+        f.write(activity_code)
+
+# 4. إضافة إعدادات التوقيع إلى build.gradle
+gradle_path = "android/app/build.gradle"
+if os.path.exists(gradle_path):
+    signing_config = """
+android {
+    signingConfigs {
+        release {
+            storeFile file(\'mafia-release-key.jks\')
+            storePassword \'mafia123\'
+            keyAlias \'mafia-alias\'
+            keyPassword \'mafia123\'
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}
+"""
+    with open(gradle_path, "a", encoding="utf-8") as f:
+        f.write(signing_config)
 '
 
-        # تعديل MainActivity لملء الشاشة بالكامل بطريقة آمنة تماماً وخالية من أخطاء الـ YAML
-        MAIN_ACTIVITY="android/app/src/main/java/com/mafia/game/MainActivity.java"
-        if [ -f "$MAIN_ACTIVITY" ]; then
-          echo "package com.mafia.game;" > "$MAIN_ACTIVITY"
-          echo "import android.os.Bundle;" >> "$MAIN_ACTIVITY"
-          echo "import android.view.View;" >> "$MAIN_ACTIVITY"
-          echo "import com.getcapacitor.BridgeActivity;" >> "$MAIN_ACTIVITY"
-          echo "public class MainActivity extends BridgeActivity {" >> "$MAIN_ACTIVITY"
-          echo "    @Override" >> "$MAIN_ACTIVITY"
-          echo "    public void onCreate(Bundle savedInstanceState) {" >> "$MAIN_ACTIVITY"
-          echo "        super.onCreate(savedInstanceState);" >> "$MAIN_ACTIVITY"
-          echo "        View decorView = getWindow().getDecorView();" >> "$MAIN_ACTIVITY"
-          echo "        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);" >> "$MAIN_ACTIVITY"
-          echo "    }" >> "$MAIN_ACTIVITY"
-          echo "}" >> "$MAIN_ACTIVITY"
-        fi
-        
-        # إعداد مفتاح التوقيع الثابت والدائم لتحديثات سلسة بدون مشاكل تعارض
+        # إعداد مفتاح التوقيع والبناء
         cd android/app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
-        BUILD_GRADLE="build.gradle"
-        echo "android { signingConfigs { release { storeFile file('mafia-release-key.jks'); storePassword 'mafia123'; keyAlias 'mafia-alias'; keyPassword 'mafia123' } } buildTypes { debug { signingConfig signingConfigs.release } release { signingConfig signingConfigs.release } } }" >> "$BUILD_GRADLE"
-        
-        cd ..
+        cd ../..
+        cd mafia-app
         ./gradlew clean
         ./gradlew assembleDebug --no-daemon
 
