@@ -29,10 +29,11 @@ jobs:
         cd mafia-app
         npm init -y
         npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
+        npm install -g cordova-res
         
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        # إنشاء إعدادات الكاباسيتور
+        # إعدادات الكاباسيتور
         cat << 'EOF' > capacitor.config.json
         {
           "appId": "com.mafia.game",
@@ -51,17 +52,22 @@ jobs:
         mkdir www
         cp ../index.html www/
         
-        # إضافة منصة أندرويد
+        # نسخ الأيقونة الأصلية إلى الجذر لتتعرف عليها أداة توليد الأيقونات
+        if [ -f ../icon.png ]; then
+          cp ../icon.png icon.png
+          cp ../icon.png www/icon.png
+        fi
+        
         npx cap add android
         
-        # نسخ الأيقونة المخصصة إذا وجدت في الجذر الرئيسي مباشرة إلى مجلد الـ res في أندرويد
-        if [ -f ../icon.png ]; then
-          cp ../icon.png android/app/src/main/res/drawable/icon.png || true
+        # توليد الأيقونات الحقيقية ووضعها في مسارات أندرويد الصحيحة (mipmap) بالاعتماد على icon.png
+        if [ -f icon.png ]; then
+          cordova-res android --skip-config --icon-source=icon.png
         fi
         
         npx cap sync android
         
-        # تعديل MainActivity لضمان ملء الشاشة بالكامل وإخفاء الأشرطة
+        # تعديل MainActivity لضمان ملء الشاشة الكامل
         MAIN_ACTIVITY="android/app/src/main/java/com/mafia/game/MainActivity.java"
         if [ -f "$MAIN_ACTIVITY" ]; then
           cat << 'EOF' > "$MAIN_ACTIVITY"
