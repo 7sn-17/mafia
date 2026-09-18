@@ -1,0 +1,58 @@
+name: Build Mafia APK
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install Cordova globally
+      run: npm install -g cordova
+
+    - name: Create App and Build APK
+      run: |
+        # اسم التطبيق باللغة العربية هنا "مافيا"
+        cordova create my-app com.mafia.game "مافيا"
+        cd my-app
+        
+        # نسخ ملف اللعبة
+        cp -r ../index.html www/
+        
+        cordova platform add android
+        
+        # ضبط الأيقونة من الملف الموجود في مستودعك
+        if [ -f ../icon.jpg ]; then
+          mkdir -p resources
+          cp ../icon.jpg resources/icon.png
+          cordova plugin add cordova-plugin-icon
+          cordova icon --source=resources/icon.png
+        fi
+        
+        cordova build android --release
+
+    - name: Rename and Prepare APK
+      run: |
+        cp my-app/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk mafia.apk
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mafia
+        path: mafia.apk
