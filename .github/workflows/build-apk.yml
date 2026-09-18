@@ -75,8 +75,8 @@ jobs:
         echo "    }" >> build.gradle
         echo "}" >> build.gradle
         
-        cd ../..
-        cd mafia-app
+        # العودة الدقيقة للمجلد الصحيح بدون أي أخطاء
+        cd ../../
         ./gradlew assembleDebug --no-daemon
 
     - name: Find and Rename APK
