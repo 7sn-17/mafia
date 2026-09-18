@@ -1,4 +1,4 @@
-name: Build Mafia APK Final
+name: Build Mafia APK Final Fullscreen
 
 on:
   push:
@@ -25,7 +25,10 @@ jobs:
 
     - name: Complete Build Process
       run: |
-        # إنشاء مشروع كاباسيتور والعمل داخله مباشرة
+        # حفظ المسار الجذري للمشروع
+        ROOT_DIR=$(pwd)
+        
+        # إنشاء مشروع كاباسيتور
         mkdir mafia-app
         cd mafia-app
         
@@ -33,21 +36,41 @@ jobs:
         npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        # إنشاء ملف الإعدادات
-        echo '{"appId": "com.mafia.game", "appName": "مافيا", "webDir": "www", "plugins": {"SplashScreen": {"launchShowDuration": 1500, "backgroundColor": "#050d0a", "showSpinner": false}}}' > capacitor.config.json
+        # إعدادات كاباسيتور الأساسية
+        cat << 'EOF' > capacitor.config.json
+        {
+          "appId": "com.mafia.game",
+          "appName": "مافيا",
+          "webDir": "www",
+          "plugins": {
+            "SplashScreen": {
+              "launchShowDuration": 1500,
+              "backgroundColor": "#050d0a",
+              "showSpinner": false
+            }
+          }
+        }
+        EOF
         
         mkdir www
-        cp ../index.html www/
+        cp "$ROOT_DIR/index.html" www/
         
         npx cap add android
         npx cap sync android
         
-        # حقن الأيقونة باحترافية كاملة لجميع المقاسات
+        # تفعيل وضع ملء الشاشة الفلكي وإخفاء الأشرطة العلوية والسفلية عبر ملف الثيمات
+        THEME_FILE="android/app/src/main/res/values/styles.xml"
+        if [ -f "$THEME_FILE" ]; then
+          # إزالة الوسم الختامي المؤقت وإضافة خصائص ملء الشاشة ثم إرجاع الوسم
+          sed -i 's|<!-- Customize your theme here. -->|<!-- Customize your theme here. -->\n        <item name=\"android:windowFullscreen\">true</item>\n        <item name=\"android:windowContentOverlay\">@null</item>|g' "$THEME_FILE"
+        fi
+        
+        # حقن الأيقونة باحترافية لجميع المقاسات
         ICON_SRC=""
-        if [ -f ../icon.png ]; then
-          ICON_SRC="../icon.png"
-        elif [ -f ../assets/icon.png ]; then
-          ICON_SRC="../assets/icon.png"
+        if [ -f "$ROOT_DIR/icon.png" ]; then
+          ICON_SRC="$ROOT_DIR/icon.png"
+        elif [ -f "$ROOT_DIR/assets/icon.png" ]; then
+          ICON_SRC="$ROOT_DIR/assets/icon.png"
         fi
         
         if [ -n "$ICON_SRC" ]; then
@@ -61,32 +84,37 @@ jobs:
           done
         fi
         
-        # الدخول مباشرة إلى مجلد التطبيق الخاص بالأندرويد للتعامل مع المفتاح والبناء من الداخل لمنع ضياع المسار
-        cd android/app
+        # الانتقال المباشر لمجلد أندرويد لإنشاء المفتاح والتوقيع والتنفيذ الآمن
+        cd android
         
+        # منح صلاحيات التنفيذ لملف الـ gradlew لضمان عدم فشل العملية نهائياً
+        chmod +x gradlew
+        
+        # توليد المفتاح وتعديل ملف build.gradle في مكانه الصحيح
+        cd app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
-        # إضافة إعدادات التوقيع لملف الـ build.gradle
-        echo "" >> build.gradle
-        echo "android {" >> build.gradle
-        echo "    signingConfigs {" >> build.gradle
-        echo "        release {" >> build.gradle
-        echo "            storeFile file('mafia-release-key.jks')" >> build.gradle
-        echo "            storePassword 'mafia123'" >> build.gradle
-        echo "            keyAlias 'mafia-alias'" >> build.gradle
-        echo "            keyPassword 'mafia123'" >> build.gradle
-        echo "        }" >> build.gradle
-        echo "    }" >> build.gradle
-        echo "    buildTypes {" >> build.gradle
-        echo "        release {" >> build.gradle
-        echo "            signingConfig signingConfigs.release" >> build.gradle
-        echo "        }" >> build.gradle
-        echo "    }" >> build.gradle
-        echo "}" >> build.gradle
-        
-        # العودة لمجلد android الأساسي لتشغيل الـ gradlew الموجود داخله مباشرة وبكل أمان
+        cat << 'EOF' >> build.gradle
+
+android {
+    signingConfigs {
+        release {
+            storeFile file('mafia-release-key.jks')
+            storePassword 'mafia123'
+            keyAlias 'mafia-alias'
+            keyPassword 'mafia123'
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}
+EOF
+
+        # العودة مجدداً لمجلد أندرويد الرئيسي لتشغيل البناء بكل سلاسة
         cd ..
-        chmod +x gradlew
         ./gradlew assembleDebug --no-daemon
 
     - name: Find and Export APK
@@ -97,5 +125,5 @@ jobs:
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: mafia-final-apk
+        name: mafia-final-fullscreen-apk
         path: mafia.apk
