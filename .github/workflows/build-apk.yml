@@ -53,39 +53,58 @@ jobs:
         
         npx cap add android
         
-        # فرض الأيقونة وحذف كل النماذج والملفات الافتراضية التي تسبب عرض الايقونة القديمة
+        # --- حل جذري ومطلق للأيقونات ---
         if [ -f ../icon.png ]; then
           RES_DIR="android/app/src/main/res"
           
-          # حذف مجلدات الأيقونات المتجهة والدائرية الافتراضية بالكامل
+          # حذف أي أثر للأيقونات المتجهة أو المجلدات القديمة التي تولد الأيقونة الافتراضية
           rm -rf "$RES_DIR"/mipmap-anydpi-v26
-          rm -f "$RES_DIR"/drawable/ic_launcher_background.xml
-          rm -f "$RES_DIR"/drawable-v24/ic_launcher_background.xml
+          find "$RES_DIR" -name "*ic_launcher*" -exec rm -f {} \;
           
-          # إنشاء وتعبئة جميع مجلدات الـ mipmap بصورتك لضمان ظهورها في كل مكان (القائمة، الإعدادات، المعلومات)
-          for density in mdpidpi hdpi xhdpi xxhdpi xxxhdpi; do
-            # تم تصحيح اسماء الكثافات بدقة
-            true
-          done
-          
+          # إنشاء وتعبئة جميع مقاسات الـ mipmap بصورتك الشخصية حصرياً
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            mkdir -p "$RES_DIR/mipmap-$density"
+            MIP_DIR="$RES_DIR/mipmap-$density"
+            mkdir -p "$MIP_DIR"
+            cp ../icon.png "$MIP_DIR/ic_launcher.png"
+            cp ../icon.png "$MIP_DIR/ic_launcher_round.png"
+            cp ../icon.png "$MIP_DIR/ic_launcher_foreground.png"
+          done
+        fi
+        
+        # تعديل AndroidManifest.xml بأسلوب جذري لمنع أي أيقونة دائرية أو افتراضية
+        MANIFEST_PATH="android/app/src/main/AndroidManifest.xml"
+        if [ -f "$MANIFEST_PATH" ]; then
+          # استخدام Python لتعديل الـ Manifest بدقة وأمان تام
+          python3 -c '
+          import re
+          path = "android/app/src/main/AndroidManifest.xml"
+          with open(path, "r", encoding="utf-8") as f:
+              content = f.read()
+          
+          # حذف الـ roundIcon تماماً لكي لا يذهب النظام للأيقونة الافتراضية الدائرية
+          content = re.sub(r"android:roundIcon=\"@[^\"]+\"", "", content)
+          
+          # التأكد من أن الـ icon يشير تماماً إلى ic_launcher
+          content = re.sub(r"android:icon=\"@[^\"]+\"", "android:icon=\"@mipmap/ic_launcher\"", content)
+          
+          with open(path, "w", encoding="utf-8") as f:
+              f.write(content)
+          '
+        fi
+        
+        # مزامنة الكاباسيتور بدون إعادة كتابة الأيقونات
+        npx cap sync android
+        
+        # التأكد مرّة أخرى بعد الـ sync من عدم عودة الأيقونات الافتراضية
+        if [ -f ../icon.png ]; then
+          RES_DIR="android/app/src/main/res"
+          rm -rf "$RES_DIR"/mipmap-anydpi-v26
+          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher.png"
             cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_round.png"
             cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_foreground.png"
           done
         fi
-        
-        # تنظيف ملف AndroidManifest.xml لضمان الاعتماد الكلي على أيقونتك المخصصة
-        MANIFEST_PATH="android/app/src/main/AndroidManifest.xml"
-        if [ -f "$MANIFEST_PATH" ]; then
-          # إزالة خاصية roundIcon إن وجدت لكي لا يلجأ النظام لأي أيقونة دائرية افتراضية
-          sed -i 's/android:roundIcon="@mipmap\/ic_launcher_round"//g' "$MANIFEST_PATH"
-          # التأكد من توجيه الأيقونة حصرياً إلى ic_launcher
-          sed -i 's/android:icon="@mipmap\/ic_launcher"/android:icon="@mipmap\/ic_launcher"/g' "$MANIFEST_PATH"
-        fi
-        
-        npx cap sync android
         
         # تعديل MainActivity لضمان ملء الشاشة الكامل
         MAIN_ACTIVITY="android/app/src/main/java/com/mafia/game/MainActivity.java"
@@ -115,7 +134,7 @@ jobs:
         EOF
         fi
         
-        # إنشاء مفتاح التوقيع الثائم وتكوينه
+        # إعداد مفتاح التوقيع الثابت والتوقيع
         cd android/app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
