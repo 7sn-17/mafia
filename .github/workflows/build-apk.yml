@@ -81,20 +81,8 @@ jobs:
           # إنشاء مجلد anydpi يدويًا برمجياً ليتطابق مع صورتك تماماً
           ANY_DIR="$RES_DIR/mipmap-anydpi-v26"
           mkdir -p "$ANY_DIR"
-          cat << 'EOF' > "$ANY_DIR/ic_launcher.xml"
-          <?xml version="1.0" encoding="utf-8"?>
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@mipmap/ic_launcher_foreground"/>
-              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
-          </adaptive-icon>
-          EOF
-          cat << 'EOF' > "$ANY_DIR/ic_launcher_round.xml"
-          <?xml version="1.0" encoding="utf-8"?>
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@mipmap/ic_launcher_foreground"/>
-              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
-          </adaptive-icon>
-          EOF
+          echo '<?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@mipmap/ic_launcher_foreground"/><foreground android:drawable="@mipmap/ic_launcher_foreground"/></adaptive-icon>' > "$ANY_DIR/ic_launcher.xml"
+          echo '<?xml version="1.0" encoding="utf-8"?><adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@mipmap/ic_launcher_foreground"/><foreground android:drawable="@mipmap/ic_launcher_foreground"/></adaptive-icon>' > "$ANY_DIR/ic_launcher_round.xml"
         fi
         
         # تعديل الـ AndroidManifest لربط الأيقونات بشكل صحيح
@@ -111,32 +99,21 @@ with open(path, "w", encoding="utf-8") as f:
     f.write(content)
 '
 
-        # تعديل MainActivity لملء الشاشة بالكامل
+        # تعديل MainActivity لملء الشاشة بالكامل بطريقة آمنة تماماً وخالية من أخطاء الـ YAML
         MAIN_ACTIVITY="android/app/src/main/java/com/mafia/game/MainActivity.java"
         if [ -f "$MAIN_ACTIVITY" ]; then
-          cat << 'EOF' > "$MAIN_ACTIVITY"
-          package com.mafia.game;
-
-          import android.os.Bundle;
-          import android.view.View;
-          import com.getcapacitor.BridgeActivity;
-
-          public class MainActivity extends BridgeActivity {
-              @Override
-              public void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-                  
-                  View decorView = getWindow().getDecorView();
-                  decorView.setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                      | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                      | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                      | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                      | View.SYSTEM_UI_FLAG_FULLSCREEN
-                      | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-              }
-          }
-        EOF
+          echo "package com.mafia.game;" > "$MAIN_ACTIVITY"
+          echo "import android.os.Bundle;" >> "$MAIN_ACTIVITY"
+          echo "import android.view.View;" >> "$MAIN_ACTIVITY"
+          echo "import com.getcapacitor.BridgeActivity;" >> "$MAIN_ACTIVITY"
+          echo "public class MainActivity extends BridgeActivity {" >> "$MAIN_ACTIVITY"
+          echo "    @Override" >> "$MAIN_ACTIVITY"
+          echo "    public void onCreate(Bundle savedInstanceState) {" >> "$MAIN_ACTIVITY"
+          echo "        super.onCreate(savedInstanceState);" >> "$MAIN_ACTIVITY"
+          echo "        View decorView = getWindow().getDecorView();" >> "$MAIN_ACTIVITY"
+          echo "        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);" >> "$MAIN_ACTIVITY"
+          echo "    }" >> "$MAIN_ACTIVITY"
+          echo "}" >> "$MAIN_ACTIVITY"
         fi
         
         # إعداد مفتاح التوقيع الثابت والدائم لتحديثات سلسة بدون مشاكل تعارض
@@ -144,27 +121,7 @@ with open(path, "w", encoding="utf-8") as f:
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
         BUILD_GRADLE="build.gradle"
-        cat << 'EOF' >> "$BUILD_GRADLE"
-
-        android {
-            signingConfigs {
-                release {
-                    storeFile file('mafia-release-key.jks')
-                    storePassword 'mafia123'
-                    keyAlias 'mafia-alias'
-                    keyPassword 'mafia123'
-                }
-            }
-            buildTypes {
-                debug {
-                    signingConfig signingConfigs.release
-                }
-                release {
-                    signingConfig signingConfigs.release
-                }
-            }
-        }
-        EOF
+        echo "android { signingConfigs { release { storeFile file('mafia-release-key.jks'); storePassword 'mafia123'; keyAlias 'mafia-alias'; keyPassword 'mafia123' } } buildTypes { debug { signingConfig signingConfigs.release } release { signingConfig signingConfigs.release } } }" >> "$BUILD_GRADLE"
         
         cd ..
         ./gradlew clean
