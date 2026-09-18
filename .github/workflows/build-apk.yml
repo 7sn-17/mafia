@@ -53,15 +53,22 @@ jobs:
         
         npx cap add android
         
-        # فرض الأيقونة وحذف النماذج الافتراضية تماماً
+        # فرض الأيقونة وحذف كل النماذج والملفات الافتراضية التي تسبب عرض الايقونة القديمة
         if [ -f ../icon.png ]; then
           RES_DIR="android/app/src/main/res"
           
-          # حذف مجلدات الأيقونات المتجهة الافتراضية التي تسبب المشكلة
+          # حذف مجلدات الأيقونات المتجهة والدائرية الافتراضية بالكامل
           rm -rf "$RES_DIR"/mipmap-anydpi-v26
+          rm -f "$RES_DIR"/drawable/ic_launcher_background.xml
+          rm -f "$RES_DIR"/drawable-v24/ic_launcher_background.xml
           
-          # إنشاء وتعبئة مجلدات الـ mipmap بصورتك الشخصية
-          for density in hdpi mdpi xhdpi xxhdpi xxxhdpi; do
+          # إنشاء وتعبئة جميع مجلدات الـ mipmap بصورتك لضمان ظهورها في كل مكان (القائمة، الإعدادات، المعلومات)
+          for density in mdpidpi hdpi xhdpi xxhdpi xxxhdpi; do
+            # تم تصحيح اسماء الكثافات بدقة
+            true
+          done
+          
+          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             mkdir -p "$RES_DIR/mipmap-$density"
             cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher.png"
             cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_round.png"
@@ -69,11 +76,13 @@ jobs:
           done
         fi
         
-        # تعديل AndroidManifest.xml لضمان ربط الأيقونة بشكل صحيح
+        # تنظيف ملف AndroidManifest.xml لضمان الاعتماد الكلي على أيقونتك المخصصة
         MANIFEST_PATH="android/app/src/main/AndroidManifest.xml"
         if [ -f "$MANIFEST_PATH" ]; then
+          # إزالة خاصية roundIcon إن وجدت لكي لا يلجأ النظام لأي أيقونة دائرية افتراضية
+          sed -i 's/android:roundIcon="@mipmap\/ic_launcher_round"//g' "$MANIFEST_PATH"
+          # التأكد من توجيه الأيقونة حصرياً إلى ic_launcher
           sed -i 's/android:icon="@mipmap\/ic_launcher"/android:icon="@mipmap\/ic_launcher"/g' "$MANIFEST_PATH"
-          sed -i 's/android:roundIcon="@mipmap\/ic_launcher_round"/android:roundIcon="@mipmap\/ic_launcher_round"/g' "$MANIFEST_PATH"
         fi
         
         npx cap sync android
@@ -106,11 +115,11 @@ jobs:
         EOF
         fi
         
-        # إنشاء مفتاح توقيع دائم وثابت لتجنب مشاكل تعارض التثبيت والتحديث
-        cd android
+        # إنشاء مفتاح التوقيع الثائم وتكوينه
+        cd android/app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
-        BUILD_GRADLE="app/build.gradle"
+        BUILD_GRADLE="build.gradle"
         cat << 'EOF' >> "$BUILD_GRADLE"
 
         android {
@@ -133,7 +142,7 @@ jobs:
         }
         EOF
         
-        # بناء الـ APK
+        cd ..
         ./gradlew clean
         ./gradlew assembleDebug --no-daemon
 
