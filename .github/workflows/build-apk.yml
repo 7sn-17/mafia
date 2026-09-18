@@ -32,7 +32,7 @@ jobs:
         
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        # إعدادات الكاباسيتور
+        # إعدادات الكاباسيتور الأساسية
         cat << 'EOF' > capacitor.config.json
         {
           "appId": "com.mafia.game",
@@ -53,11 +53,11 @@ jobs:
         
         npx cap add android
         
-        # --- الحل الهندسي المتكامل للأيقونات (PNG + XML + Adaptive) ---
+        # --- التجهيز الهندسي المتكامل للأيقونات (PNG + XML + Adaptive) ---
         if [ -f ../icon.png ]; then
           RES_DIR="android/app/src/main/res"
           
-          # 1. توزيع ملفات الـ PNG المباشرة على جميع مقاسات اليبماپ
+          # 1. توزيع ملفات الـ PNG المباشرة على جميع مقاسات الميبماپ
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             MIP_DIR="$RES_DIR/mipmap-$density"
             mkdir -p "$MIP_DIR"
@@ -66,11 +66,10 @@ jobs:
             cp ../icon.png "$MIP_DIR/ic_launcher_foreground.png"
           done
           
-          # 2. إنشاء مجلد الأيقونات التكيفية anydpi-v26 ووضع ملفات الـ XML التي تشير لصورك بصراحة
+          # 2. إنشاء مجلد الأيقونات التكيفية وإضافة ملفات الـ XML المرتبطة بصورتك
           ANY_DIR="$RES_DIR/mipmap-anydpi-v26"
           mkdir -p "$ANY_DIR"
           
-          # ملف ic_launcher.xml التكيفي
           cat << 'EOF' > "$ANY_DIR/ic_launcher.xml"
           <?xml version="1.0" encoding="utf-8"?>
           <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
@@ -79,7 +78,6 @@ jobs:
           </adaptive-icon>
           EOF
 
-          # ملف ic_launcher_round.xml التكيفي الدائري
           cat << 'EOF' > "$ANY_DIR/ic_launcher_round.xml"
           <?xml version="1.0" encoding="utf-8"?>
           <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
@@ -89,14 +87,13 @@ jobs:
           EOF
         fi
         
-        # --- تعديل الـ Manifest لضمان قراءة الأيقونات بالطريقة الصحيحة ---
+        # --- تعديل الـ Manifest لضمان توجيه الأيقونات بشكل قاطع ---
         python3 -c '
 import re
 path = "android/app/src/main/AndroidManifest.xml"
 with open(path, "r", encoding="utf-8") as f:
     content = f.read()
 
-# التأكد من وجود وتوجيه الـ icon والـ roundIcon إلى ic_launcher
 if "android:roundIcon" not in content:
     content = content.replace("android:icon=\"@mipmap/ic_launcher\"", "android:icon=\"@mipmap/ic_launcher\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"")
 else:
@@ -110,7 +107,7 @@ with open(path, "w", encoding="utf-8") as f:
         
         npx cap sync android
         
-        # --- إعادة تطبيق ملفات الـ XML والـ PNG للتأكد من ثباتها بعد الـ sync ---
+        # --- إعادة التأكيد وتثبيت الملفات بعد الـ sync لضمان عدم استبدالها ---
         if [ -f ../icon.png ]; then
           RES_DIR="android/app/src/main/res"
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
@@ -137,7 +134,7 @@ with open(path, "w", encoding="utf-8") as f:
           EOF
         fi
         
-        # تعديل MainActivity لضمان ملء الشاشة الكامل
+        # تعديل MainActivity لملء الشاشة الكامل
         MAIN_ACTIVITY="android/app/src/main/java/com/mafia/game/MainActivity.java"
         if [ -f "$MAIN_ACTIVITY" ]; then
           cat << 'EOF' > "$MAIN_ACTIVITY"
@@ -165,7 +162,7 @@ with open(path, "w", encoding="utf-8") as f:
         EOF
         fi
         
-        # إعداد مفتاح التوقيع الثابت والدائم لتحديثات سلسة بدون حذف النسخة القديمة
+        # إعداد مفتاح التوقيع الثابت والدائم لتحديثات سلسة وآمنة
         cd android/app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
