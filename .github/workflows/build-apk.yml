@@ -61,11 +61,12 @@ jobs:
           done
         fi
         
-        # الانتقال لمدير التطبيق الأندرويد وإنشاء مفتاح التوقيع الثابت وبناء الـ APK مباشرة بدون تشتت في المسارات
+        # الدخول مباشرة إلى مجلد التطبيق الخاص بالأندرويد للتعامل مع المفتاح والبناء من الداخل لمنع ضياع المسار
         cd android/app
+        
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
-        # إضافة إعدادات التوقيع لملف الـ build.gradle بضمان تام
+        # إضافة إعدادات التوقيع لملف الـ build.gradle
         echo "" >> build.gradle
         echo "android {" >> build.gradle
         echo "    signingConfigs {" >> build.gradle
@@ -83,9 +84,10 @@ jobs:
         echo "    }" >> build.gradle
         echo "}" >> build.gradle
         
-        # العودة لمجلد المشروع الأساسي لتشغيل الـ Gradle وتجنب أخطاء المسارات
-        cd ../..
-        ./mafia-app/android/gradlew -p mafia-app/android assembleDebug --no-daemon
+        # العودة لمجلد android الأساسي لتشغيل الـ gradlew الموجود داخله مباشرة وبكل أمان
+        cd ..
+        chmod +x gradlew
+        ./gradlew assembleDebug --no-daemon
 
     - name: Find and Export APK
       run: |
