@@ -1,4 +1,4 @@
-name: Build Mafia APK
+name: Build Mafia APK with Capacitor
 
 on:
   push:
@@ -23,58 +23,40 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Install Cordova globally
-      run: npm install -g cordova
-
-    - name: Create App and Build APK
+    - name: Initialize App and Install Capacitor
       run: |
-        cordova create my-app com.mafia.game "مافيا"
-        cd my-app
+        mkdir mafia-app
+        cd mafia-app
+        npm init -y
+        npm install @capacitor/core @capacitor/cli @capacitor/android
         
-        # نسخ ملفات اللعبة والأيقونة
-        cp -r ../index.html www/
+        # إنشاء إعدادات Capacitor الأساسية
+        npx cap init "مافيا" "com.mafia.game" --web-dir www
+        
+        # إنشاء مجلد الويب ونسخ ملفاتك والأيقونة إليه
+        mkdir www
+        cp ../index.html www/
         if [ -f ../icon.png ]; then
-          cp ../icon.png icon.png
+          cp ../icon.png www/icon.png
         fi
         
-        # إضافة إعدادات config.xml لتعطيل أي شاشة بداية افتراضية وضبط الأيقونة
-        cat << 'EOF' > update_config.js
-        const fs = require('fs');
-        let config = fs.readFileSync('config.xml', 'utf8');
+        # إضافة منصة الأندرويد
+        npx cap add android
         
-        // ربط الأيقونة
-        config = config.replace('</widget>', '<icon src="icon.png" /></widget>');
+        # مزامنة الملفات
+        npx cap sync android
         
-        // تعطيل شاشة البداية بالكامل
-        const splashFix = `
-            <preference name="SplashScreen" value="none" />
-            <preference name="SplashScreenDelay" value="0" />
-            <preference name="AutoHideSplashScreen" value="true" />
-            <preference name="FadeSplashScreen" value="false" />
-        </widget>`;
-        config = config.replace('</widget>', splashFix);
-        
-        fs.writeFileSync('config.xml', config, 'utf8');
-        EOF
-        
-        node update_config.js
-        
-        cordova platform add android
-        
-        # حذف إضافة السبلاش سكرين نهائياً من منصة أندرويد لضمان عدم ظهور الشاشة الرمادية
-        rm -rf platforms/android/app/src/main/res/drawable*splash* || true
-        rm -rf plugins/cordova-plugin-splashscreen || true
-        
-        # بناء التطبيق
-        cordova build android --debug
+        # الانتقال لمجلد الأندرويد وبناء ملف الـ APK
+        cd android
+        ./gradlew assembleDebug
 
     - name: Find and Rename APK
       run: |
-        find my-app/platforms/android/app/build/outputs/apk/ -name "*.apk" -exec cp {} mafia.apk \;
+        find mafia-app/android/app/build/outputs/apk/ -name "*.apk" -exec cp {} mafia.apk \;
         ls -la mafia.apk
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: mafia
+        name: mafia-capacitor
         path: mafia.apk
