@@ -1,4 +1,4 @@
-name: Build Mafia APK with Capacitor
+name: Build Mafia APK Clean
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
       with:
         node-version: '22'
 
-    - name: Build Application and Setup Android
+    - name: Build Application
       run: |
         mkdir mafia-app
         cd mafia-app
@@ -31,14 +31,15 @@ jobs:
         npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        echo '{"appId": "com.mafia.game", "appName": "مافيا", "webDir": "www", "plugins": {"SplashScreen": {"launchShowDuration": 2000, "backgroundColor": "#050d0a", "showSpinner": false}}}' > capacitor.config.json
+        # إعدادات كاباسيتور الأساسية النظيفة
+        echo '{"appId": "com.mafia.game", "appName": "مافيا", "webDir": "www", "plugins": {"SplashScreen": {"launchShowDuration": 1500, "backgroundColor": "#050d0a", "showSpinner": false}}}' > capacitor.config.json
         
         mkdir www
         cp ../index.html www/
         npx cap add android
         npx cap sync android
         
-        # حقن الأيقونة بالقوة لتفادي أيقونة كاباسيتور الافتراضية
+        # حقن الأيقونة لجميع المقاسات لضمان ظهورها بشكل صحيح
         ICON_SRC=""
         if [ -f ../icon.png ]; then ICON_SRC="../icon.png"; elif [ -f ../assets/icon.png ]; then ICON_SRC="../assets/icon.png"; fi
         
@@ -53,7 +54,7 @@ jobs:
           done
         fi
         
-        # إعداد التوقيع الثابت مباشرة في ملف build.gradle لتجنب مشاكل التعارض
+        # إعداد مفتاح التوقيع الثابت (مهم لتحديثات الهاتف المستقبلية)
         cd android/app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
@@ -76,7 +77,6 @@ jobs:
         
         cd ../..
         cd mafia-app
-        ./gradlew clean
         ./gradlew assembleDebug --no-daemon
 
     - name: Find and Rename APK
@@ -87,5 +87,5 @@ jobs:
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: mafia-capacitor
+        name: mafia-clean-apk
         path: mafia.apk
