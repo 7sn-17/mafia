@@ -28,7 +28,6 @@ jobs:
 
     - name: Create App and Build APK
       run: |
-        # اسم التطبيق باللغة العربية هنا "مافيا"
         cordova create my-app com.mafia.game "مافيا"
         cd my-app
         
@@ -37,12 +36,10 @@ jobs:
         
         cordova platform add android
         
-        # ضبط الأيقونة من الملف الموجود في مستودعك
+        # وضع الأيقونة مباشرة في مجلد أندرويد لتجنب أخطاء الإضافات
         if [ -f ../icon.jpg ]; then
-          mkdir -p resources
-          cp ../icon.jpg resources/icon.png
-          cordova plugin add cordova-plugin-icon
-          cordova icon --source=resources/icon.png
+          mkdir -p platforms/android/app/src/main/res/mipmap-xxhdpi/
+          cp ../icon.jpg platforms/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
         fi
         
         cordova build android --release
