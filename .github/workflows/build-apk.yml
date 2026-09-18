@@ -53,15 +53,11 @@ jobs:
         
         npx cap add android
         
-        # --- حل جذري ومطلق للأيقونات ---
+        # --- الحل الهندسي المتكامل للأيقونات (PNG + XML + Adaptive) ---
         if [ -f ../icon.png ]; then
           RES_DIR="android/app/src/main/res"
           
-          # حذف أي أثر للأيقونات المتجهة أو المجلدات القديمة التي تولد الأيقونة الافتراضية
-          rm -rf "$RES_DIR"/mipmap-anydpi-v26
-          find "$RES_DIR" -name "*ic_launcher*" -exec rm -f {} \;
-          
-          # إنشاء وتعبئة جميع مقاسات الـ mipmap بصورتك الشخصية حصرياً
+          # 1. توزيع ملفات الـ PNG المباشرة على جميع مقاسات اليبماپ
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             MIP_DIR="$RES_DIR/mipmap-$density"
             mkdir -p "$MIP_DIR"
@@ -69,41 +65,76 @@ jobs:
             cp ../icon.png "$MIP_DIR/ic_launcher_round.png"
             cp ../icon.png "$MIP_DIR/ic_launcher_foreground.png"
           done
+          
+          # 2. إنشاء مجلد الأيقونات التكيفية anydpi-v26 ووضع ملفات الـ XML التي تشير لصورك بصراحة
+          ANY_DIR="$RES_DIR/mipmap-anydpi-v26"
+          mkdir -p "$ANY_DIR"
+          
+          # ملف ic_launcher.xml التكيفي
+          cat << 'EOF' > "$ANY_DIR/ic_launcher.xml"
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@mipmap/ic_launcher_foreground"/>
+              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+          </adaptive-icon>
+          EOF
+
+          # ملف ic_launcher_round.xml التكيفي الدائري
+          cat << 'EOF' > "$ANY_DIR/ic_launcher_round.xml"
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@mipmap/ic_launcher_foreground"/>
+              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+          </adaptive-icon>
+          EOF
         fi
         
-        # تعديل AndroidManifest.xml بأسلوب جذري لمنع أي أيقونة دائرية أو افتراضية
-        MANIFEST_PATH="android/app/src/main/AndroidManifest.xml"
-        if [ -f "$MANIFEST_PATH" ]; then
-          # استخدام Python لتعديل الـ Manifest بدقة وأمان تام
-          python3 -c '
-          import re
-          path = "android/app/src/main/AndroidManifest.xml"
-          with open(path, "r", encoding="utf-8") as f:
-              content = f.read()
-          
-          # حذف الـ roundIcon تماماً لكي لا يذهب النظام للأيقونة الافتراضية الدائرية
-          content = re.sub(r"android:roundIcon=\"@[^\"]+\"", "", content)
-          
-          # التأكد من أن الـ icon يشير تماماً إلى ic_launcher
-          content = re.sub(r"android:icon=\"@[^\"]+\"", "android:icon=\"@mipmap/ic_launcher\"", content)
-          
-          with open(path, "w", encoding="utf-8") as f:
-              f.write(content)
-          '
-        fi
+        # --- تعديل الـ Manifest لضمان قراءة الأيقونات بالطريقة الصحيحة ---
+        python3 -c '
+import re
+path = "android/app/src/main/AndroidManifest.xml"
+with open(path, "r", encoding="utf-8") as f:
+    content = f.read()
+
+# التأكد من وجود وتوجيه الـ icon والـ roundIcon إلى ic_launcher
+if "android:roundIcon" not in content:
+    content = content.replace("android:icon=\"@mipmap/ic_launcher\"", "android:icon=\"@mipmap/ic_launcher\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"")
+else:
+    content = re.sub(r"android:roundIcon=\"@[^\"]+\"", "android:roundIcon=\"@mipmap/ic_launcher_round\"", content)
+
+content = re.sub(r"android:icon=\"@[^\"]+\"", "android:icon=\"@mipmap/ic_launcher\"", content)
+
+with open(path, "w", encoding="utf-8") as f:
+    f.write(content)
+'
         
-        # مزامنة الكاباسيتور بدون إعادة كتابة الأيقونات
         npx cap sync android
         
-        # التأكد مرّة أخرى بعد الـ sync من عدم عودة الأيقونات الافتراضية
+        # --- إعادة تطبيق ملفات الـ XML والـ PNG للتأكد من ثباتها بعد الـ sync ---
         if [ -f ../icon.png ]; then
           RES_DIR="android/app/src/main/res"
-          rm -rf "$RES_DIR"/mipmap-anydpi-v26
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher.png"
             cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_round.png"
             cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_foreground.png"
           done
+          
+          ANY_DIR="$RES_DIR/mipmap-anydpi-v26"
+          mkdir -p "$ANY_DIR"
+          cat << 'EOF' > "$ANY_DIR/ic_launcher.xml"
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@mipmap/ic_launcher_foreground"/>
+              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+          </adaptive-icon>
+          EOF
+          cat << 'EOF' > "$ANY_DIR/ic_launcher_round.xml"
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@mipmap/ic_launcher_foreground"/>
+              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+          </adaptive-icon>
+          EOF
         fi
         
         # تعديل MainActivity لضمان ملء الشاشة الكامل
@@ -134,7 +165,7 @@ jobs:
         EOF
         fi
         
-        # إعداد مفتاح التوقيع الثابت والتوقيع
+        # إعداد مفتاح التوقيع الثابت والدائم لتحديثات سلسة بدون حذف النسخة القديمة
         cd android/app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
