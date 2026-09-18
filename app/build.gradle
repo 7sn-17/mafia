@@ -10,8 +10,8 @@ android {
         applicationId "com.mafia.game"
         minSdk 24
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
 
     buildTypes {
@@ -19,4 +19,16 @@ android {
             minifyEnabled false
         }
     }
+
+    // أمر لتسمية ملف الـ APK الناتج باسم Mafia.apk مباشرة
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "Mafia.apk"
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
 }
