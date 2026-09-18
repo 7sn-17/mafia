@@ -32,7 +32,6 @@ jobs:
         
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        # إعدادات الكاباسيتور مع تعطيل أي تعديل تلقائي للأيقونات
         cat << 'EOF' > capacitor.config.json
         {
           "appId": "com.mafia.game",
@@ -53,34 +52,52 @@ jobs:
         
         npx cap add android
         
-        # التأكد من وجود صورة icon.png في الجذر ونسخها بقوة لجميع مجلدات الـ mipmap
+        # تنفيذ الـ sync أولاً
+        npx cap sync android
+        
+        # --- الحقن اليدوي المباشر للأيقونة من المكانين لضمان نجاحها 100% ---
+        TARGET_ICON=""
         if [ -f ../icon.png ]; then
+          TARGET_ICON="../icon.png"
+        elif [ -f ../assets/icon.png ]; then
+          TARGET_ICON="../assets/icon.png"
+        fi
+        
+        if [ -n "$TARGET_ICON" ]; then
           RES_DIR="android/app/src/main/res"
           
-          # حذف مجلد الأيقونات التكيفية الوهمي لمنع أي تداخل
+          # حذف مجلد أيقونات كاباسيتور الزرقاء التكيفية لمنع التداخل
           rm -rf "$RES_DIR"/mipmap-anydpi-v26
           
+          # نسخ صورتك لجميع مقاسات الميبماپ
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             MIP_DIR="$RES_DIR/mipmap-$density"
             mkdir -p "$MIP_DIR"
-            cp ../icon.png "$MIP_DIR/ic_launcher.png"
-            cp ../icon.png "$MIP_DIR/ic_launcher_round.png"
+            cp "$TARGET_ICON" "$MIP_DIR/ic_launcher.png"
+            cp "$TARGET_ICON" "$MIP_DIR/ic_launcher_round.png"
+            cp "$TARGET_ICON" "$MIP_DIR/ic_launcher_foreground.png"
           done
+          
+          # إنشاء مجلد anydpi يدويًا برمجياً ليتطابق مع صورتك تماماً
+          ANY_DIR="$RES_DIR/mipmap-anydpi-v26"
+          mkdir -p "$ANY_DIR"
+          cat << 'EOF' > "$ANY_DIR/ic_launcher.xml"
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@mipmap/ic_launcher_foreground"/>
+              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+          </adaptive-icon>
+          EOF
+          cat << 'EOF' > "$ANY_DIR/ic_launcher_round.xml"
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@mipmap/ic_launcher_foreground"/>
+              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+          </adaptive-icon>
+          EOF
         fi
         
-        npx cap sync android
-        
-        # خطوة إضافية حاسمة بعد الـ sync لتثبيت صورتك ومنع أي أيقونة افتراضية نهائياً
-        if [ -f ../icon.png ]; then
-          RES_DIR="android/app/src/main/res"
-          rm -rf "$RES_DIR"/mipmap-anydpi-v26
-          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher.png"
-            cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_round.png"
-          done
-        fi
-        
-        # تعديل الـ AndroidManifest للتأكد من ربط الأيقونة بشكل صحيح وصريح
+        # تعديل الـ AndroidManifest لربط الأيقونات بشكل صحيح
         python3 -c '
 import re
 path = "android/app/src/main/AndroidManifest.xml"
@@ -94,7 +111,7 @@ with open(path, "w", encoding="utf-8") as f:
     f.write(content)
 '
 
-        # تعديل MainActivity لملء الشاشة الكامل
+        # تعديل MainActivity لملء الشاشة بالكامل
         MAIN_ACTIVITY="android/app/src/main/java/com/mafia/game/MainActivity.java"
         if [ -f "$MAIN_ACTIVITY" ]; then
           cat << 'EOF' > "$MAIN_ACTIVITY"
