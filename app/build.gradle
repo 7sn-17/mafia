@@ -26,10 +26,3 @@ android {
         }
     }
 }
-
-dependencies {
-    // هذه المكتبات ستعطي التطبيق بنية قوية وتزيد حجمه ليكون طبيعياً (حوالي 4-5 ميجابايت)
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-}
