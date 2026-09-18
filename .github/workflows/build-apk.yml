@@ -106,8 +106,34 @@ jobs:
         EOF
         fi
         
-        # بناء الـ APK
+        # إنشاء مفتاح توقيع دائم وثابت لتجنب مشاكل تعارض التثبيت والتحديث
         cd android
+        keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
+        
+        BUILD_GRADLE="app/build.gradle"
+        cat << 'EOF' >> "$BUILD_GRADLE"
+
+        android {
+            signingConfigs {
+                release {
+                    storeFile file('mafia-release-key.jks')
+                    storePassword 'mafia123'
+                    keyAlias 'mafia-alias'
+                    keyPassword 'mafia123'
+                }
+            }
+            buildTypes {
+                debug {
+                    signingConfig signingConfigs.release
+                }
+                release {
+                    signingConfig signingConfigs.release
+                }
+            }
+        }
+        EOF
+        
+        # بناء الـ APK
         ./gradlew clean
         ./gradlew assembleDebug --no-daemon
 
