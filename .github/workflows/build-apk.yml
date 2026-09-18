@@ -36,10 +36,10 @@ jobs:
         
         cordova platform add android
         
-        # وضع الأيقونة مباشرة في مجلد أندرويد لتجنب أخطاء الإضافات
-        if [ -f ../icon.jpg ]; then
+        # ضبط الأيقونة بصيغة PNG بشكل صحيح إذا وجدت
+        if [ -f ../icon.png ]; then
           mkdir -p platforms/android/app/src/main/res/mipmap-xxhdpi/
-          cp ../icon.jpg platforms/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          cp ../icon.png platforms/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
         fi
         
         cordova build android --release
