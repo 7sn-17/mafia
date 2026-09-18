@@ -1,4 +1,4 @@
-name: Build Mafia APK Clean
+name: Build Mafia APK Final
 
 on:
   push:
@@ -23,25 +23,32 @@ jobs:
       with:
         node-version: '22'
 
-    - name: Build Application
+    - name: Complete Build Process
       run: |
+        # إنشاء مشروع كاباسيتور والعمل داخله مباشرة
         mkdir mafia-app
         cd mafia-app
+        
         npm init -y
         npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
         npx cap init "مافيا" "com.mafia.game" --web-dir www
         
-        # إعدادات كاباسيتور الأساسية النظيفة
+        # إنشاء ملف الإعدادات
         echo '{"appId": "com.mafia.game", "appName": "مافيا", "webDir": "www", "plugins": {"SplashScreen": {"launchShowDuration": 1500, "backgroundColor": "#050d0a", "showSpinner": false}}}' > capacitor.config.json
         
         mkdir www
         cp ../index.html www/
+        
         npx cap add android
         npx cap sync android
         
-        # حقن الأيقونة لجميع المقاسات لضمان ظهورها بشكل صحيح
+        # حقن الأيقونة باحترافية كاملة لجميع المقاسات
         ICON_SRC=""
-        if [ -f ../icon.png ]; then ICON_SRC="../icon.png"; elif [ -f ../assets/icon.png ]; then ICON_SRC="../assets/icon.png"; fi
+        if [ -f ../icon.png ]; then
+          ICON_SRC="../icon.png"
+        elif [ -f ../assets/icon.png ]; then
+          ICON_SRC="../assets/icon.png"
+        fi
         
         if [ -n "$ICON_SRC" ]; then
           RES_DIR="android/app/src/main/res"
@@ -54,10 +61,11 @@ jobs:
           done
         fi
         
-        # إعداد مفتاح التوقيع الثابت (مهم لتحديثات الهاتف المستقبلية)
+        # الانتقال لمدير التطبيق الأندرويد وإنشاء مفتاح التوقيع الثابت وبناء الـ APK مباشرة بدون تشتت في المسارات
         cd android/app
         keytool -genkey -v -keystore mafia-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mafia-alias -storepass mafia123 -keypass mafia123 -dname "CN=Hasan, O=Mafia, C=SY"
         
+        # إضافة إعدادات التوقيع لملف الـ build.gradle بضمان تام
         echo "" >> build.gradle
         echo "android {" >> build.gradle
         echo "    signingConfigs {" >> build.gradle
@@ -75,11 +83,11 @@ jobs:
         echo "    }" >> build.gradle
         echo "}" >> build.gradle
         
-        # العودة الدقيقة للمجلد الصحيح بدون أي أخطاء
-        cd ../../
-        ./gradlew assembleDebug --no-daemon
+        # العودة لمجلد المشروع الأساسي لتشغيل الـ Gradle وتجنب أخطاء المسارات
+        cd ../..
+        ./mafia-app/android/gradlew -p mafia-app/android assembleDebug --no-daemon
 
-    - name: Find and Rename APK
+    - name: Find and Export APK
       run: |
         find mafia-app/android/app/build/outputs/apk/ -name "*.apk" -exec cp {} mafia.apk \;
         ls -la mafia.apk
@@ -87,5 +95,5 @@ jobs:
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: mafia-clean-apk
+        name: mafia-final-apk
         path: mafia.apk
