@@ -53,26 +53,27 @@ jobs:
         
         npx cap add android
         
-        # وضع الأيقونة في كافة مجلدات الـ mipmap الخاصة بأندرويد لكي تظهر في كل مكان بدون أخطاء
+        # فرض الأيقونة وحذف النماذج الافتراضية تماماً
         if [ -f ../icon.png ]; then
           RES_DIR="android/app/src/main/res"
-          mkdir -p "$RES_DIR/mipmap-hdpi"
-          mkdir -p "$RES_DIR/mipmap-mdpi"
-          mkdir -p "$RES_DIR/mipmap-xhdpi"
-          mkdir -p "$RES_DIR/mipmap-xxhdpi"
-          mkdir -p "$RES_DIR/mipmap-xxxhdpi"
           
-          cp ../icon.png "$RES_DIR/mipmap-hdpi/ic_launcher.png"
-          cp ../icon.png "$RES_DIR/mipmap-mdpi/ic_launcher.png"
-          cp ../icon.png "$RES_DIR/mipmap-xhdpi/ic_launcher.png"
-          cp ../icon.png "$RES_DIR/mipmap-xxhdpi/ic_launcher.png"
-          cp ../icon.png "$RES_DIR/mipmap-xxxhdpi/ic_launcher.png"
+          # حذف مجلدات الأيقونات المتجهة الافتراضية التي تسبب المشكلة
+          rm -rf "$RES_DIR"/mipmap-anydpi-v26
           
-          cp ../icon.png "$RES_DIR/mipmap-hdpi/ic_launcher_round.png"
-          cp ../icon.png "$RES_DIR/mipmap-mdpi/ic_launcher_round.png"
-          cp ../icon.png "$RES_DIR/mipmap-xhdpi/ic_launcher_round.png"
-          cp ../icon.png "$RES_DIR/mipmap-xxhdpi/ic_launcher_round.png"
-          cp ../icon.png "$RES_DIR/mipmap-xxxhdpi/ic_launcher_round.png"
+          # إنشاء وتعبئة مجلدات الـ mipmap بصورتك الشخصية
+          for density in hdpi mdpi xhdpi xxhdpi xxxhdpi; do
+            mkdir -p "$RES_DIR/mipmap-$density"
+            cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher.png"
+            cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_round.png"
+            cp ../icon.png "$RES_DIR/mipmap-$density/ic_launcher_foreground.png"
+          done
+        fi
+        
+        # تعديل AndroidManifest.xml لضمان ربط الأيقونة بشكل صحيح
+        MANIFEST_PATH="android/app/src/main/AndroidManifest.xml"
+        if [ -f "$MANIFEST_PATH" ]; then
+          sed -i 's/android:icon="@mipmap\/ic_launcher"/android:icon="@mipmap\/ic_launcher"/g' "$MANIFEST_PATH"
+          sed -i 's/android:roundIcon="@mipmap\/ic_launcher_round"/android:roundIcon="@mipmap\/ic_launcher_round"/g' "$MANIFEST_PATH"
         fi
         
         npx cap sync android
