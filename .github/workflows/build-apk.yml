@@ -42,20 +42,15 @@ jobs:
         chmod +x gradlew
         ./gradlew assembleRelease --no-daemon
 
-    # 2. توقيع ملف الـ APK والتحقق من صحة التوقيع بالكامل
     - name: Sign APK and Verify Signature
       run: |
-        # تثبيت أدوات أندرويد المطلوبة للتوقيع والتحقق
         echo "y" | sudo /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --install "build-tools;34.0.0"
         
-        # فك تشفير مفتاح التوقيع من الأسرار
         echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.jks
         
-        # البحث عن ملف الـ APK الناتج وتخزين مساره في متغير
         APK_FILE=$(find app/build/outputs/apk/release -name "*.apk" | head -n 1)
         echo "Found APK to sign: $APK_FILE"
         
-        # توقيع الملف الفعلي باستخدام مفتاحك الخاص والأسرار
         /usr/local/lib/android/sdk/build-tools/34.0.0/apksigner sign \
           --ks release.jks \
           --ks-key-alias "${{ secrets.KEY_ALIAS }}" \
@@ -63,14 +58,11 @@ jobs:
           --key-pass "pass:${{ secrets.KEY_PASSWORD }}" \
           "$APK_FILE"
 
-        # التحقق من التوقيع وطباعة تفاصيل الشهادة ومطابقتها في السجلات
         echo "=== فحص وتأكيد التوقيع الرقمي ==="
         /usr/local/lib/android/sdk/build-tools/34.0.0/apksigner verify --verbose --print-certs "$APK_FILE"
           
-        # نسخ الملف بعد توقيعه وتسميته نهائياً
         cp "$APK_FILE" Mafia.apk
 
-    # 5. حفظ نسخة كـ Artifact (للاحتياط)
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
