@@ -198,7 +198,7 @@
                 <div class="stat-title">الإصدار</div>
             </div>
             <div class="stat-box">
-                <div class="stat-value" id="siteSize">محدث</div>
+                <div class="stat-value" id="siteSize">مناسب</div>
                 <div class="stat-title">الحجم</div>
             </div>
             <div class="stat-box">
@@ -236,8 +236,8 @@
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.version) {
-                        // وضع الإصدار تلقائياً (مثال: v1.3 أو 1.3)
-                        const ver = data.version.startsWith('v') ? data.version : 'v' + data.version;
+  
+                      const ver = data.version;
                         document.getElementById('siteVersion').innerText = ver;
                     }
                     if (data && data.size) {
