@@ -43,8 +43,7 @@ jobs:
         chmod +x gradlew
         ./gradlew assembleRelease --no-daemon
 
-    # 2. توقيع التطبيق باستخدام الأسرار التي حفظناها (بدون تعديل كود الأندرويد)
-       # 2. تثبيت أدوات بناء أندرويد وتوقيع التطبيق يدوياً وبأمان تام
+    # 2. توقيع ملف الـ APK أوتوماتيكياً (بالبحث التلقائي عن اسم الملف الناتج)
     - name: Sign APK with apksigner
       run: |
         # تثبيت أدوات أندرويد المطلوبة للتوقيع
@@ -53,17 +52,21 @@ jobs:
         # فك تشفير مفتاح التوقيع من الأسرار
         echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.jks
         
-        # توقيع ملف الـ APK
+        # البحث عن ملف الـ APK الناتج وتخزين مساره في متغير
+        APK_FILE=$(find app/build/outputs/apk/release -name "*.apk" | head -n 1)
+        echo "Found APK: $APK_FILE"
+        
+        # توقيع الملف الذي تم العثور عليه
         /usr/local/lib/android/sdk/build-tools/34.0.0/apksigner sign \
           --ks release.jks \
           --ks-key-alias "${{ secrets.KEY_ALIAS }}" \
           --ks-pass "pass:${{ secrets.STORE_PASSWORD }}" \
           --key-pass "pass:${{ secrets.KEY_PASSWORD }}" \
-          app/build/outputs/apk/release/app-release.apk
+          "$APK_FILE"
+          
+        # نسخ الملف الموقّع وجعله باسم Mafia.apk في الجذر
+        cp "$APK_FILE" Mafia.apk
 
-    - name: Rename APK
-      run: |
-        cp app/build/outputs/apk/release/app-release.apk Mafia.apk
 
     # 4. رفع الملف النهائي كإصدار (Release) ليتمكن الموقع من تحميله
     - name: Upload to GitHub Release
