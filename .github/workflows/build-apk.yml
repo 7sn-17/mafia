@@ -44,20 +44,26 @@ jobs:
         ./gradlew assembleRelease --no-daemon
 
     # 2. توقيع التطبيق باستخدام الأسرار التي حفظناها (بدون تعديل كود الأندرويد)
-    - name: Sign APK
-      uses: r0adkll/sign-android-release@v1
-      id: sign_app
-      with:
-        releaseDirectory: app/build/outputs/apk/release
-        signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
-        alias: ${{ secrets.KEY_ALIAS }}
-        keyStorePassword: ${{ secrets.STORE_PASSWORD }}
-        keyPassword: ${{ secrets.KEY_PASSWORD }}
+       # 2. تثبيت أدوات بناء أندرويد وتوقيع التطبيق يدوياً وبأمان تام
+    - name: Sign APK with apksigner
+      run: |
+        # تثبيت أدوات أندرويد المطلوبة للتوقيع
+        echo "y" | sudo /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --install "build-tools;34.0.0"
+        
+        # فك تشفير مفتاح التوقيع من الأسرار
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.jks
+        
+        # توقيع ملف الـ APK
+        /usr/local/lib/android/sdk/build-tools/34.0.0/apksigner sign \
+          --ks release.jks \
+          --ks-key-alias "${{ secrets.KEY_ALIAS }}" \
+          --ks-pass "pass:${{ secrets.STORE_PASSWORD }}" \
+          --key-pass "pass:${{ secrets.KEY_PASSWORD }}" \
+          app/build/outputs/apk/release/app-release.apk
 
-    # 3. إعادة تسمية التطبيق الموقع إلى Mafia.apk
     - name: Rename APK
       run: |
-        mv ${{steps.sign_app.outputs.signedReleaseFile}} Mafia.apk
+        cp app/build/outputs/apk/release/app-release.apk Mafia.apk
 
     # 4. رفع الملف النهائي كإصدار (Release) ليتمكن الموقع من تحميله
     - name: Upload to GitHub Release
