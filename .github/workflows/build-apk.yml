@@ -3,7 +3,7 @@ name: Build and Sign Mafia Release
 on:
   push:
     branches: [ "main", "master" ]
-  workflow_dispatch: # لتشغيل البناء يدوياً متى شئت
+  workflow_dispatch: # لتشغيل البناء يدوياً متى شئت من تبيوب Actions
 
 jobs:
   build:
@@ -27,27 +27,20 @@ jobs:
         echo "84831b9409646a918e30573bab4c9c91346d8abd" >> $ANDROID_HOME/licenses/android-sdk-license
         echo "d975f751698a77b662f1254ddbeed3901e976f5a" >> $ANDROID_HOME/licenses/android-sdk-license
 
-    - name: Install Exact Gradle 8.2
-      run: |
-        wget https://services.gradle.org/distributions/gradle-8.2-bin.zip
-        unzip gradle-8.2-bin.zip
-        sudo rm -rf /opt/gradle
-        sudo mv gradle-8.2 /opt/gradle
-        sudo rm -f /usr/bin/gradle
-        sudo ln -s /opt/gradle/bin/gradle /usr/bin/gradle
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
 
-    - name: Build Release APK
-      run: |
-        gradle wrapper --gradle-version 8.2
-        chmod +x gradlew
-        ./gradlew assembleRelease --no-daemon
+    - name: Build Release APK with Gradle
+      run: ./gradlew assembleRelease --no-daemon
 
     - name: Sign APK and Verify Signature
       run: |
         echo "y" | sudo /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --install "build-tools;34.0.0"
         
+        # فك تشفير مفتاح التوقيع من الـ Secrets
         echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.jks
         
+        # البحث عن ملف الـ APK الناتج
         APK_FILE=$(find app/build/outputs/apk/release -name "*.apk" | head -n 1)
         echo "Found APK to sign: $APK_FILE"
         
@@ -58,9 +51,6 @@ jobs:
           --key-pass "pass:${{ secrets.KEY_PASSWORD }}" \
           "$APK_FILE"
 
-        echo "=== فحص وتأكيد التوقيع الرقمي ==="
-        /usr/local/lib/android/sdk/build-tools/34.0.0/apksigner verify --verbose --print-certs "$APK_FILE"
-          
         cp "$APK_FILE" Mafia.apk
 
     - name: Upload APK Artifact
