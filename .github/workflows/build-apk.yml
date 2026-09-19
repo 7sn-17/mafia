@@ -71,15 +71,6 @@ jobs:
         # نسخ الملف بعد توقيعه وتسميته نهائياً
         cp "$APK_FILE" Mafia.apk
 
-    # 4. رفع الملف النهائي كإصدار (Release) ليتمكن الموقع من تحميله
-    - name: Upload to GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: latest
-        name: "تحديث لعبة مافيا (الإصدار الأخير)"
-        files: Mafia.apk
-        token: ${{ secrets.GITHUB_TOKEN }}
-
     # 5. حفظ نسخة كـ Artifact (للاحتياط)
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
