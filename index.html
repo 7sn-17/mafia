@@ -1,859 +1,2795 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="htmlRoot">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">لعبة مافيا - الموقع الرسمي</title>
-    
-    <!-- وسوم المعاينة لمنصات التواصل الاجتماعي -->
-    <meta property="og:title" content="لعبة مافيا - عُشاق الغموض والذكاء">
-    <meta property="og:description" content="عُشاق الغموض والذكاء 🕵️‍♂️🔥. اجمع أصدقاءك وابدأ معركة كشف الخونة في تجربة جماعية ممتعة وبدون إعلانات.">
-    <meta property="og:image" content="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png">
-    <meta property="og:url" content="https://7sn-17.github.io/mafia/">
-    <meta property="og:type" content="website">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لعبة مافيا | عُشاق الغموض والذكاء</title>
 
-    <!-- استيراد خط Cairo والفونت الإنجليزي المتناسق -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- مكتبة أيقونات Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- مكتبة الجزيئات المتحركة (Particles.js) -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
+<meta property="og:title" content="لعبة مافيا - عُشاق الغموض والذكاء">
+<meta property="og:description" content="اجمع أصدقاءك وابدأ معركة كشف الخونة. تجربة جماعية ممتعة وبدون إعلانات.">
+<meta property="og:image" content="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png">
+<meta property="og:url" content="https://7sn-17.github.io/mafia/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0c100e">
 
-        /* استثناء أيقونات Font Awesome من وراثة الخط العام لضمان عدم اختفائها */
-        html[dir="ltr"] *:not(.fa, .fa-solid, .fa-brands, .fa-regular, i) {
-            font-family: 'Inter', sans-serif;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        body {
-            background-color: #0c100e;
-            color: #f1f5f9;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            overflow-x: hidden;
-        }
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
+<style>
+:root {
+    --green: #2ecc71;
+    --green-dark: #27ae60;
+    --green-glow: rgba(46, 204, 113, 0.35);
+    --bg: #0c100e;
+    --bg-2: #141c17;
+    --bg-3: #1a2520;
+    --border: rgba(255,255,255,0.06);
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --dim: #64748b;
+}
 
-        /* زر تبديل اللغة المنفصل وغير المدمج */
-        .lang-switch-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            height: 42px;
-            padding: 0 16px;
-            background: rgba(20, 28, 23, 0.85);
-            border: 1px solid rgba(46, 204, 113, 0.35);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 21px;
-            color: #2ecc71;
-            font-weight: 700;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            transition: all 0.25s ease;
-        }
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
 
-        .lang-switch-btn:hover {
-            background: #2ecc71;
-            color: #0c100e;
-            transform: scale(1.05);
-            border-color: #2ecc71;
-        }
+body {
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    position: relative;
+    line-height: 1.6;
+}
 
-        .lang-switch-btn i {
-            font-size: 1.05rem;
-        }
-        
-        /* حاوية الصفحة الرئيسية */
-        .wrapper {
-            max-width: 440px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-            gap: 22px;
-            padding: 40px 20px;
-            margin: auto;
-        }
-        
-        /* شاشة سياسة الخصوصية */
-        .privacy-container {
-            width: 100%;
-            min-height: 100vh;
-            display: none;
-            flex-direction: column;
-            position: relative;
-            z-index: 10;
-            background: #0c100e;
-            padding: 0 20px 40px 20px;
-            animation: fadeIn 0.3s ease;
-        }
+/* ============ NAVBAR ============ */
+.navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(12, 16, 14, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 20px;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #fff;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.nav-brand img {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+}
+.nav-brand span:last-child { color: var(--green); }
+.nav-links {
+    display: flex;
+    gap: 26px;
+    align-items: center;
+}
+.nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+.nav-links a:hover { color: var(--green); }
+.nav-cta {
+    background: var(--green);
+    color: var(--bg) !important;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-weight: 700 !important;
+    transition: all 0.2s;
+}
+.nav-cta:hover { background: var(--green-dark); transform: translateY(-1px); }
 
-        html[dir="rtl"] .privacy-container { text-align: right; }
-        html[dir="ltr"] .privacy-container { text-align: left; }
+.nav-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
 
-        /* الشريط العلوى الثابت الاحترافي */
-        .privacy-top-bar {
-            position: sticky;
-            top: 0;
-            background: rgba(12, 16, 14, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(46, 204, 113, 0.15);
-            padding: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 100;
-            width: 100%;
-            margin-bottom: 25px;
-        }
+.lang-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 7px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+.lang-btn:hover {
+    background: rgba(46,204,113,0.1);
+    border-color: var(--green);
+    color: var(--green);
+}
 
-        .privacy-top-title-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.burger {
+    display: none;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: #fff;
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    align-items: center;
+    justify-content: center;
+}
 
-        .privacy-top-icon {
-            width: 38px;
-            height: 38px;
-            background: #141c17;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
+/* ============ HERO ============ */
+.hero {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 20px 60px;
+    gap: 18px;
+}
 
-        .privacy-top-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+.hero-icon {
+    width: 110px; height: 110px;
+    border-radius: 26px;
+    overflow: hidden;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 60px var(--green-glow);
+    animation: floatY 3.5s ease-in-out infinite;
+}
+.hero-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .privacy-top-bar h2 {
-            color: #2ecc71;
-            font-size: 1.25rem;
-            font-weight: 800;
-            margin: 0;
-        }
+@keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
 
-        .privacy-back-icon-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #cbd5e1;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+.hero h1 {
+    font-size: clamp(2rem, 5.5vw, 3.4rem);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+}
+.hero h1 span {
+    color: var(--green);
+    text-shadow: 0 0 40px var(--green-glow);
+}
 
-        .privacy-back-icon-btn:hover {
-            background: #2ecc71;
-            color: #0c100e;
-            border-color: #2ecc71;
-        }
+.hero-tagline {
+    color: var(--muted);
+    font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+    max-width: 580px;
+    font-weight: 500;
+    line-height: 1.7;
+}
 
-        .privacy-content-box {
-            max-width: 700px;
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+/* ============ بطاقات المعلومات ============ */
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 520px;
+    margin-top: 8px;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+.stat-card {
+    background: linear-gradient(160deg, rgba(46,204,113,0.08), rgba(46,204,113,0.02));
+    border: 1px solid rgba(46, 204, 113, 0.15);
+    border-radius: 14px;
+    padding: 14px 8px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.28s ease;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+}
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(46, 204, 113, 0.4);
+    background: linear-gradient(160deg, rgba(46,204,113,0.14), rgba(46,204,113,0.04));
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 25px var(--green-glow);
+}
+.stat-card:hover::before { opacity: 1; }
 
-        .privacy-container .update-date {
-            color: #64748b;
-            font-size: 0.85rem;
-            margin-bottom: 10px;
-        }
+.stat-card-icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: rgba(46, 204, 113, 0.12);
+    border: 1px solid rgba(46, 204, 113, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green);
+    font-size: 0.85rem;
+    transition: all 0.28s ease;
+}
+.stat-card:hover .stat-card-icon {
+    background: rgba(46, 204, 113, 0.22);
+    box-shadow: 0 6px 15px var(--green-glow);
+    transform: scale(1.08);
+}
 
-        .privacy-container h3 {
-            color: #ffffff;
-            font-size: 1.15rem;
-            margin-top: 15px;
-            font-weight: 700;
-        }
+.stat-card-num {
+    font-size: 1rem;
+    font-weight: 900;
+    color: var(--green);
+    line-height: 1.1;
+    text-shadow: 0 0 15px var(--green-glow);
+    letter-spacing: -0.3px;
+}
 
-        .privacy-container p, .privacy-container li {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            line-height: 1.8;
-        }
+.stat-card-lbl {
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
 
-        html[dir="rtl"] .privacy-container ul { padding-right: 20px; padding-left: 0; }
-        html[dir="ltr"] .privacy-container ul { padding-left: 20px; padding-right: 0; }
+/* ============ الأزرار ============ */
+.hero-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    width: 100%;
+    max-width: 360px;
+}
 
-        .back-btn {
-            background: #2ecc71;
-            color: #0c100e;
-            border: none;
-            padding: 15px;
-            border-radius: 14px;
-            font-weight: 800;
-            font-size: 1.05rem;
-            cursor: pointer;
-            margin: 30px 0 50px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.2s ease;
-            width: 100%;
-            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.25);
-        }
+.btn-download {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
+    border-radius: 14px;
+    justify-content: center;
+}
 
-        .back-btn:hover {
-            background: #27ae60;
-        }
+.hero-stack .stores-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 2px;
+}
+.hero-stack .store-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    justify-content: center;
+}
 
-        .app-icon-container {
-            width: 90px;
-            height: 90px;
-            background: #141c17;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 22px;
-            overflow: hidden;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .app-icon-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        h1 {
-            color: #ffffff;
-            font-size: 2rem;
-            font-weight: 800;
-            text-align: center;
-            letter-spacing: 0.3px;
-        }
-        h1 span {
-            color: #2ecc71;
-        }
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 32px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    user-select: none;
+    -webkit-user-select: none;
+}
 
-        /* تصميم بطاقة الدور التفاعلية الجديدة */
-        .role-card-container {
-            background: linear-gradient(145deg, rgba(20, 28, 23, 0.85), rgba(12, 16, 14, 0.95));
-            border: 1px solid rgba(46, 204, 113, 0.25);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 22px;
-            border-radius: 18px;
-            width: 100%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        html[dir="rtl"] .role-card-container { text-align: right; }
-        html[dir="ltr"] .role-card-container { text-align: left; }
+.btn-small {
+    padding: 9px 22px;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    gap: 7px;
+    margin-top: 2px;
+}
 
-        .role-card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 10px;
-        }
+.btn-primary {
+    background: var(--green);
+    color: var(--bg);
+    box-shadow: 0 10px 30px var(--green-glow);
+}
+.btn-primary:hover {
+    background: var(--green-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px var(--green-glow);
+}
 
-        .role-badge {
-            background: rgba(255, 255, 255, 0.05);
-            color: #2ecc71;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(46, 204, 113, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+.btn-secondary {
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--green);
+    color: var(--green);
+}
 
-        .role-card-body {
-            min-height: 85px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+/* ============ المتاجر ============ */
+.stores-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 12px;
+}
+.store-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    padding: 11px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.25s ease;
+    min-width: 175px;
+}
+.store-btn:hover { transform: translateY(-3px); }
+.store-btn.apkpure:hover {
+    border-color: #00c853;
+    box-shadow: 0 10px 30px rgba(0, 200, 83, 0.2);
+}
+.store-btn.uptodown:hover {
+    border-color: #00AAD5;
+    box-shadow: 0 10px 30px rgba(0, 170, 213, 0.25);
+}
 
-        .role-text-content {
-            color: #cbd5e1;
-            font-size: 0.93rem;
-            line-height: 1.7;
-            transition: opacity 0.25s ease, transform 0.25s ease;
-        }
-        .role-text-content strong {
-            color: #ffffff;
-            font-weight: 700;
-        }
+.store-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: transparent;
+}
 
-        .role-card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 15px;
-            padding-top: 10px;
-        }
+.store-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+}
 
-        .role-dots {
-            display: flex;
-            gap: 6px;
-        }
-        .dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-        .dot.active {
-            background: #2ecc71;
-            width: 18px;
-            border-radius: 4px;
-        }
+.store-btn.apkpure .store-icon {
+    box-shadow: 0 0 0 1px rgba(0, 200, 83, 0.3);
+}
+.store-btn.uptodown .store-icon {
+    box-shadow: 0 0 0 1px rgba(0, 170, 213, 0.3);
+}
 
-        .next-role-btn {
-            background: rgba(46, 204, 113, 0.1);
-            border: 1px solid rgba(46, 204, 113, 0.4);
-            color: #2ecc71;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s ease;
-        }
-        .next-role-btn:hover {
-            background: #2ecc71;
-            color: #0c100e;
-        }
+.store-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: start;
+}
+.store-text small {
+    font-size: 0.68rem;
+    color: var(--dim);
+    font-weight: 600;
+}
+.store-text b {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
 
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            width: 100%;
-        }
-        .stat-box {
-            background: rgba(20, 28, 23, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            padding: 12px 8px;
-            border-radius: 12px;
-            text-align: center;
-        }
-        .stat-value {
-            color: #2ecc71;
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-        .stat-title {
-            color: #64748b;
-            font-size: 0.78rem;
-            font-weight: 600;
-        }
-        .download-action-btn {
-            background: #2ecc71;
-            color: #0c100e;
-            width: 100%;
-            padding: 15px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-decoration: none;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.2);
-            transition: all 0.2s ease;
-        }
-        .download-action-btn:hover {
-            background: #27ae60;
-        }
-        .download-action-btn:active {
-            transform: scale(0.98);
-        }
-        .social-row {
-            display: flex;
-            gap: 12px;
-            width: 100%;
-        }
-        .social-link-btn {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: #cbd5e1;
-            padding: 12px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-        }
-        .social-link-btn.wa:hover { background: #1b4d3e; color: #fff; border-color: #25d366; }
-        .social-link-btn.ig:hover { background: #4a1535; color: #fff; border-color: #e1306c; }
-        
-        /* الفوتر العام */
-        footer {
-            margin: 20px 0;
-            color: #475569;
-            font-size: 0.82rem;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            font-weight: 600;
-        }
-        footer span { color: #94a3b8; }
-        
-        .privacy-link {
-            color: #38bdf8;
-            text-decoration: none;
-            cursor: pointer;
-            margin: 0 5px;
-            transition: color 0.2s;
-        }
-        .privacy-link:hover {
-            text-decoration: underline;
-            color: #60a5fa;
-        }
-    </style>
+/* ============ SECTIONS ============ */
+section {
+    position: relative;
+    z-index: 2;
+    padding: 80px 20px;
+}
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 60px;
+}
+.section-title h2 {
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 12px;
+    position: relative;
+    display: inline-block;
+}
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    border-radius: 3px;
+    opacity: 0.7;
+}
+.section-title h2 span { color: var(--green); }
+.section-title p {
+    color: var(--muted);
+    max-width: 600px;
+    margin: 22px auto 0;
+    font-size: 1rem;
+}
+
+/* ============ FEATURES ============ */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+}
+
+.feature-card {
+    background: linear-gradient(160deg, var(--bg-2) 0%, rgba(20,28,23,0.6) 100%);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 26px 28px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.35, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.feature-card::after {
+    content: '';
+    position: absolute;
+    top: -50%; inset-inline-end: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, var(--green-glow) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(46, 204, 113, 0.35);
+    background: linear-gradient(160deg, var(--bg-3) 0%, rgba(26,37,32,0.7) 100%);
+    box-shadow: 
+        0 20px 50px rgba(0,0,0,0.5),
+        0 0 40px rgba(46,204,113,0.12);
+}
+
+.feature-card:hover::before { opacity: 1; }
+.feature-card:hover::after { opacity: 0.15; }
+
+.feature-num {
+    position: absolute;
+    top: 20px;
+    inset-inline-end: 22px;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: rgba(46, 204, 113, 0.08);
+    line-height: 1;
+    letter-spacing: -2px;
+    transition: all 0.4s ease;
+    user-select: none;
+}
+
+.feature-card:hover .feature-num {
+    color: rgba(46, 204, 113, 0.18);
+    transform: scale(1.1);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(46,204,113,0.05));
+    border: 1px solid rgba(46, 204, 113, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green);
+    font-size: 1.55rem;
+    margin-bottom: 20px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.35, 1);
+    position: relative;
+    z-index: 1;
+}
+
+.feature-card:hover .feature-icon {
+    background: linear-gradient(135deg, rgba(46,204,113,0.25), rgba(46,204,113,0.1));
+    box-shadow: 
+        0 10px 30px var(--green-glow),
+        0 0 50px rgba(46,204,113,0.2);
+    transform: translateY(-4px) scale(1.08) rotate(-5deg);
+    border-color: rgba(46, 204, 113, 0.5);
+}
+
+.feature-card h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.3px;
+    transition: color 0.3s ease;
+}
+
+.feature-card:hover h3 {
+    color: var(--green);
+}
+
+.feature-card h3::after {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--green);
+    border-radius: 2px;
+    margin-top: 8px;
+    opacity: 0.5;
+    transition: width 0.4s ease, opacity 0.4s ease;
+}
+
+.feature-card:hover h3::after {
+    width: 45px;
+    opacity: 1;
+}
+
+.feature-card p {
+    color: var(--muted);
+    font-size: 0.93rem;
+    line-height: 1.75;
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s ease;
+}
+
+.feature-card:hover p {
+    color: #cbd5e1;
+}
+
+/* ============ GALLERY ============ */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
+    overflow: hidden;
+}
+
+.carousel-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    aspect-ratio: 9 / 16;
+    border-radius: 22px;
+    overflow: hidden;
+    background: var(--bg-2);
+    cursor: pointer;
+    transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.35, 1),
+                opacity 0.45s ease;
+    transform: translate3d(-50%, -50%, 0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    border-radius: 22px;
+}
+
+.carousel-slide.is-center {
+    z-index: 5;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.5));
+}
+
+.carousel-slide.is-left { z-index: 3; }
+.carousel-slide.is-right { z-index: 3; }
+
+.carousel-slide.is-hidden {
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.carousel-dots {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.carousel-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.35s ease;
+    cursor: pointer;
+}
+.carousel-dots span.active {
+    width: 28px;
+    border-radius: 4px;
+    background: var(--green);
+    box-shadow: 0 0 15px var(--green-glow);
+}
+
+/* ============ TESTIMONIALS ============ */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.testimonial {
+    background: linear-gradient(160deg, var(--bg-2), rgba(20,28,23,0.6));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px 22px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.35, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonial::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.testimonial:hover {
+    border-color: rgba(46, 204, 113, 0.3);
+    transform: translateY(-6px);
+    background: linear-gradient(160deg, var(--bg-3), rgba(26,37,32,0.6));
+    box-shadow: 
+        0 20px 45px rgba(0,0,0,0.5),
+        0 0 40px rgba(46,204,113,0.1);
+}
+
+.testimonial:hover::before { opacity: 1; }
+
+.quote-mark {
+    position: absolute;
+    top: 20px;
+    inset-inline-end: 22px;
+    font-size: 1.8rem;
+    color: rgba(46, 204, 113, 0.15);
+    transition: all 0.4s ease;
+}
+.testimonial:hover .quote-mark {
+    color: rgba(46, 204, 113, 0.3);
+    transform: scale(1.15);
+}
+
+.stars {
+    color: #fbbf24;
+    margin-bottom: 14px;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    filter: drop-shadow(0 0 8px rgba(251,191,36,0.3));
+}
+
+.testimonial p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    margin-bottom: 22px;
+    line-height: 1.75;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+}
+
+.testimonial-footer {
+    display: flex;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.avatar-1 {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    box-shadow: 0 4px 15px rgba(46,204,113,0.4);
+}
+.avatar-2 {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    box-shadow: 0 4px 15px rgba(52,152,219,0.4);
+}
+.avatar-3 {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    box-shadow: 0 4px 15px rgba(155,89,182,0.4);
+}
+
+.author-info b {
+    display: block;
+    font-size: 0.95rem;
+    color: #fff;
+    font-weight: 800;
+}
+.author-info small {
+    color: var(--dim);
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+/* ============ FAQ ============ */
+.faq-list {
+    max-width: 750px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.faq-item {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.25s;
+}
+.faq-item.open {
+    border-color: rgba(46, 204, 113, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 25px rgba(46,204,113,0.08);
+}
+.faq-question {
+    width: 100%;
+    padding: 18px 22px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: start;
+    gap: 12px;
+}
+.faq-question i {
+    color: var(--green);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+}
+.faq-item.open .faq-question i { transform: rotate(180deg); }
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 22px;
+    color: var(--muted);
+    font-size: 0.93rem;
+    line-height: 1.75;
+}
+.faq-item.open .faq-answer {
+    max-height: 400px;
+    padding: 0 22px 20px;
+}
+
+/* ================================================
+   FINAL CTA - ملء الشاشة بالكامل
+================================================ */
+#download {
+    padding: 80px 0 !important;
+    width: 100%;
+}
+
+#download .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    width: 100%;
+}
+
+.final-cta {
+    position: relative;
+    width: 100%;
+    padding: 60px 20px 70px;
+    text-align: center;
+    overflow: hidden;
+    background: transparent;
+}
+
+/* خط أخضر متدرج علوي - مثل باقي الأقسام */
+.final-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(46,204,113,0.4), transparent);
+}
+
+.cta-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.cta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(46, 204, 113, 0.1);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    color: var(--green);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    box-shadow: 0 0 25px rgba(46,204,113,0.15);
+    backdrop-filter: blur(10px);
+}
+.cta-badge i {
+    color: #ff4757;
+    filter: drop-shadow(0 0 6px rgba(255,71,87,0.6));
+    animation: heartBeat 1.5s ease-in-out infinite;
+}
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.final-cta h2 {
+    font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+    font-weight: 900;
+    margin: 4px 0 0;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    position: relative;
+    display: inline-block;
+}
+.final-cta h2 span {
+    color: var(--green);
+    text-shadow: 0 0 50px var(--green-glow);
+}
+/* خط أخضر متدرج تحت العنوان - مثل باقي الأقسام */
+.final-cta h2::after {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    border-radius: 3px;
+    opacity: 0.7;
+}
+.final-cta p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    font-weight: 500;
+    max-width: 500px;
+    line-height: 1.7;
+    margin-top: 12px;
+}
+
+/* زر التحميل - توهج دائري معقول */
+.cta-main-btn {
+    padding: 18px 48px;
+    font-size: 1.08rem;
+    border-radius: 16px;
+    font-weight: 800;
+    margin-top: 8px;
+    position: relative;
+    letter-spacing: 0.2px;
+    z-index: 2;
+    background: var(--green);
+    color: var(--bg);
+    box-shadow: 
+        0 15px 40px -10px rgba(46,204,113,0.6),
+        0 0 0 0 rgba(46,204,113,0.3);
+    animation: btnPulse 2.5s ease-in-out infinite;
+    transition: transform 0.3s ease, background 0.3s ease;
+    overflow: visible;
+}
+
+/* توهج دائري خفيف خلف الزر */
+.cta-main-btn::after {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(ellipse at center, 
+        rgba(46,204,113,0.3) 0%, 
+        rgba(46,204,113,0.12) 35%, 
+        transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+    pointer-events: none;
+    animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        opacity: 0.6;
+    }
+    50% { 
+        transform: scale(1.05); 
+        opacity: 0.9;
+    }
+}
+
+@keyframes btnPulse {
+    0%, 100% {
+        box-shadow: 
+            0 15px 40px -10px rgba(46,204,113,0.6),
+            0 0 0 0 rgba(46,204,113,0.3);
+    }
+    50% {
+        box-shadow: 
+            0 20px 50px -10px rgba(46,204,113,0.8),
+            0 0 0 6px rgba(46,204,113,0.08);
+    }
+}
+
+.cta-main-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    background: var(--green-dark);
+}
+
+/* ميزات سريعة */
+.cta-features {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    width: 100%;
+    max-width: 500px;
+}
+.cta-features span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+.cta-features i {
+    color: var(--green);
+    font-size: 0.75rem;
+    background: rgba(46,204,113,0.15);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* المتاجر - جنب بعض */
+.final-cta .stores-row {
+    margin-top: 22px;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.final-cta .stores-row .store-btn {
+    flex: 1;
+    min-width: 0;
+    justify-content: center;
+    padding: 11px 12px;
+    gap: 8px;
+}
+
+.final-cta .stores-row .store-btn .store-icon {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+}
+
+.final-cta .stores-row .store-btn .store-text small {
+    font-size: 0.62rem;
+}
+
+.final-cta .stores-row .store-btn .store-text b {
+    font-size: 0.82rem;
+}
+
+/* ============ قسم التقييم على المتاجر ============ */
+.rate-section {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 12px;
+    padding: 22px 20px;
+    background: rgba(251, 191, 36, 0.05);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 18px;
+    text-align: center;
+}
+
+.rate-title {
+    color: #fbbf24 !important;
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 14px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    max-width: 100% !important;
+}
+.rate-title i {
+    filter: drop-shadow(0 0 6px rgba(251,191,36,0.6));
+    animation: starPulse 2s ease-in-out infinite;
+}
+@keyframes starPulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.15) rotate(15deg); }
+}
+
+.rate-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.rate-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.35, 1);
+    border: 1px solid transparent;
+    flex: 1;
+    min-width: 180px;
+    justify-content: flex-start;
+    position: relative;
+    overflow: hidden;
+    background: rgba(0,0,0,0.25);
+}
+
+.rate-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+}
+.rate-btn:hover::before {
+    transform: translateX(100%);
+}
+
+.rate-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 3px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+.rate-btn:hover .rate-icon {
+    transform: scale(1.08) rotate(-5deg);
+}
+
+.rate-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 7px;
+    display: block;
+}
+
+.rate-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.15;
+    flex: 1;
+    text-align: start;
+}
+.rate-info small {
+    font-size: 0.62rem;
+    font-weight: 600;
+    opacity: 0.75;
+    margin-bottom: 2px;
+}
+.rate-info b {
+    font-size: 0.92rem;
+    font-weight: 800;
+}
+
+.rate-star {
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 6px currentColor);
+}
+.rate-btn:hover .rate-star {
+    transform: scale(1.3) rotate(72deg);
+}
+
+/* APKPure - أخضر */
+.rate-apkpure {
+    background: linear-gradient(135deg, rgba(0, 200, 83, 0.15), rgba(0, 200, 83, 0.05));
+    border-color: rgba(0, 200, 83, 0.4);
+    color: #00e676;
+}
+.rate-apkpure .rate-info small { color: rgba(0, 230, 118, 0.75); }
+.rate-apkpure .rate-info b { color: #00e676; }
+.rate-apkpure .rate-star { color: #00c853; }
+.rate-apkpure:hover {
+    background: linear-gradient(135deg, rgba(0, 200, 83, 0.25), rgba(0, 200, 83, 0.1));
+    border-color: #00c853;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0, 200, 83, 0.3);
+}
+
+/* Uptodown - أزرق سماوي */
+.rate-uptodown {
+    background: linear-gradient(135deg, rgba(0, 170, 213, 0.15), rgba(0, 170, 213, 0.05));
+    border-color: rgba(0, 170, 213, 0.4);
+    color: #00AAD5;
+}
+.rate-uptodown .rate-info small { color: rgba(0, 170, 213, 0.75); }
+.rate-uptodown .rate-info b { color: #00AAD5; }
+.rate-uptodown .rate-star { color: #00AAD5; }
+.rate-uptodown:hover {
+    background: linear-gradient(135deg, rgba(0, 170, 213, 0.25), rgba(0, 170, 213, 0.1));
+    border-color: #00AAD5;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0, 170, 213, 0.3);
+}
+
+/* ============ QR قابل للتحميل ============ */
+.qr-downloadable {
+    margin-top: 28px;
+    padding: 20px 20px 18px;
+    background: linear-gradient(160deg, rgba(0,0,0,0.5), rgba(0,0,0,0.35));
+    border: 1px solid rgba(46,204,113,0.25);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 40px rgba(46,204,113,0.1);
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.qr-downloadable::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0.6;
+}
+
+.qr-downloadable:hover {
+    border-color: var(--green);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 60px rgba(46,204,113,0.25);
+    transform: translateY(-4px);
+}
+
+.qr-downloadable:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+.qr-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--green);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+}
+.qr-header i {
+    font-size: 0.95rem;
+    filter: drop-shadow(0 0 8px var(--green-glow));
+    animation: qrPulse 2s ease-in-out infinite;
+}
+@keyframes qrPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.85; }
+}
+
+.qr-image-wrap {
+    padding: 10px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 
+        0 10px 30px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(46,204,113,0.15),
+        inset 0 0 0 1px rgba(0,0,0,0.05);
+    position: relative;
+}
+.qr-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--green), transparent 50%, var(--green));
+    opacity: 0.15;
+    z-index: -1;
+}
+
+.qr-image-wrap img {
+    width: 140px;
+    height: 140px;
+    border-radius: 8px;
+    display: block;
+    pointer-events: none;
+}
+
+.qr-footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(46,204,113,0.12);
+    border: 1px solid rgba(46,204,113,0.3);
+    color: var(--green);
+    padding: 9px 18px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    transition: all 0.3s ease;
+}
+.qr-downloadable:hover .qr-footer-btn {
+    background: var(--green);
+    color: var(--bg);
+    border-color: var(--green);
+    box-shadow: 0 10px 25px var(--green-glow);
+}
+.qr-footer-btn i {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+.qr-downloadable:hover .qr-footer-btn i {
+    transform: translateY(2px);
+}
+
+/* ============ PRIVACY ============ */
+.privacy-container {
+    display: none;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 100px 20px 60px;
+    position: relative;
+    z-index: 3;
+    animation: fadeIn 0.3s;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.privacy-header {
+    text-align: center;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+}
+.privacy-header .privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(46,204,113,0.1);
+    border: 1px solid rgba(46,204,113,0.25);
+    color: var(--green);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+.privacy-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 900;
+    margin-bottom: 12px;
+}
+.privacy-header h1 span { color: var(--green); }
+.privacy-header .update-date {
+    color: var(--dim);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.privacy-toc {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin-bottom: 40px;
+}
+.privacy-toc h4 {
+    color: var(--green);
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.privacy-toc ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+}
+.privacy-toc li a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+.privacy-toc li a:hover { color: var(--green); }
+.privacy-toc li a::before {
+    content: '→';
+    color: var(--green);
+    font-size: 0.75rem;
+}
+
+.privacy-section {
+    margin-bottom: 36px;
+    scroll-margin-top: 100px;
+}
+.privacy-section h3 {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(46,204,113,0.15);
+}
+.privacy-section h3 .num {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: rgba(46,204,113,0.12);
+    border: 1px solid rgba(46,204,113,0.25);
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.privacy-section p, .privacy-section li {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.85;
+    margin-bottom: 8px;
+}
+.privacy-section ul {
+    padding-inline-start: 22px;
+    margin: 10px 0;
+}
+.privacy-section ul li::marker { color: var(--green); }
+.privacy-section strong { color: var(--green); font-weight: 700; }
+
+.privacy-highlight {
+    background: linear-gradient(135deg, rgba(46,204,113,0.08), rgba(46,204,113,0.02));
+    border: 1px solid rgba(46,204,113,0.2);
+    border-inline-start: 3px solid var(--green);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.privacy-highlight i {
+    color: var(--green);
+    font-size: 1.1rem;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+.privacy-highlight p {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+.privacy-contact {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 26px;
+    margin-top: 30px;
+    text-align: center;
+}
+.privacy-contact h3 {
+    border: none;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+.privacy-contact p {
+    color: var(--muted);
+    margin-bottom: 16px;
+}
+.privacy-contact a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green);
+    color: var(--bg);
+    padding: 10px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    box-shadow: 0 8px 25px var(--green-glow);
+}
+.privacy-contact a:hover {
+    background: var(--green-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px var(--green-glow);
+}
+
+/* ============ FOOTER ============ */
+footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid var(--border);
+    padding: 40px 20px 30px;
+    text-align: center;
+    background: rgba(0,0,0,0.3);
+}
+.footer-socials {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.footer-socials a {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 1.1rem;
+}
+.footer-socials a:hover {
+    color: var(--bg);
+    background: var(--green);
+    border-color: var(--green);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--green-glow);
+}
+footer p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.8;
+}
+footer p .dev-name {
+    color: var(--green);
+    font-weight: 800;
+    text-shadow: 0 0 15px rgba(46,204,113,0.3);
+}
+.privacy-link {
+    color: #38bdf8;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 0 6px;
+    font-weight: 700;
+}
+.privacy-link:hover { text-decoration: underline; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 720px) {
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%; inset-inline-end: 0; inset-inline-start: 0;
+        background: rgba(12, 16, 14, 0.98);
+        flex-direction: column;
+        padding: 20px;
+        gap: 16px;
+        border-bottom: 1px solid var(--border);
+    }
+    .nav-links.open { display: flex; }
+    .burger { display: flex; }
+    section { padding: 60px 16px; }
+    .hero { padding: 100px 16px 40px; }
+    .btn { padding: 14px 24px; font-size: 0.95rem; }
+    .store-btn { min-width: 155px; padding: 10px 15px; }
+    .store-icon { width: 36px; height: 36px; font-size: 1.15rem; }
+    .store-text b { font-size: 0.88rem; }
+}
+
+@media (max-width: 560px) {
+    .hero { padding: 100px 16px 40px; gap: 14px; }
+    .hero-icon { width: 92px; height: 92px; border-radius: 22px; }
+    .hero-stats { gap: 8px; max-width: 100%; }
+    .stat-card { padding: 11px 4px 10px; gap: 5px; border-radius: 12px; }
+    .stat-card-icon { width: 28px; height: 28px; font-size: 0.7rem; border-radius: 8px; }
+    .stat-card-num { font-size: 0.85rem; }
+    .stat-card-lbl { font-size: 0.6rem; }
+    .hero-stack { max-width: 100%; }
+    .btn-download { padding: 13px 16px; font-size: 0.95rem; }
+
+    .carousel { height: 400px; }
+    .carousel-slide { width: 165px; border-radius: 18px; }
+    .carousel-slide img { border-radius: 18px; }
+    .carousel-slide.is-center { width: 200px; }
+
+    .final-cta { padding: 50px 16px 60px; }
+    .cta-badge { font-size: 0.72rem; padding: 6px 14px; }
+    .cta-main-btn { padding: 16px 32px; font-size: 1rem; width: 100%; max-width: 320px; }
+    .cta-features { gap: 12px; }
+    .cta-features span { font-size: 0.78rem; }
+
+    .final-cta .stores-row {
+        max-width: 100%;
+        gap: 8px;
+    }
+    .final-cta .stores-row .store-btn {
+        padding: 10px 8px;
+        gap: 6px;
+    }
+    .final-cta .stores-row .store-btn .store-icon {
+        width: 30px;
+        height: 30px;
+    }
+    .final-cta .stores-row .store-btn .store-text small {
+        font-size: 0.55rem;
+    }
+    .final-cta .stores-row .store-btn .store-text b {
+        font-size: 0.72rem;
+    }
+
+    .feature-card { padding: 26px 22px 24px; }
+    .feature-icon { width: 52px; height: 52px; font-size: 1.35rem; }
+    .feature-num { font-size: 1.8rem; top: 16px; inset-inline-end: 18px; }
+
+    .rate-buttons { flex-direction: column; }
+    .rate-btn { width: 100%; min-width: 0; }
+
+    .qr-downloadable { padding: 16px 16px 14px; gap: 12px; }
+    .qr-image-wrap img { width: 120px; height: 120px; }
+    .qr-header { font-size: 0.75rem; }
+    .qr-footer-btn { font-size: 0.75rem; padding: 8px 14px; }
+}
+
+@media (max-width: 380px) {
+    .stat-card-num { font-size: 0.78rem; }
+    .stat-card-lbl { font-size: 0.55rem; }
+    .stat-card-icon { width: 24px; height: 24px; font-size: 0.62rem; }
+
+    .carousel { height: 360px; }
+    .carousel-slide { width: 145px; border-radius: 16px; }
+    .carousel-slide img { border-radius: 16px; }
+    .carousel-slide.is-center { width: 180px; }
+}
+</style>
 </head>
+
 <body>
 
-    <div id="particles-js"></div>
-
-    <!-- زر تبديل اللغة (يظهر فقط في الواجهة الرئيسية) -->
-    <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()">
-        <i class="fa-solid fa-globe"></i>
-        <span id="langBtnText">AR</span>
-    </button>
-
-    <!-- 1. واجهة الصفحة الرئيسية (التحميل) -->
-    <div class="wrapper" id="homeScreen">
-        <div class="app-icon-container">
-            <img src="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png" alt="Mafia App Icon">
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <div class="nav-brand" onclick="showHome()">
+            <img src="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png" alt="Mafia">
+            <span data-i18n="brand.prefix">لعبة</span> <span data-i18n="brand.suffix">مافيا</span>
         </div>
-        
-        <h1 id="mainHeading">لعبة <span>مافيا</span></h1>
-        
-        <!-- بطاقة الدور التفاعلية البديلة للوصف التقليدي -->
-        <div class="role-card-container">
-            <div class="role-card-header">
-               <span class="role-badge" id="cardBadgeTitle">
-                   <i class="fa-solid fa-lightbulb" style="color: #2ecc71;"></i> نبذة سريعة
-               </span>
-                <span style="font-size: 0.78rem; color: #64748b;" id="cardStepIndicator">1 / 3</span>
+        <div class="nav-links" id="navLinks">
+            <a data-target="#features" data-i18n="nav.features">الميزات</a>
+            <a data-target="#gallery" data-i18n="nav.gallery">الصور</a>
+            <a data-target="#reviews" data-i18n="nav.reviews">الآراء</a>
+            <a data-target="#faq" data-i18n="nav.faq">الأسئلة</a>
+            <a data-target="#download" class="nav-cta" data-i18n="nav.download">حمّل الآن</a>
+        </div>
+        <div class="nav-tools">
+            <button class="lang-btn" id="langBtn" aria-label="Language">
+                <i class="fa-solid fa-globe"></i>
+                <span id="langText">EN</span>
+            </button>
+            <button class="burger" id="burger" aria-label="Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- ============ HOME ============ -->
+<div id="homeScreen">
+
+    <header class="hero">
+        <div class="hero-icon">
+            <img src="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png" alt="Mafia Icon">
+        </div>
+        <h1 data-i18n="hero.title">لعبة <span>مافيا</span></h1>
+        <p class="hero-tagline" data-i18n="hero.tagline">عُشاق الغموض والذكاء والخداع المتقن 🕵️‍♂️🔥 اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة.</p>
+
+        <div class="hero-stats">
+            <div class="stat-card">
+                <div class="stat-card-icon"><i class="fa-solid fa-code-branch"></i></div>
+                <div class="stat-card-num" id="statVersion">1.2</div>
+                <div class="stat-card-lbl" data-i18n="stats.version">إصدار</div>
             </div>
-            <div class="role-card-body">
-                <div class="role-text-content" id="roleTextContent">
-                    <strong>عُشاق الغموض والذكاء والخداع المتقن 🔥</strong><br>اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة في تجربة جماعية ممتعة.
+            <div class="stat-card">
+                <div class="stat-card-icon"><i class="fa-solid fa-database"></i></div>
+                <div class="stat-card-num" id="statSize">2.24 MB</div>
+                <div class="stat-card-lbl" data-i18n="stats.size">حجم</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="stat-card-num">+100</div>
+                <div class="stat-card-lbl" data-i18n="stats.sessions">جلسة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-icon"><i class="fa-solid fa-star"></i></div>
+                <div class="stat-card-num">4.8</div>
+                <div class="stat-card-lbl" data-i18n="stats.rating">تقييم</div>
+            </div>
+        </div>
+
+        <div class="hero-stack">
+            <a href="https://github.com/7sn-17/mafia/releases/latest/download/Mafia.apk" class="btn btn-primary btn-download">
+                <i class="fa-solid fa-cloud-arrow-down"></i> <span data-i18n="btn.download">تحميل مباشر (APK)</span>
+            </a>
+
+            <div class="stores-row">
+                <a href="https://apkpure.com/" target="_blank" rel="noopener" class="store-btn apkpure">
+                    <div class="store-icon"><img src="https://iili.io/nIrWgsI.jpg" alt="APKPure"></div>
+                    <div class="store-text">
+                        <small data-i18n="store.available">قريبًا على</small>
+                        <b>APKPure</b>
+                    </div>
+                </a>
+                <a href="https://uptodown.com/" target="_blank" rel="noopener" class="store-btn uptodown">
+                    <div class="store-icon"><img src="https://iili.io/nIrXUpj.png" alt="Uptodown"></div>
+                    <div class="store-text">
+                        <small data-i18n="store.available">قريبًا على</small>
+                        <b>Uptodown</b>
+                    </div>
+                </a>
+            </div>
+
+            <a data-target="#features" class="btn btn-secondary btn-small">
+                <i class="fa-solid fa-circle-info"></i> <span data-i18n="btn.learn">تعرّف أكثر</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- FEATURES -->
+    <section id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="features.title">لماذا <span>مافيا</span>؟</h2>
+                <p data-i18n="features.subtitle">تجربة جماعية متكاملة مصممة لتعيش أجواء الغموض مع أصدقائك بكل سهولة.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-num">01</div>
+                    <div class="feature-icon"><i class="fa-solid fa-masks-theater"></i></div>
+                    <h3 data-i18n="feat1.title">أدوار متنوعة</h3>
+                    <p data-i18n="feat1.desc">مافيا، طبيب، محقق، ومواطنون — كل دور له قوة خاصة وتأثير على مجرى اللعبة.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-num">02</div>
+                    <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h3 data-i18n="feat2.title">تحكم سلس وسريع</h3>
+                    <p data-i18n="feat2.desc">واجهة بسيطة وأنيقة تتيح إدارة الجلسة بضغطة زر، بدون أي تعقيد أو إعدادات معقدة.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-num">03</div>
+                    <div class="feature-icon"><i class="fa-solid fa-wifi"></i></div>
+                    <h3 data-i18n="feat3.title">بدون إنترنت</h3>
+                    <p data-i18n="feat3.desc">العب في أي مكان — في المنزل، الرحلة، أو الجلسة مع الأصدقاء، بدون الحاجة لاتصال.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-num">04</div>
+                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3 data-i18n="feat4.title">خصوصية تامة</h3>
+                    <p data-i18n="feat4.desc">لا تسجيل، لا حسابات، لا تتبع. نلتزم بحماية خصوصيتك بشكل كامل وشفاف.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-num">05</div>
+                    <div class="feature-icon"><i class="fa-solid fa-users-rectangle"></i></div>
+                    <h3 data-i18n="feat5.title">جماعية تفاعلية</h3>
+                    <p data-i18n="feat5.desc">مثالية للمجموعات من 4 إلى 15 لاعباً، مع إدارة كاملة للأدوار وجولات اللعب.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-num">06</div>
+                    <div class="feature-icon"><i class="fa-solid fa-face-smile"></i></div>
+                    <h3 data-i18n="feat6.title">بدون إعلانات</h3>
+                    <p data-i18n="feat6.desc">تجربة نظيفة تماماً بدون أي إعلانات مزعجة أو نوافذ منبثقة تفسد متعة اللعب.</p>
                 </div>
             </div>
-            <div class="role-card-footer">
-                <div class="role-dots" id="roleDots">
-                    <div class="dot active" data-index="0"></div>
-                    <div class="dot" data-index="1"></div>
-                    <div class="dot" data-index="2"></div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="gallery.title">لمحة من <span>اللعب</span></h2>
+                <p data-i18n="gallery.subtitle">تصاميم أنيقة وواجهات مدروسة تجعل كل جلسة تجربة فريدة.</p>
+            </div>
+
+            <div class="carousel" id="carousel">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide" data-index="0">
+                        <img src="https://iili.io/nIrFCvV.png" alt="Screenshot 1" draggable="false">
+                    </div>
+                    <div class="carousel-slide" data-index="1">
+                        <img src="https://iili.io/nIrd3CJ.png" alt="Screenshot 2" draggable="false">
+                    </div>
+                    <div class="carousel-slide" data-index="2">
+                        <img src="https://iili.io/nIrKHSR.png" alt="Screenshot 3" draggable="false">
+                    </div>
                 </div>
-                <button class="next-role-btn" onclick="nextCardInfo()">
-                    <span id="nextBtnText">التالي</span> <i class="fa-solid fa-arrow-left" id="nextBtnIcon"></i>
-                </button>
+            </div>
+
+            <div class="carousel-dots" id="carouselDots">
+                <span data-slide="0"></span>
+                <span class="active" data-slide="1"></span>
+                <span data-slide="2"></span>
             </div>
         </div>
+    </section>
 
-        <!-- الإحصائيات -->
-        <div class="stats-row">
-            <div class="stat-box">
-                <div class="stat-value" id="siteVersion">جاري التحميل...</div>
-                <div class="stat-title" id="statVersionTitle">الإصدار</div>
+    <!-- TESTIMONIALS -->
+    <section id="reviews">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="reviews.title">ماذا قال <span>اللاعبون</span>؟</h2>
+                <p data-i18n="reviews.subtitle">تجارب حقيقية من مجتمع اللعبة.</p>
             </div>
-            <div class="stat-box">
-                <div class="stat-value" id="siteSize">مناسب</div>
-                <div class="stat-title" id="statSizeTitle">الحجم</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value" id="statPlayVal">بدون إنترنت</div>
-                <div class="stat-title" id="statPlayTitle">التشغيل</div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <div class="quote-mark"><i class="fa-solid fa-quote-right"></i></div>
+                    <div class="stars">★★★★★</div>
+                    <p data-i18n="rev1.text">"أفضل لعبة مافيا عربية لعبتها! التصميم نظيف والأدوار متوازنة جداً. أصدقائي مدمنين عليها."</p>
+                    <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                            <div class="avatar avatar-1">م</div>
+                            <div class="author-info">
+                                <b data-i18n="rev1.name">محمد المحمد</b>
+                                <small data-i18n="rev1.role">لاعب منتظم</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    <div class="quote-mark"><i class="fa-solid fa-quote-right"></i></div>
+                    <div class="stars">★★★★★</div>
+                    <p data-i18n="rev2.text">"واجهة أنيقة جداً وسريعة، وما فيها إعلانات. صراحة تجربة احترافية تستحق التحميل."</p>
+                    <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                            <div class="avatar avatar-2">س</div>
+                            <div class="author-info">
+                                <b data-i18n="rev2.name">سارة العلي</b>
+                                <small data-i18n="rev2.role">من أول إصدار</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    <div class="quote-mark"><i class="fa-solid fa-quote-right"></i></div>
+                    <div class="stars">★★★★</div>
+                    <p data-i18n="rev3.text">"نلعبها كل نهاية أسبوع مع الشباب. الأدوار واضحة والتوزيع عادل. شيء رهيب!"</p>
+                    <div class="testimonial-footer">
+                        <div class="testimonial-author">
+                            <div class="avatar avatar-3">خ</div>
+                            <div class="author-info">
+                                <b data-i18n="rev3.name">خالد الراشد</b>
+                                <small data-i18n="rev3.role">لاعب نشط</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- زر التحميل المباشر -->
-        <a href="https://github.com/7sn-17/mafia/releases/latest/download/Mafia.apk" class="download-action-btn" id="downloadBtnContainer">
-            <i class="fa-solid fa-cloud-arrow-down"></i> <span id="downloadBtnText">تحميل النسخة الرسمية (APK)</span>
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="faq.title">الأسئلة <span>الشائعة</span></h2>
+                <p data-i18n="faq.subtitle">كل ما تريد معرفته قبل التحميل.</p>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span data-i18n="faq.q1">هل اللعبة مجانية بالكامل؟</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer" data-i18n="faq.a1">نعم، اللعبة مجانية بالكامل ولا تحتوي على أي إعلانات أو عمليات شراء داخلية.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span data-i18n="faq.q2">كم عدد اللاعبين المطلوب؟</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer" data-i18n="faq.a2">اللعبة مصممة لمجموعة من 4 إلى 15 لاعباً، ويمكن ضبط عدد اللاعبين بسهولة من داخل التطبيق.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span data-i18n="faq.q3">هل تحتاج اتصال بالإنترنت؟</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer" data-i18n="faq.a3">لا، التطبيق يعمل بالكامل بدون إنترنت. يمكنك اللعب في أي مكان وفي أي وقت.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span data-i18n="faq.q4">من أين أحمّل اللعبة؟</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer" data-i18n="faq.a4">يمكنك التحميل مباشرة عبر زر APK في الأعلى، أو من متجري APKPure و Uptodown اللذين يوفران تحديثات تلقائية.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA - ملء الشاشة -->
+    <section id="download">
+        <div class="container">
+            <div class="final-cta">
+                <div class="cta-content">
+                    <div class="cta-badge">
+                        <i class="fa-solid fa-heart"></i>
+                        <span data-i18n="cta.badge">تجربة يطورها شغف اللاعبين</span>
+                    </div>
+
+                    <h2 data-i18n="cta.title">جاهز <span>للانطلاق</span>؟</h2>
+                    <p data-i18n="cta.subtitle">حمّل النسخة الرسمية الآن وابدأ أول جلسة مع أصدقائك.</p>
+
+                    <a href="https://github.com/7sn-17/mafia/releases/latest/download/Mafia.apk" class="btn btn-primary cta-main-btn">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                        <span data-i18n="cta.download">تحميل APK مباشر</span>
+                    </a>
+
+                    <div class="stores-row">
+                        <a href="https://apkpure.com/" target="_blank" rel="noopener" class="store-btn apkpure">
+                            <div class="store-icon"><img src="https://iili.io/nIrWgsI.jpg" alt="APKPure"></div>
+                            <div class="store-text">
+                                <small data-i18n="store.available">قريبًا على</small>
+                                <b>APKPure</b>
+                            </div>
+                        </a>
+                        <a href="https://uptodown.com/" target="_blank" rel="noopener" class="store-btn uptodown">
+                            <div class="store-icon"><img src="https://iili.io/nIrXUpj.png" alt="Uptodown"></div>
+                            <div class="store-text">
+                                <small data-i18n="store.available">قريبًا على</small>
+                                <b>Uptodown</b>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="cta-features">
+                        <span><i class="fa-solid fa-check"></i> <span data-i18n="cta.f1">مجاني بالكامل</span></span>
+                        <span><i class="fa-solid fa-check"></i> <span data-i18n="cta.f2">بدون إعلانات</span></span>
+                        <span><i class="fa-solid fa-check"></i> <span data-i18n="cta.f3">بدون إنترنت</span></span>
+                    </div>
+
+                    <div class="rate-section">
+                        <p class="rate-title" data-i18n="cta.rateTitle">
+                            <i class="fa-solid fa-star"></i>
+                            أعجبتك اللعبة؟ قيّمها على المتجر
+                        </p>
+                        <div class="rate-buttons">
+                            <a href="https://apkpure.com/" target="_blank" rel="noopener" class="rate-btn rate-apkpure">
+                                <div class="rate-icon">
+                                    <img src="https://iili.io/nIrWgsI.jpg" alt="APKPure">
+                                </div>
+                                <div class="rate-info">
+                                    <small data-i18n="cta.rateLabel">قيّم اللعبة على</small>
+                                    <b>APKPure</b>
+                                </div>
+                                <i class="fa-solid fa-star rate-star"></i>
+                            </a>
+                            <a href="https://uptodown.com/" target="_blank" rel="noopener" class="rate-btn rate-uptodown">
+                                <div class="rate-icon">
+                                    <img src="https://iili.io/nIrXUpj.png" alt="Uptodown">
+                                </div>
+                                <div class="rate-info">
+                                    <small data-i18n="cta.rateLabel">قيّم اللعبة على</small>
+                                    <b>Uptodown</b>
+                                </div>
+                                <i class="fa-solid fa-star rate-star"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- QR قابل للتحميل -->
+                    <div class="qr-downloadable" id="qrDownload">
+                        <div class="qr-header">
+                            <i class="fa-solid fa-qrcode"></i>
+                            <span data-i18n="cta.qrScan">امسح الرمز للتحميل السريع</span>
+                        </div>
+                        <div class="qr-image-wrap">
+                            <img src="https://iili.io/nI6W5lt.png" alt="QR Code" id="qrImage" crossorigin="anonymous">
+                        </div>
+                        <div class="qr-footer-btn">
+                            <i class="fa-solid fa-download"></i>
+                            <span data-i18n="cta.qrDownload">اضغط لتحميل صورة QR</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- ============ PRIVACY ============ -->
+<div class="privacy-container" id="privacyScreen">
+    <div class="privacy-header">
+        <div class="privacy-badge"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="privacy.badge">وثيقة قانونية موثوقة</span></div>
+        <h1 data-i18n="privacy.title">سياسة <span>الخصوصية</span></h1>
+        <div class="update-date" data-i18n="privacy.date">آخر تحديث: 19 سبتمبر 2026</div>
+    </div>
+
+    <div class="privacy-toc">
+        <h4><i class="fa-solid fa-list"></i> <span data-i18n="privacy.toc.title">جدول المحتويات</span></h4>
+        <ul>
+            <li><a data-target="#p1" data-i18n="privacy.toc.1">مقدمة عامة</a></li>
+            <li><a data-target="#p2" data-i18n="privacy.toc.2">البيانات التي نجمعها</a></li>
+            <li><a data-target="#p3" data-i18n="privacy.toc.3">كيفية استخدام البيانات</a></li>
+            <li><a data-target="#p4" data-i18n="privacy.toc.4">الإعلانات والتتبع</a></li>
+            <li><a data-target="#p5" data-i18n="privacy.toc.5">حقوق المستخدم</a></li>
+            <li><a data-target="#p6" data-i18n="privacy.toc.6">أمان المعلومات</a></li>
+            <li><a data-target="#p7" data-i18n="privacy.toc.7">الأطفال والخصوصية</a></li>
+            <li><a data-target="#p8" data-i18n="privacy.toc.8">تحديثات السياسة</a></li>
+        </ul>
+    </div>
+
+    <div class="privacy-section" id="p1">
+        <h3><span class="num">01</span> <span data-i18n="privacy.s1.title">مقدمة عامة</span></h3>
+        <p data-i18n="privacy.s1.p1">نحن في تطبيق "مافيا" نولي أهمية قصوى لخصوصية مستخدمينا. تم إعداد سياسة الخصوصية هذه لتوضيح آلية تعاملنا مع بياناتك عند استخدامك للتطبيق، ولتكون مرجعاً شفافاً يوضح حقوقك ومسؤولياتنا.</p>
+        <p data-i18n="privacy.s1.p2">باستخدامك للتطبيق، فإنك توافق على الممارسات الموضحة في هذه الوثيقة. إذا كنت لا توافق على أي بند من بنودها، نرجو التوقف عن استخدام التطبيق.</p>
+        <div class="privacy-highlight">
+            <i class="fa-solid fa-circle-info"></i>
+            <p data-i18n="privacy.s1.note">تطبيق مافيا هو تطبيق تفاعلي محلي بالكامل لإدارة جلسات اللعب الجماعية. لا يتطلب إنشاء حساب، ولا يجمع أي بيانات شخصية.</p>
+        </div>
+    </div>
+
+    <div class="privacy-section" id="p2">
+        <h3><span class="num">02</span> <span data-i18n="privacy.s2.title">البيانات التي نجمعها</span></h3>
+        <p data-i18n="privacy.s2.p1">نظراً لطبيعة التطبيق، فإننا لا نجمع أي نوع من البيانات الشخصية. بشكل تفصيلي:</p>
+        <ul>
+            <li data-i18n="privacy.s2.li1">لا نجمع الأسماء أو البريد الإلكتروني أو أرقام الهواتف.</li>
+            <li data-i18n="privacy.s2.li2">لا نجمع الموقع الجغرافي أو بيانات GPS.</li>
+            <li data-i18n="privacy.s2.li3">لا نجمع معلومات الجهاز أو معرّفات الإعلانات.</li>
+            <li data-i18n="privacy.s2.li4">لا نصل إلى جهات الاتصال أو الصور أو الملفات على جهازك.</li>
+            <li data-i18n="privacy.s2.li5">جميع البيانات المستخدمة في اللعبة (الأسماء، الأدوار) تُعالج محلياً على جهازك فقط.</li>
+        </ul>
+    </div>
+
+    <div class="privacy-section" id="p3">
+        <h3><span class="num">03</span> <span data-i18n="privacy.s3.title">كيفية استخدام البيانات</span></h3>
+        <p data-i18n="privacy.s3.p1">بما أننا لا نجمع أي بيانات، فلا توجد بيانات نستخدمها. جميع المدخلات النصية داخل اللعبة (مثل أسماء اللاعبين) تُخزَّن مؤقتاً في ذاكرة الجهاز فقط أثناء الجلسة، وتُحذف تلقائياً عند إغلاق التطبيق.</p>
+        <p data-i18n="privacy.s3.p2">نحن لا نحتفظ بأي نسخ احتياطية لهذه البيانات، ولا نرسلها إلى أي خادم خارجي.</p>
+    </div>
+
+    <div class="privacy-section" id="p4">
+        <h3><span class="num">04</span> <span data-i18n="privacy.s4.title">الإعلانات والتتبع الرقمي</span></h3>
+        <p data-i18n="privacy.s4.p1">نلتزم بتقديم تجربة نظيفة تماماً:</p>
+        <ul>
+            <li data-i18n="privacy.s4.li1">النسخة الحالية من التطبيق خالية تماماً من أي إعلانات تجارية.</li>
+            <li data-i18n="privacy.s4.li2">لا نستخدم أي أدوات تحليلية (Analytics) لتتبع سلوكك.</li>
+            <li data-i18n="privacy.s4.li3">لا نستخدم أي مكتبات تتبع خارجية (Tracking SDKs).</li>
+            <li data-i18n="privacy.s4.li4">لا نشارك أي بيانات مع جهات إعلانية أو تسويقية.</li>
+        </ul>
+    </div>
+
+    <div class="privacy-section" id="p5">
+        <h3><span class="num">05</span> <span data-i18n="privacy.s5.title">حقوق المستخدم</span></h3>
+        <p data-i18n="privacy.s5.p1">حتى مع عدم جمعنا للبيانات، فإننا نلتزم بحقوقك الأساسية وفقاً للقوانين الدولية لحماية البيانات (مثل GDPR الأوروبي و CCPA الأمريكي):</p>
+        <ul>
+            <li data-i18n="privacy.s5.li1"><strong>حق المعرفة:</strong> تعرف تماماً ما يفعله التطبيق ببياناتك (لا شيء).</li>
+            <li data-i18n="privacy.s5.li2"><strong>حق الوصول:</strong> لك الحق في الوصول إلى أي بيانات تخصك (لا توجد بيانات).</li>
+            <li data-i18n="privacy.s5.li3"><strong>حق الحذف:</strong> يمكنك حذف التطبيق وكل بياناته بحذفه من جهازك.</li>
+            <li data-i18n="privacy.s5.li4"><strong>حق الاعتراض:</strong> لك الحق في الاعتراض على أي ممارسة، ونحن ملتزمون بالاستجابة.</li>
+        </ul>
+    </div>
+
+    <div class="privacy-section" id="p6">
+        <h3><span class="num">06</span> <span data-i18n="privacy.s6.title">أمان المعلومات</span></h3>
+        <p data-i18n="privacy.s6.p1">نظراً لعدم وجود أي عمليات لجمع أو تخزين أو نقل البيانات، فلا توجد مخاطر تتعلق بتسريب المعلومات الشخصية. جميع العمليات تتم محلياً على جهازك، وأنت المتحكم الكامل بها.</p>
+        <div class="privacy-highlight">
+            <i class="fa-solid fa-lock"></i>
+            <p data-i18n="privacy.s6.note">نلتزم بمعايير الأمان الدولية، ولا نستخدم أي خوادم خارجية، ولا نطلب أي أذونات حساسة على جهازك.</p>
+        </div>
+    </div>
+
+    <div class="privacy-section" id="p7">
+        <h3><span class="num">07</span> <span data-i18n="privacy.s7.title">الأطفال والخصوصية</span></h3>
+        <p data-i18n="privacy.s7.p1">التطبيق مناسب لجميع الأعمار، ولا يجمع أي بيانات من الأطفال أو البالغين على حد سواء. نحن نلتزم بقانون حماية خصوصية الأطفال على الإنترنت (COPPA) وبكل القوانين المشابهة.</p>
+    </div>
+
+    <div class="privacy-section" id="p8">
+        <h3><span class="num">08</span> <span data-i18n="privacy.s8.title">تحديثات السياسة</span></h3>
+        <p data-i18n="privacy.s8.p1">قد نقوم بتحديث سياسة الخصوصية من وقت لآخر عند إضافة ميزات جديدة أو لتوافق مع القوانين. سنقوم بنشر أي تحديث فوراً عبر هذه الصفحة، مع تحديث تاريخ آخر تعديل في الأعلى.</p>
+        <p data-i18n="privacy.s8.p2">نوصي بمراجعة هذه الصفحة دورياً للاطلاع على أي تغييرات. استمرارك في استخدام التطبيق بعد نشر التحديثات يُعد موافقة ضمنية عليها.</p>
+    </div>
+
+    <div class="privacy-contact">
+        <h3><span class="num" style="display:inline-flex; margin-inline-end:8px;"><i class="fa-solid fa-envelope"></i></span> <span data-i18n="privacy.contact.title">التواصل معنا</span></h3>
+        <p data-i18n="privacy.contact.text">لأي استفسارات أو ملاحظات بخصوص سياسة الخصوصية، تواصل معنا مباشرة:</p>
+        <a href="mailto:hasantaha5689@gmail.com">
+            <i class="fa-solid fa-paper-plane"></i> hasantaha5689@gmail.com
         </a>
-
-        <!-- أزرار التواصل -->
-        <div class="social-row">
-            <a href="https://wa.me/17862927607" target="_blank" class="social-link-btn wa" id="waBtnContainer">
-                <i class="fa-brands fa-whatsapp fa-lg"></i> <span id="whatsappText">واتساب</span>
-            </a>
-            <a href="https://www.instagram.com/7sn__08" target="_blank" class="social-link-btn ig" id="igBtnContainer">
-                <i class="fa-brands fa-instagram fa-lg"></i> <span id="instagramText">إنستغرام</span>
-            </a>
-        </div>
     </div>
 
-    <!-- 2. شاشة سياسة الخصوصية -->
-    <div class="privacy-container" id="privacyScreen">
-        <div class="privacy-top-bar">
-            <div class="privacy-top-title-wrapper">
-                <div class="privacy-top-icon">
-                    <img src="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png" alt="Icon">
-                </div>
-                <h2 id="privacyNavTitle">سياسة الخصوصية</h2>
-            </div>
-            <button class="privacy-back-icon-btn" onclick="showHome()" title="العودة">
-                <i class="fa-solid fa-arrow-right" id="backIconDir"></i>
-            </button>
-        </div>
-
-        <div class="privacy-content-box">
-            <div class="update-date" id="privacyDate">تاريخ آخر تحديث: 19 سبتمبر 2026</div>
-
-            <h3 id="pSec1Title">مقدمة عامة</h3>
-            <p id="pSec1Text">نحن نولي أهمية قصوى لخصوصية مستخدمي تطبيق <strong>مافيا</strong>. تهدف وثيقة سياسة الخصوصية هذه إلى توضيح الممارسات والآلية المتبعة بشأن التعامل مع البيانات والمعلومات عند استخدامك للتطبيق.</p>
-
-            <h3 id="pSec2Title">1. عدم جمع البيانات الشخصية</h3>
-            <p id="pSec2Sub">تم تصميم تطبيق "مافيا" ليعمل بشكل أساسي كأداة تفاعلية محلية لإدارة جلسات اللعب الجماعية بين الأصدقاء:</p>
-            <ul id="pSec2List">
-                <li id="pSec2Li1">لا يتطلب التطبيق تسجيل حسابات مستخدمين أو إدخال كلمات مرور.</li>
-                <li id="pSec2Li2">لا نقوم نهائياً بجمع أي معلومات شخصية قابلة للتحديد (مثل الأسماء، أرقام الهواتف، البريد الإلكتروني، أو المواقع الجغرافية).</li>
-            </ul>
-
-            <h3 id="pSec3Title">2. الإعلانات والتتبع الرقمي</h3>
-            <ul id="pSec3List">
-                <li id="pSec3Li1">النسخة الحالية من التطبيق خالية تماماً من أي إعلانات تجارية لضمان تجربة مريحة ومستقرة.</li>
-                <li id="pSec3Li2">لا يتم دمج أي حزم برمجية لأدوات التتبع أو التحليلات الخارجية لمراقبة سلوك المستخدمين.</li>
-            </ul>
-
-            <h3 id="pSec4Title">3. أمان وحماية المعلومات</h3>
-            <p id="pSec4Text">نظرًا لعدم وجود أي عمليات لجمع أو تخزين البيانات للمستخدمين، فلا توجد أي مخاطر تتعلق بتسريب أو مشاركة معلومات شخصية مع أية جهات أو أطراف ثالثة.</p>
-
-            <h3 id="pSec5Title">4. التعديلات على السياسة</h3>
-            <p id="pSec5Text">قد يتم تحديث هذه السياسة مستقبلاً في حال تم إطلاق ميزات جديدة. سيتم نشر أي تحديث رسمي فوراً عبر هذه الصفحة.</p>
-
-            <h3 id="pSec6Title">5. التواصل معنا</h3>
-            <p id="pSec6Text">لأي استفسارات أو ملاحظات إضافية تتعلق بسياسة الخصوصية، يسعدنا تواصلكم عبر البريد الإلكتروني الرسمي:</p>
-            <p><a href="mailto:hasantaha5689@gmail.com" style="color: #38bdf8; font-weight: 700;">hasantaha5689@gmail.com</a></p>
-
-            <button class="back-btn" onclick="showHome()">
-                <i class="fa-solid fa-arrow-right" id="backBtnIconDir"></i> <span id="backBtnText">العودة إلى الصفحة الرئيسية</span>
-            </button>
-        </div>
+    <div style="text-align:center; margin-top:40px;">
+        <button class="btn btn-primary" onclick="showHome()">
+            <i class="fa-solid fa-arrow-right"></i> <span data-i18n="privacy.back">العودة إلى الصفحة الرئيسية</span>
+        </button>
     </div>
+</div>
 
-    <!-- الفوتر العام -->
-    <footer id="mainFooter">
-        <span id="footerDevText">تم تطوير اللعبة بواسطة</span> <span style="color: #2ecc71;">حسن المحمد</span> © 2026 <br>
-        <span class="privacy-link" onclick="showPrivacy()" id="footerPrivacyText">سياسة الخصوصية</span>
-    </footer>
+<!-- ============ FOOTER ============ -->
+<footer id="mainFooter">
+    <div class="footer-socials">
+        <a href="https://wa.me/17862927607" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://www.instagram.com/7sn__08" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="mailto:hasantaha5689@gmail.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+    </div>
+    <p>
+        <span data-i18n="footer.dev">تم تطوير اللعبة بواسطة</span> <span class="dev-name" data-i18n="footer.name">حسن المحمد</span> © 2026<br>
+        <span class="privacy-link" onclick="showPrivacy()" data-i18n="footer.privacy">سياسة الخصوصية</span>
+    </p>
+</footer>
 
-    <!-- سكربت التحكم الشامل -->
-    <script>
-        let currentLang = 'ar';
-        let currentCardIndex = 0;
+<script>
+/* ============ LANGUAGE SYSTEM ============ */
+const translations = {
+    ar: {
+        "brand.prefix": "لعبة", "brand.suffix": "مافيا",
+        "nav.features": "الميزات", "nav.gallery": "الصور", "nav.reviews": "الآراء", "nav.faq": "الأسئلة", "nav.download": "حمّل الآن",
+        "hero.title": 'لعبة <span>مافيا</span>',
+        "hero.tagline": 'عُشاق الغموض والذكاء والخداع المتقن 🕵️‍♂️🔥<br>اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة.',
+        "stats.version": "إصدار", "stats.size": "حجم", "stats.sessions": "جلسة", "stats.rating": "تقييم",
+        "btn.download": "تحميل مباشر (APK)", "btn.learn": "تعرّف أكثر",
+        "store.available": "قريبًا على",
+        "features.title": 'لماذا <span>مافيا</span>؟',
+        "features.subtitle": "تجربة جماعية متكاملة مصممة لتعيش أجواء الغموض مع أصدقائك بكل سهولة.",
+        "feat1.title": "أدوار متنوعة", "feat1.desc": "مافيا، طبيب، محقق، ومواطنون — كل دور له قوة خاصة وتأثير على مجرى اللعبة.",
+        "feat2.title": "تحكم سلس وسريع", "feat2.desc": "واجهة بسيطة وأنيقة تتيح إدارة الجلسة بضغطة زر، بدون أي تعقيد أو إعدادات معقدة.",
+        "feat3.title": "بدون إنترنت", "feat3.desc": "العب في أي مكان — في المنزل، الرحلة، أو الجلسة مع الأصدقاء، بدون الحاجة لاتصال.",
+        "feat4.title": "خصوصية تامة", "feat4.desc": "لا تسجيل، لا حسابات، لا تتبع. نلتزم بحماية خصوصيتك بشكل كامل وشفاف.",
+        "feat5.title": "جماعية تفاعلية", "feat5.desc": "مثالية للمجموعات من 4 إلى 15 لاعباً، مع إدارة كاملة للأدوار وجولات اللعب.",
+        "feat6.title": "بدون إعلانات", "feat6.desc": "تجربة نظيفة تماماً بدون أي إعلانات مزعجة أو نوافذ منبثقة تفسد متعة اللعب.",
+        "gallery.title": 'لمحة من <span>اللعب</span>',
+        "gallery.subtitle": "تصاميم أنيقة وواجهات مدروسة تجعل كل جلسة تجربة فريدة.",
+        "reviews.title": 'ماذا قال <span>اللاعبون</span>؟',
+        "reviews.subtitle": "تجارب حقيقية من مجتمع اللعبة.",
+        "rev1.text": '"أفضل لعبة مافيا عربية لعبتها! التصميم نظيف والأدوار متوازنة جداً. أصدقائي مدمنين عليها."',
+        "rev1.name": "محمد المحمد", "rev1.role": "لاعب منتظم",
+        "rev2.text": '"واجهة أنيقة جداً وسريعة، وما فيها إعلانات. صراحة تجربة احترافية تستحق التحميل."',
+        "rev2.name": "سارة العلي", "rev2.role": "من أول إصدار",
+        "rev3.text": '"نلعبها كل نهاية أسبوع مع الشباب. الأدوار واضحة والتوزيع عادل. شيء رهيب!"',
+        "rev3.name": "خالد الراشد", "rev3.role": "لاعب نشط",
+        "faq.title": 'الأسئلة <span>الشائعة</span>',
+        "faq.subtitle": "كل ما تريد معرفته قبل التحميل.",
+        "faq.q1": "هل اللعبة مجانية بالكامل؟", "faq.a1": "نعم، اللعبة مجانية بالكامل ولا تحتوي على أي إعلانات أو عمليات شراء داخلية.",
+        "faq.q2": "كم عدد اللاعبين المطلوب؟", "faq.a2": "اللعبة مصممة لمجموعة من 4 إلى 15 لاعباً، ويمكن ضبط عدد اللاعبين بسهولة من داخل التطبيق.",
+        "faq.q3": "هل تحتاج اتصال بالإنترنت؟", "faq.a3": "لا، التطبيق يعمل بالكامل بدون إنترنت. يمكنك اللعب في أي مكان وفي أي وقت.",
+        "faq.q4": "من أين أحمّل اللعبة؟", "faq.a4": "يمكنك التحميل مباشرة عبر زر APK في الأعلى، أو من متجري APKPure و Uptodown اللذين يوفران تحديثات تلقائية.",
+        "cta.badge": "تجربة يطورها شغف اللاعبين",
+        "cta.title": 'جاهز <span>للانطلاق</span>؟',
+        "cta.subtitle": "حمّل النسخة الرسمية الآن وابدأ أول جلسة مع أصدقائك.",
+        "cta.download": "تحميل APK مباشر",
+        "cta.f1": "مجاني بالكامل", "cta.f2": "بدون إعلانات", "cta.f3": "بدون إنترنت",
+        "cta.rateTitle": "أعجبتك اللعبة؟ قيّمها على المتجر",
+        "cta.rateLabel": "قيّم اللعبة على",
+        "cta.qrScan": "امسح الرمز للتحميل السريع",
+        "cta.qrDownload": "اضغط لتحميل صورة QR",
+        "privacy.badge": "وثيقة قانونية موثوقة",
+        "privacy.title": 'سياسة <span>الخصوصية</span>',
+        "privacy.date": "آخر تحديث: 19 سبتمبر 2026",
+        "privacy.toc.title": "جدول المحتويات",
+        "privacy.toc.1": "مقدمة عامة", "privacy.toc.2": "البيانات التي نجمعها", "privacy.toc.3": "كيفية استخدام البيانات", "privacy.toc.4": "الإعلانات والتتبع",
+        "privacy.toc.5": "حقوق المستخدم", "privacy.toc.6": "أمان المعلومات", "privacy.toc.7": "الأطفال والخصوصية", "privacy.toc.8": "تحديثات السياسة",
+        "privacy.s1.title": "مقدمة عامة",
+        "privacy.s1.p1": 'نحن في تطبيق "مافيا" نولي أهمية قصوى لخصوصية مستخدمينا. تم إعداد سياسة الخصوصية هذه لتوضيح آلية تعاملنا مع بياناتك عند استخدامك للتطبيق، ولتكون مرجعاً شفافاً يوضح حقوقك ومسؤولياتنا.',
+        "privacy.s1.p2": "باستخدامك للتطبيق، فإنك توافق على الممارسات الموضحة في هذه الوثيقة. إذا كنت لا توافق على أي بند من بنودها، نرجو التوقف عن استخدام التطبيق.",
+        "privacy.s1.note": "تطبيق مافيا هو تطبيق تفاعلي محلي بالكامل لإدارة جلسات اللعب الجماعية. لا يتطلب إنشاء حساب، ولا يجمع أي بيانات شخصية.",
+        "privacy.s2.title": "البيانات التي نجمعها",
+        "privacy.s2.p1": "نظراً لطبيعة التطبيق، فإننا لا نجمع أي نوع من البيانات الشخصية. بشكل تفصيلي:",
+        "privacy.s2.li1": "لا نجمع الأسماء أو البريد الإلكتروني أو أرقام الهواتف.",
+        "privacy.s2.li2": "لا نجمع الموقع الجغرافي أو بيانات GPS.",
+        "privacy.s2.li3": "لا نجمع معلومات الجهاز أو معرّفات الإعلانات.",
+        "privacy.s2.li4": "لا نصل إلى جهات الاتصال أو الصور أو الملفات على جهازك.",
+        "privacy.s2.li5": "جميع البيانات المستخدمة في اللعبة (الأسماء، الأدوار) تُعالج محلياً على جهازك فقط.",
+        "privacy.s3.title": "كيفية استخدام البيانات",
+        "privacy.s3.p1": "بما أننا لا نجمع أي بيانات، فلا توجد بيانات نستخدمها. جميع المدخلات النصية داخل اللعبة (مثل أسماء اللاعبين) تُخزَّن مؤقتاً في ذاكرة الجهاز فقط أثناء الجلسة، وتُحذف تلقائياً عند إغلاق التطبيق.",
+        "privacy.s3.p2": "نحن لا نحتفظ بأي نسخ احتياطية لهذه البيانات، ولا نرسلها إلى أي خادم خارجي.",
+        "privacy.s4.title": "الإعلانات والتتبع الرقمي",
+        "privacy.s4.p1": "نلتزم بتقديم تجربة نظيفة تماماً:",
+        "privacy.s4.li1": "النسخة الحالية من التطبيق خالية تماماً من أي إعلانات تجارية.",
+        "privacy.s4.li2": "لا نستخدم أي أدوات تحليلية (Analytics) لتتبع سلوكك.",
+        "privacy.s4.li3": "لا نستخدم أي مكتبات تتبع خارجية (Tracking SDKs).",
+        "privacy.s4.li4": "لا نشارك أي بيانات مع جهات إعلانية أو تسويقية.",
+        "privacy.s5.title": "حقوق المستخدم",
+        "privacy.s5.p1": "حتى مع عدم جمعنا للبيانات، فإننا نلتزم بحقوقك الأساسية وفقاً للقوانين الدولية لحماية البيانات (مثل GDPR الأوروبي و CCPA الأمريكي):",
+        "privacy.s5.li1": "<strong>حق المعرفة:</strong> تعرف تماماً ما يفعله التطبيق ببياناتك (لا شيء).",
+        "privacy.s5.li2": "<strong>حق الوصول:</strong> لك الحق في الوصول إلى أي بيانات تخصك (لا توجد بيانات).",
+        "privacy.s5.li3": "<strong>حق الحذف:</strong> يمكنك حذف التطبيق وكل بياناته بحذفه من جهازك.",
+        "privacy.s5.li4": "<strong>حق الاعتراض:</strong> لك الحق في الاعتراض على أي ممارسة، ونحن ملتزمون بالاستجابة.",
+        "privacy.s6.title": "أمان المعلومات",
+        "privacy.s6.p1": "نظراً لعدم وجود أي عمليات لجمع أو تخزين أو نقل البيانات، فلا توجد مخاطر تتعلق بتسريب المعلومات الشخصية. جميع العمليات تتم محلياً على جهازك، وأنت المتحكم الكامل بها.",
+        "privacy.s6.note": "نلتزم بمعايير الأمان الدولية، ولا نستخدم أي خوادم خارجية، ولا نطلب أي أذونات حساسة على جهازك.",
+        "privacy.s7.title": "الأطفال والخصوصية",
+        "privacy.s7.p1": "التطبيق مناسب لجميع الأعمار، ولا يجمع أي بيانات من الأطفال أو البالغين على حد سواء. نحن نلتزم بقانون حماية خصوصية الأطفال على الإنترنت (COPPA) وبكل القوانين المشابهة.",
+        "privacy.s8.title": "تحديثات السياسة",
+        "privacy.s8.p1": "قد نقوم بتحديث سياسة الخصوصية من وقت لآخر عند إضافة ميزات جديدة أو لتوافق مع القوانين. سنقوم بنشر أي تحديث فوراً عبر هذه الصفحة، مع تحديث تاريخ آخر تعديل في الأعلى.",
+        "privacy.s8.p2": "نوصي بمراجعة هذه الصفحة دورياً للاطلاع على أي تغييرات. استمرارك في استخدام التطبيق بعد نشر التحديثات يُعد موافقة ضمنية عليها.",
+        "privacy.contact.title": "التواصل معنا",
+        "privacy.contact.text": "لأي استفسارات أو ملاحظات بخصوص سياسة الخصوصية، تواصل معنا مباشرة:",
+        "privacy.back": "العودة إلى الصفحة الرئيسية",
+        "footer.dev": "تم تطوير اللعبة بواسطة", "footer.name": "حسن المحمد", "footer.privacy": "سياسة الخصوصية",
+        "lang.btn": "EN"
+    },
+    en: {
+        "brand.prefix": "Mafia", "brand.suffix": "Game",
+        "nav.features": "Features", "nav.gallery": "Screenshots", "nav.reviews": "Reviews", "nav.faq": "FAQ", "nav.download": "Download Now",
+        "hero.title": 'Mafia <span>Game</span>',
+        "hero.tagline": 'Lovers of mystery, wit, and clever deception 🕵️‍♂️🔥<br>Gather your friends, shuffle the roles, and begin the battle of planning and uncovering traitors.',
+        "stats.version": "Version", "stats.size": "Size", "stats.sessions": "Sessions", "stats.rating": "Rating",
+        "btn.download": "Direct Download (APK)", "btn.learn": "Learn More",
+        "store.available": "Available on",
+        "features.title": 'Why <span>Mafia</span>?',
+        "features.subtitle": "A complete group experience designed to enjoy the mystery with your friends with ease.",
+        "feat1.title": "Varied Roles", "feat1.desc": "Mafia, Doctor, Detective, and Citizens — each role has a unique power that impacts the game.",
+        "feat2.title": "Smooth & Fast Control", "feat2.desc": "A simple and elegant interface that lets you manage sessions with one tap, no complexity.",
+        "feat3.title": "Works Offline", "feat3.desc": "Play anywhere — at home, on a trip, or with friends, without needing an internet connection.",
+        "feat4.title": "Total Privacy", "feat4.desc": "No signup, no accounts, no tracking. We fully commit to protecting your privacy transparently.",
+        "feat5.title": "Interactive Group Play", "feat5.desc": "Perfect for groups of 4 to 15 players, with complete management of roles and rounds.",
+        "feat6.title": "Ad-Free", "feat6.desc": "A completely clean experience without annoying ads or popups ruining the fun.",
+        "gallery.title": 'A Glimpse of <span>Gameplay</span>',
+        "gallery.subtitle": "Elegant designs and thoughtful interfaces make every session unique.",
+        "reviews.title": 'What <span>Players</span> Say',
+        "reviews.subtitle": "Real experiences from the game community.",
+        "rev1.text": '"Best Arabic Mafia game I have ever played! Clean design and very balanced roles. My friends are addicted."',
+        "rev1.name": "Mohammed Al-Mohammad", "rev1.role": "Regular Player",
+        "rev2.text": '"Very elegant and fast interface, with no ads. Honestly a professional experience worth downloading."',
+        "rev2.name": "Sarah Al-Ali", "rev2.role": "Since First Release",
+        "rev3.text": '"We play it every weekend with friends. Roles are clear and fair distribution. Amazing!"',
+        "rev3.name": "Khaled Al-Rashed", "rev3.role": "Active Player",
+        "faq.title": 'Frequently Asked <span>Questions</span>',
+        "faq.subtitle": "Everything you want to know before downloading.",
+        "faq.q1": "Is the game completely free?", "faq.a1": "Yes, the game is completely free and contains no ads or in-app purchases.",
+        "faq.q2": "How many players are needed?", "faq.a2": "The game is designed for groups of 4 to 15 players, and you can easily set the number inside the app.",
+        "faq.q3": "Does it require an internet connection?", "faq.a3": "No, the app works completely offline. You can play anywhere, anytime.",
+        "faq.q4": "Where can I download the game?", "faq.a4": "You can download directly via the APK button above, or from APKPure and Uptodown which provide auto-updates.",
+        "cta.badge": "A passion-driven experience for players",
+        "cta.title": 'Ready to <span>Start</span>?',
+        "cta.subtitle": "Download the official version now and start your first session with friends.",
+        "cta.download": "Direct APK Download",
+        "cta.f1": "Completely Free", "cta.f2": "No Ads", "cta.f3": "Works Offline",
+        "cta.rateTitle": "Loved the game? Rate it on the store",
+        "cta.rateLabel": "Rate the game on",
+        "cta.qrScan": "Scan the code for quick download",
+        "cta.qrDownload": "Tap to download QR image",
+        "privacy.badge": "Trusted Legal Document",
+        "privacy.title": '<span>Privacy</span> Policy',
+        "privacy.date": "Last updated: September 19, 2026",
+        "privacy.toc.title": "Table of Contents",
+        "privacy.toc.1": "General Introduction", "privacy.toc.2": "Data We Collect", "privacy.toc.3": "How We Use Data", "privacy.toc.4": "Ads & Tracking",
+        "privacy.toc.5": "User Rights", "privacy.toc.6": "Information Security", "privacy.toc.7": "Children & Privacy", "privacy.toc.8": "Policy Updates",
+        "privacy.s1.title": "General Introduction",
+        "privacy.s1.p1": 'At Mafia app, we place the utmost importance on the privacy of our users. This privacy policy is designed to clarify how we handle your data when you use the app, and to serve as a transparent reference explaining your rights and our responsibilities.',
+        "privacy.s1.p2": "By using the app, you agree to the practices described in this document. If you do not agree with any of its terms, please stop using the app.",
+        "privacy.s1.note": "Mafia is a fully local interactive app for managing group game sessions. It does not require account creation and does not collect any personal data.",
+        "privacy.s2.title": "Data We Collect",
+        "privacy.s2.p1": "Given the nature of the app, we do not collect any type of personal data. In detail:",
+        "privacy.s2.li1": "We do not collect names, emails, or phone numbers.",
+        "privacy.s2.li2": "We do not collect geographic location or GPS data.",
+        "privacy.s2.li3": "We do not collect device information or advertising identifiers.",
+        "privacy.s2.li4": "We do not access contacts, photos, or files on your device.",
+        "privacy.s2.li5": "All game data (names, roles) is processed locally on your device only.",
+        "privacy.s3.title": "How We Use Data",
+        "privacy.s3.p1": "Since we do not collect any data, there is no data for us to use. All text inputs within the game (such as player names) are temporarily stored in your device's memory only during the session, and are automatically deleted when the app is closed.",
+        "privacy.s3.p2": "We do not keep any backups of this data and do not send it to any external server.",
+        "privacy.s4.title": "Ads & Digital Tracking",
+        "privacy.s4.p1": "We are committed to providing a completely clean experience:",
+        "privacy.s4.li1": "The current version of the app is completely free of any commercial ads.",
+        "privacy.s4.li2": "We do not use any analytics tools to track your behavior.",
+        "privacy.s4.li3": "We do not use any external tracking libraries (Tracking SDKs).",
+        "privacy.s4.li4": "We do not share any data with advertising or marketing parties.",
+        "privacy.s5.title": "User Rights",
+        "privacy.s5.p1": "Even without collecting data, we adhere to your fundamental rights under international data protection laws (such as European GDPR and US CCPA):",
+        "privacy.s5.li1": "<strong>Right to Know:</strong> You know exactly what the app does with your data (nothing).",
+        "privacy.s5.li2": "<strong>Right to Access:</strong> You have the right to access any data related to you (no data exists).",
+        "privacy.s5.li3": "<strong>Right to Deletion:</strong> You can delete the app and all its data by removing it from your device.",
+        "privacy.s5.li4": "<strong>Right to Object:</strong> You have the right to object to any practice, and we are committed to responding.",
+        "privacy.s6.title": "Information Security",
+        "privacy.s6.p1": "Since there are no operations for collecting, storing, or transferring data, there are no risks related to personal information leakage. All operations are done locally on your device, and you have full control.",
+        "privacy.s6.note": "We adhere to international security standards, do not use any external servers, and do not request any sensitive permissions on your device.",
+        "privacy.s7.title": "Children & Privacy",
+        "privacy.s7.p1": "The app is suitable for all ages and does not collect any data from children or adults alike. We comply with the Children's Online Privacy Protection Act (COPPA) and all similar laws.",
+        "privacy.s8.title": "Policy Updates",
+        "privacy.s8.p1": "We may update the privacy policy from time to time when adding new features or to comply with laws. We will publish any update immediately on this page, with the last modified date updated at the top.",
+        "privacy.s8.p2": "We recommend reviewing this page periodically for any changes. Your continued use of the app after updates are published constitutes implicit acceptance of them.",
+        "privacy.contact.title": "Contact Us",
+        "privacy.contact.text": "For any inquiries or feedback regarding the privacy policy, contact us directly:",
+        "privacy.back": "Back to Home",
+        "footer.dev": "Developed by", "footer.name": "Hasan Al-Mohammad", "footer.privacy": "Privacy Policy",
+        "lang.btn": "AR"
+    }
+};
 
-        const translations = {
-            ar: {
-                pageTitle: "لعبة مافيا - الموقع الرسمي",
-                mainHeading: "لعبة <span>مافيا</span>",
-                cardBadgeTitle: '<i class="fa-solid fa-lightbulb" style="color: #2ecc71;"></i> نبذة سريعة',
-                cards: [
-                    "<strong>عُشاق الغموض والذكاء والخداع المتقن 🔥</strong><br>اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة في تجربة جماعية ممتعة.",
-                    "<strong>معركة ذكاء بدون إنترنت 📴</strong><br>قم بإدارة أدوار اللعبة بسهولة وبدون إعلانات مزعجة، لتستمتع بجلسات السهر والغموض مع أصدقائك.",
-                    "<strong>من هو القاتل بينكم؟ 🎭</strong><br>وزّع الأدوار بسرية تامة، راقب ردود الفعل، واكشف الحقيقة قبل فوات الأوان. حمّل النسخة الآن!"
-                ],
-                nextBtnText: "التالي",
-                statVersionTitle: "الإصدار",
-                statSizeTitle: "الحجم",
-                statPlayVal: "بدون إنترنت",
-                statPlayTitle: "التشغيل",
-                defaultSize: "مناسب",
-                defaultVersion: "v1.2",
-                downloadBtnHTML: '<i class="fa-solid fa-cloud-arrow-down"></i> <span>تحميل النسخة الرسمية (APK)</span>',
-                whatsappHTML: '<i class="fa-brands fa-whatsapp fa-lg"></i> <span>واتساب</span>',
-                instagramHTML: '<i class="fa-brands fa-instagram fa-lg"></i> <span>إنستغرام</span>',
-                privacyNavTitle: "سياسة الخصوصية",
-                privacyDate: "تاريخ آخر تحديث: 19 سبتمبر 2026",
-                pSec1Title: "مقدمة عامة",
-                pSec1Text: "نحن نولي أهمية قصوى لخصوصية مستخدمي تطبيق <strong>مافيا</strong>. تهدف وثيقة سياسة الخصوصية هذه إلى توضيح الممارسات والآلية المتبعة بشأن التعامل مع البيانات والمعلومات عند استخدامك للتطبيق.",
-                pSec2Title: "1. عدم جمع البيانات الشخصية",
-                pSec2Sub: "تم تصميم تطبيق \"مافيا\" ليعمل بشكل أساسي كأداة تفاعلية محلية لإدارة جلسات اللعب الجماعية بين الأصدقاء:",
-                pSec2Li1: "لا يتطلب التطبيق تسجيل حسابات مستخدمين أو إدخال كلمات مرور.",
-                pSec2Li2: "لا نقوم نهائياً بجمع أي معلومات شخصية قابلة للتحديد (مثل الأسماء، أرقام الهواتف، البريد الإلكتروني، أو المواقع الجغرافية).",
-                pSec3Title: "2. الإعلانات والتتبع الرقمي",
-                pSec3Li1: "النسخة الحالية من التطبيق خالية تماماً من أي إعلانات تجارية لضمان تجربة مريحة ومستقرة.",
-                pSec3Li2: "لا يتم دمج أي حزم برمجية لأدوات التتبع أو التحليلات الخارجية لمراقبة سلوك المستخدمين.",
-                pSec4Title: "3. أمان وحماية المعلومات",
-                pSec4Text: "نظرًا لعدم وجود أي عمليات لجمع أو تخزين البيانات للمستخدمين، فلا توجد أي مخاطر تتعلق بتسريب أو مشاركة معلومات شخصية مع أية جهات أو أطراف ثالثة.",
-                pSec5Title: "4. التعديلات على السياسة",
-                pSec5Text: "قد يتم تحديث هذه السياسة مستقبلاً في حال تم إطلاق ميزات جديدة. سيتم نشر أي تحديث رسمي فوراً عبر هذه الصفحة.",
-                pSec6Title: "5. التواصل معنا",
-                pSec6Text: "لأي استفسارات أو ملاحظات إضافية تتعلق بسياسة الخصوصية، يسعدنا تواصلكم عبر البريد الإلكتروني الرسمي:",
-                backBtnText: "العودة إلى الصفحة الرئيسية",
-                footerDevText: "تم تطوير اللعبة بواسطة",
-                footerPrivacyText: "سياسة الخصوصية"
-            },
-            en: {
-                pageTitle: "Mafia Game - Official Website",
-                mainHeading: "<span>Mafia</span> Game",
-                cardBadgeTitle: '<i class="fa-solid fa-lightbulb" style="color: #2ecc71;"></i> Quick Overview',
-                cards: [
-                    "<strong>For lovers of mystery, intelligence, and master deception 🔥</strong><br>Gather your friends, shuffle the cards, and start the battle of planning and exposing traitors.",
-                    "<strong>Offline Intelligence Battle 📴</strong><br>Manage game roles seamlessly and completely ad-free for an ultimate hangout experience with friends.",
-                    "<strong>Who is the traitor among you? 🎭</strong><br>Distribute roles secretly, watch reactions, and uncover the truth before it's too late. Download now!"
-                ],
-                nextBtnText: "Next",
-                statVersionTitle: "Version",
-                statSizeTitle: "Size",
-                statPlayVal: "Offline",
-                statPlayTitle: "Playability",
-                defaultSize: "Optimal",
-                defaultVersion: "v1.2",
-                downloadBtnHTML: '<i class="fa-solid fa-cloud-arrow-down"></i> <span>Download Official APK</span>',
-                whatsappHTML: '<i class="fa-brands fa-whatsapp fa-lg"></i> <span>WhatsApp</span>',
-                instagramHTML: '<i class="fa-brands fa-instagram fa-lg"></i> <span>Instagram</span>',
-                privacyNavTitle: "Privacy Policy",
-                privacyDate: "Last updated: September 19, 2026",
-                pSec1Title: "General Introduction",
-                pSec1Text: "We place utmost importance on the privacy of <strong>Mafia</strong> app users. This privacy policy document aims to clarify the practices and mechanisms regarding data and information handling when using the app.",
-                pSec2Title: "1. No Collection of Personal Data",
-                pSec2Sub: "The \"Mafia\" app is designed primarily as a local interactive tool to manage group game sessions among friends:",
-                pSec2Li1: "The app does not require user account registration or password entry.",
-                pSec2Li2: "We never collect any personally identifiable information (such as names, phone numbers, email addresses, or locations).",
-                pSec3Title: "2. Ads and Digital Tracking",
-                pSec3Li1: "The current version of the app is completely free of any commercial ads to ensure a comfortable and stable experience.",
-                pSec3Li2: "No third-party tracking or analytics software development kits (SDKs) are integrated to monitor user behavior.",
-                pSec4Title: "3. Information Security and Protection",
-                pSec4Text: "Due to the absence of any data collection or storage processes for users, there are no risks regarding the leakage or sharing of personal information with any entities or third parties.",
-                pSec5Title: "4. Policy Modifications",
-                pSec5Text: "This policy may be updated in the future if new features are launched. Any official update will be posted immediately via this page.",
-                pSec6Title: "5. Contact Us",
-                pSec6Text: "For any inquiries or additional feedback regarding the privacy policy, feel free to contact us via the official email:",
-                backBtnText: "Back to Home",
-                footerDevText: "Game developed by",
-                footerPrivacyText: "Privacy Policy"
-            }
-        };
+let currentLang = localStorage.getItem('mafia-lang') || 'ar';
 
-        function updateCardContent() {
-            const t = translations[currentLang];
-            const contentEl = document.getElementById('roleTextContent');
-            const indicatorEl = document.getElementById('cardStepIndicator');
-            
-            contentEl.style.opacity = '0';
-            contentEl.style.transform = 'translateY(5px)';
-            
-            setTimeout(() => {
-                contentEl.innerHTML = t.cards[currentCardIndex];
-                indicatorEl.innerText = `${currentCardIndex + 1} / 3`;
-                contentEl.style.opacity = '1';
-                contentEl.style.transform = 'translateY(0)';
-            }, 150);
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('mafia-lang', lang);
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-            // تحديث النقاط النشطة
-            const dots = document.getElementById('roleDots').getElementsByClassName('dot');
-            for (let i = 0; i < dots.length; i++) {
-                if (i === currentCardIndex) {
-                    dots[i].classList.add('active');
-                } else {
-                    dots[i].classList.remove('active');
-                }
-            }
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key] !== undefined) {
+            el.innerHTML = translations[lang][key];
         }
+    });
+    document.getElementById('langText').innerText = translations[lang]['lang.btn'];
+}
 
-        function nextCardInfo() {
-            currentCardIndex = (currentCardIndex + 1) % 3;
-            updateCardContent();
+document.getElementById('langBtn').addEventListener('click', () => {
+    setLanguage(currentLang === 'ar' ? 'en' : 'ar');
+});
+
+document.addEventListener('DOMContentLoaded', () => setLanguage(currentLang));
+
+/* ============ PRIVACY ============ */
+function showPrivacy() {
+    document.getElementById('homeScreen').style.display = 'none';
+    document.getElementById('privacyScreen').style.display = 'block';
+    document.getElementById('mainFooter').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showHome() {
+    document.getElementById('privacyScreen').style.display = 'none';
+    document.getElementById('homeScreen').style.display = 'block';
+    document.getElementById('mainFooter').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============ Burger ============ */
+document.getElementById('burger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+});
+
+/* ============ Navigation ============ */
+function scrollToTarget(target) {
+    const el = document.querySelector(target);
+    if (!el) return;
+    const offset = 80;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+}
+
+document.querySelectorAll('.nav-links a[data-target]').forEach(a => {
+    a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = a.getAttribute('data-target');
+        document.getElementById('navLinks').classList.remove('open');
+
+        if (document.getElementById('privacyScreen').style.display === 'block') {
+            showHome();
+            setTimeout(() => scrollToTarget(target), 100);
+        } else {
+            scrollToTarget(target);
         }
+    });
+});
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'ar' ? 'en' : 'ar';
-            const t = translations[currentLang];
-            const htmlRoot = document.getElementById('htmlRoot');
+document.querySelectorAll('.btn-secondary[data-target]').forEach(a => {
+    a.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollToTarget(a.getAttribute('data-target'));
+    });
+});
 
-            if (currentLang === 'en') {
-                htmlRoot.setAttribute('lang', 'en');
-                htmlRoot.setAttribute('dir', 'ltr');
-                document.getElementById('langBtnText').innerText = 'EN';
-                document.getElementById('backIconDir').className = 'fa-solid fa-arrow-left';
-                document.getElementById('backBtnIconDir').className = 'fa-solid fa-arrow-left';
-                document.getElementById('nextBtnIcon').className = 'fa-solid fa-arrow-right';
+document.querySelectorAll('.privacy-toc a[data-target]').forEach(a => {
+    a.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollToTarget(a.getAttribute('data-target'));
+    });
+});
+
+/* ============ FAQ ============ */
+document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+    });
+});
+
+/* ============ Fetch app info ============ */
+async function fetchAppInfo() {
+    try {
+        const res = await fetch('https://raw.githubusercontent.com/7sn-17/mafia/main/version.json', { cache: 'no-cache' });
+        if (res.ok) {
+            const data = await res.json();
+            if (data?.version) document.getElementById('statVersion').innerText = data.version;
+            if (data?.size) document.getElementById('statSize').innerText = data.size;
+        }
+    } catch (e) {}
+}
+document.addEventListener('DOMContentLoaded', fetchAppInfo);
+
+/* ============ CAROUSEL ============ */
+(function() {
+    const carousel = document.getElementById('carousel');
+    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+    const dots = Array.from(document.querySelectorAll('.carousel-dots span'));
+    const total = slides.length;
+
+    let current = 1;
+    let startX = 0, startY = 0, currentX = 0;
+    let isDragging = false;
+    let autoplayTimer = null;
+    let pauseTimer = null;
+    let isVisible = false;
+    const AUTOPLAY_INTERVAL = 5000;
+    const PAUSE_AFTER_INTERACTION = 5000;
+
+    function getOffsets() {
+        const w = window.innerWidth;
+        if (w <= 380) {
+            return { side: 130, scaleSide: 0.78, centerW: 180, sideW: 145 };
+        } else if (w <= 560) {
+            return { side: 150, scaleSide: 0.8, centerW: 200, sideW: 165 };
+        } else {
+            return { side: 185, scaleSide: 0.82, centerW: 240, sideW: 200 };
+        }
+    }
+
+    function updateSlides() {
+        const o = getOffsets();
+        const isRTL = document.documentElement.dir === 'rtl';
+
+        slides.forEach((slide, i) => {
+            const diff = (i - current + total) % total;
+            let x, scale, opacity, width, zIndex, filter;
+
+            if (diff === 0) {
+                x = 0; scale = 1; opacity = 1;
+                width = o.centerW + 'px';
+                zIndex = 5;
+                filter = 'drop-shadow(0 15px 30px rgba(0,0,0,0.5))';
+            } else if (diff === 1) {
+                x = isRTL ? -o.side : o.side;
+                scale = o.scaleSide; opacity = 0.85;
+                width = o.sideW + 'px';
+                zIndex = 3;
+                filter = 'none';
+            } else if (diff === total - 1) {
+                x = isRTL ? o.side : -o.side;
+                scale = o.scaleSide; opacity = 0.85;
+                width = o.sideW + 'px';
+                zIndex = 3;
+                filter = 'none';
             } else {
-                htmlRoot.setAttribute('lang', 'ar');
-                htmlRoot.setAttribute('dir', 'rtl');
-                document.getElementById('langBtnText').innerText = 'AR';
-                document.getElementById('backIconDir').className = 'fa-solid fa-arrow-right';
-                document.getElementById('backBtnIconDir').className = 'fa-solid fa-arrow-right';
-                document.getElementById('nextBtnIcon').className = 'fa-solid fa-arrow-left';
+                x = 0; scale = 0.6; opacity = 0;
+                width = o.sideW + 'px';
+                zIndex = 1;
+                filter = 'none';
             }
 
-            document.getElementById('pageTitle').innerText = t.pageTitle;
-            document.getElementById('mainHeading').innerHTML = t.mainHeading;
-            document.getElementById('cardBadgeTitle').innerHTML = t.cardBadgeTitle;
-            document.getElementById('nextBtnText').innerText = t.nextBtnText;
-            
-            updateCardContent();
-
-            document.getElementById('statVersionTitle').innerText = t.statVersionTitle;
-            document.getElementById('statSizeTitle').innerText = t.statSizeTitle;
-            document.getElementById('statPlayVal').innerText = t.statPlayVal;
-            document.getElementById('statPlayTitle').innerText = t.statPlayTitle;
-            
-            document.getElementById('downloadBtnContainer').innerHTML = t.downloadBtnHTML;
-            document.getElementById('waBtnContainer').innerHTML = t.whatsappHTML;
-            document.getElementById('igBtnContainer').innerHTML = t.instagramHTML;
-
-            document.getElementById('privacyNavTitle').innerText = t.privacyNavTitle;
-            document.getElementById('privacyDate').innerText = t.privacyDate;
-            document.getElementById('pSec1Title').innerText = t.pSec1Title;
-            document.getElementById('pSec1Text').innerHTML = t.pSec1Text;
-            document.getElementById('pSec2Title').innerText = t.pSec2Title;
-            document.getElementById('pSec2Sub').innerText = t.pSec2Sub;
-            
-            document.getElementById('pSec2Li1').innerText = t.pSec2Li1;
-            document.getElementById('pSec2Li2').innerText = t.pSec2Li2;
-
-            document.getElementById('pSec3Title').innerText = t.pSec3Title;
-            const listItems3 = document.getElementById('pSec3List').getElementsByTagName('li');
-            if (listItems3.length >= 2) {
-                listItems3[0].innerText = t.pSec3Li1;
-                listItems3[1].innerText = t.pSec3Li2;
-            }
-
-            document.getElementById('pSec4Title').innerText = t.pSec4Title;
-            document.getElementById('pSec4Text').innerText = t.pSec4Text;
-            document.getElementById('pSec5Title').innerText = t.pSec5Title;
-            document.getElementById('pSec5Text').innerText = t.pSec5Text;
-            document.getElementById('pSec6Title').innerText = t.pSec6Title;
-            document.getElementById('pSec6Text').innerText = t.pSec6Text;
-            document.getElementById('backBtnText').innerText = t.backBtnText;
-
-            document.getElementById('footerDevText').innerText = t.footerDevText;
-            document.getElementById('footerPrivacyText').innerText = t.footerPrivacyText;
-
-            fetchAppInfo();
-        }
-
-        function showPrivacy() {
-            document.getElementById('homeScreen').style.display = 'none';
-            document.getElementById('privacyScreen').style.display = 'block';
-            document.getElementById('mainFooter').style.display = 'none';
-            document.getElementById('langSwitchBtn').style.display = 'none';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function showHome() {
-            document.getElementById('privacyScreen').style.display = 'none';
-            document.getElementById('homeScreen').style.display = 'flex';
-            document.getElementById('mainFooter').style.display = 'block';
-            document.getElementById('langSwitchBtn').style.display = 'flex';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function fetchAppInfo() {
-            const t = translations[currentLang];
-            try {
-                const response = await fetch('https://raw.githubusercontent.com/7sn-17/mafia/main/version.json', { cache: 'no-cache' });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data && data.version) {
-                        document.getElementById('siteVersion').innerText = data.version;
-                    }
-                    if (data && data.size) {
-                        document.getElementById('siteSize').innerText = data.size;
-                    }
-                }
-            } catch (e) {
-                document.getElementById('siteVersion').innerText = t.defaultVersion;
-                document.getElementById('siteSize').innerText = t.defaultSize;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', fetchAppInfo);
-
-        // إعدادات البارتيكلز الصاعدة من الأسفل للأعلى
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 45, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#2ecc71" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.35, "random": true },
-                "size": { "value": 3, "random": true },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#2ecc71",
-                    "opacity": 0.1,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 1.5,
-                    "direction": "top",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out"
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": { "onhover": { "enable": false }, "onclick": { "enable": false } }
-            },
-            "retina_detect": true
+            slide.style.zIndex = zIndex;
+            slide.style.width = width;
+            slide.style.filter = filter;
+            slide.style.opacity = opacity;
+            slide.style.transform = `translate3d(calc(-50% + ${x}px), -50%, 0) scale(${scale})`;
         });
-    </script>
+
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+    }
+
+    function goTo(index) {
+        if (index === current) return;
+        current = ((index % total) + total) % total;
+        updateSlides();
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    function startAutoplay() {
+        stopAutoplay();
+        autoplayTimer = setInterval(next, AUTOPLAY_INTERVAL);
+    }
+    function stopAutoplay() {
+        if (autoplayTimer) {
+            clearInterval(autoplayTimer);
+            autoplayTimer = null;
+        }
+    }
+    function pauseAutoplayTemporarily() {
+        stopAutoplay();
+        if (pauseTimer) clearTimeout(pauseTimer);
+        pauseTimer = setTimeout(() => {
+            if (isVisible) startAutoplay();
+        }, PAUSE_AFTER_INTERACTION);
+    }
+
+    function checkVisibility() {
+        const rect = carousel.getBoundingClientRect();
+        const nowVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        if (nowVisible && !isVisible) {
+            isVisible = true;
+            startAutoplay();
+        } else if (!nowVisible && isVisible) {
+            isVisible = false;
+            stopAutoplay();
+        }
+    }
+
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    window.addEventListener('resize', updateSlides, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopAutoplay();
+        else checkVisibility();
+    });
+
+    slides.forEach((slide, i) => {
+        slide.addEventListener('click', () => {
+            if (isDragging) return;
+            if (i === current) return;
+            goTo(i);
+            pauseAutoplayTemporarily();
+        });
+    });
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            goTo(i);
+            pauseAutoplayTemporarily();
+        });
+    });
+
+    function onPointerDown(e) {
+        isDragging = false;
+        const t = e.type.includes('touch') ? e.touches[0] : e;
+        startX = t.clientX;
+        startY = t.clientY;
+        currentX = startX;
+    }
+
+    function onPointerMove(e) {
+        if (!startX) return;
+        const t = e.type.includes('touch') ? e.touches[0] : e;
+        currentX = t.clientX;
+        const diffX = Math.abs(currentX - startX);
+        const diffY = Math.abs(t.clientY - startY);
+
+        if (diffX > 8 && diffX > diffY * 1.5) {
+            isDragging = true;
+            if (e.cancelable) e.preventDefault();
+        }
+    }
+
+    function onPointerUp() {
+        if (!isDragging) { startX = 0; return; }
+        const diff = currentX - startX;
+        const threshold = 50;
+
+        if (diff > threshold) {
+            prev();
+        } else if (diff < -threshold) {
+            next();
+        }
+
+        startX = 0;
+        currentX = 0;
+        pauseAutoplayTemporarily();
+        setTimeout(() => { isDragging = false; }, 50);
+    }
+
+    carousel.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+
+    carousel.addEventListener('touchstart', onPointerDown, { passive: true });
+    carousel.addEventListener('touchmove', onPointerMove, { passive: false });
+    carousel.addEventListener('touchend', onPointerUp);
+    carousel.addEventListener('touchcancel', onPointerUp);
+
+    const observer = new MutationObserver(updateSlides);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
+
+    updateSlides();
+    checkVisibility();
+})();
+
+/* ============ QR Code - تحميل مع 3 محاولات ============ */
+document.getElementById('qrDownload').addEventListener('click', async () => {
+    const qrUrl = 'https://iili.io/nI6W5lt.png';
+    const fileName = 'Mafia_apk.png';
+
+    showToast(
+        currentLang === 'ar' ? 'جاري تحضير الصورة...' : 'Preparing image...',
+        'fa-spinner fa-spin'
+    );
+
+    try {
+        const response = await fetch(qrUrl, { mode: 'cors', cache: 'no-cache' });
+        if (!response.ok) throw new Error('fetch failed');
+        const blob = await response.blob();
+        if (!blob.type.startsWith('image/')) throw new Error('not an image');
+
+        downloadBlob(blob, fileName);
+        showToast(
+            currentLang === 'ar' ? 'تم تحميل الصورة بنجاح' : 'Image downloaded successfully',
+            'fa-circle-check'
+        );
+        return;
+    } catch (e1) {}
+
+    try {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = qrUrl;
+
+        await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+            setTimeout(reject, 5000);
+        });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || 500;
+        canvas.height = img.naturalHeight || 500;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+
+        canvas.toBlob((blob) => {
+            if (blob) {
+                downloadBlob(blob, fileName);
+                showToast(
+                    currentLang === 'ar' ? 'تم تحميل الصورة بنجاح' : 'Image downloaded successfully',
+                    'fa-circle-check'
+                );
+            } else {
+                throw new Error('toBlob failed');
+            }
+        }, 'image/png', 1.0);
+        return;
+    } catch (e2) {}
+
+    const win = window.open(qrUrl, '_blank');
+    if (win) {
+        showToast(
+            currentLang === 'ar' ? 'اضغط مطولاً على الصورة لحفظها' : 'Long-press the image to save it',
+            'fa-circle-info'
+        );
+    } else {
+        showToast(
+            currentLang === 'ar' ? 'فشل التحميل، حاول مرة أخرى' : 'Download failed, try again',
+            'fa-circle-exclamation'
+        );
+    }
+});
+
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function showToast(message, iconClass = 'fa-circle-check') {
+    let toast = document.getElementById('toast-notify');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast-notify';
+        document.body.appendChild(toast);
+    }
+
+    const iconMap = {
+        'fa-circle-check': 'fa-solid',
+        'fa-circle-info': 'fa-solid',
+        'fa-circle-exclamation': 'fa-solid',
+        'fa-spinner fa-spin': 'fa-solid'
+    };
+    const iconType = iconMap[iconClass] || 'fa-solid';
+
+    toast.innerHTML = `
+        <i class="${iconType} ${iconClass}"></i>
+        <span>${message}</span>
+    `;
+
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(120px);
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: #0c100e;
+        padding: 14px 24px;
+        border-radius: 14px;
+        font-weight: 800;
+        font-size: 0.9rem;
+        font-family: 'Cairo', sans-serif;
+        box-shadow: 0 15px 40px rgba(46,204,113,0.45), 0 0 60px rgba(46,204,113,0.25);
+        z-index: 9999;
+        opacity: 0;
+        transition: all 0.45s cubic-bezier(0.25, 0.8, 0.35, 1);
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid rgba(255,255,255,0.2);
+        max-width: 90vw;
+    `;
+
+    const icon = toast.querySelector('i');
+    if (icon) {
+        icon.style.fontSize = '1.1rem';
+        icon.style.filter = 'drop-shadow(0 0 4px rgba(0,0,0,0.2))';
+    }
+
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+    });
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(120px)';
+    }, 2600);
+}
+</script>
+
 </body>
 </html>
