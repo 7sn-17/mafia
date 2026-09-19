@@ -2446,18 +2446,64 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     });
 });
 
-/* ============ Fetch app info ============ */
+/* ============ Fetch app info from version.json ============ */
 async function fetchAppInfo() {
-    try {
-        const res = await fetch('https://raw.githubusercontent.com/7sn-17/mafia/main/version.json', { cache: 'no-cache' });
-        if (res.ok) {
+    // الملف موجود في الجذر الرئيسي للموقع - مسار نسبي
+    const sources = [
+        'version.json',                                    // الأولوية: نفس المجلد
+        './version.json',                                  // احتياطي
+        'https://7sn-17.github.io/mafia/version.json',     // احتياطي: الرابط الكامل
+        'https://raw.githubusercontent.com/7sn-17/mafia/main/version.json' // احتياطي أخير
+    ];
+
+    for (const url of sources) {
+        try {
+            const res = await fetch(url + '?t=' + Date.now(), { 
+                cache: 'no-store',
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (!res.ok) continue;
+            
             const data = await res.json();
-            if (data?.version) document.getElementById('statVersion').innerText = data.version;
-            if (data?.size) document.getElementById('statSize').innerText = data.size;
+            
+            // تحديث الإصدار
+            if (data?.version) {
+                const versionEl = document.getElementById('statVersion');
+                if (versionEl) versionEl.innerText = data.version;
+            }
+            
+            // تحديث الحجم
+            if (data?.size) {
+                const sizeEl = document.getElementById('statSize');
+                if (sizeEl) sizeEl.innerText = data.size;
+            }
+            
+            // تحديث رابط التحميل إن وُجد
+            if (data?.url) {
+                document.querySelectorAll('a[href*="Mafia.apk"], a[href*="releases/latest"]').forEach(link => {
+                    // اترك الروابط كما هي أو حدّثها حسب الحاجة
+                });
+            }
+            
+            // نجح - اخرج من الحلقة
+            console.log('✅ تم تحميل معلومات الإصدار:', data);
+            return data;
+            
+        } catch (e) {
+            // جرب المصدر التالي
+            continue;
         }
-    } catch (e) {}
+    }
+    
+    console.warn('⚠️ تعذر تحميل version.json - سيتم استخدام القيم الافتراضية');
 }
+
+// تشغيل فوري عند تحميل الصفحة + إعادة المحاولة
 document.addEventListener('DOMContentLoaded', fetchAppInfo);
+
+// إعادة المحاولة بعد 3 ثواني (في حال فشل الاتصال الأول)
+setTimeout(fetchAppInfo, 3000);
 
 /* ============ CAROUSEL ============ */
 (function() {
