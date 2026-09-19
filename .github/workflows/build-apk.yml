@@ -36,10 +36,9 @@ jobs:
         sudo rm -f /usr/bin/gradle
         sudo ln -s /opt/gradle/bin/gradle /usr/bin/gradle
 
-    # 1. بناء تطبيق الإصدار النهائي (بدون توقيع)
+     # 1. بناء تطبيق الإصدار النهائي (بدون توقيع)
     - name: Build Release APK
       run: |
-        gradle wrapper --gradle-version 8.2
         chmod +x gradlew
         ./gradlew assembleRelease --no-daemon
 
