@@ -1,25 +1,19 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة مافيا - الموقع الرسمي</title>
+    <title id="pageTitle">لعبة مافيا - الموقع الرسمي</title>
     
-    <!-- وسوم المعاينة لمنصات التواصل الاجتماعي (WhatsApp, Telegram, Facebook) -->
+    <!-- وسوم المعاينة لمنصات التواصل الاجتماعي -->
     <meta property="og:title" content="لعبة مافيا - عُشاق الغموض والذكاء">
     <meta property="og:description" content="عُشاق الغموض والذكاء 🕵️‍♂️🔥. اجمع أصدقاءك وابدأ معركة كشف الخونة في تجربة جماعية ممتعة وبدون إعلانات.">
     <meta property="og:image" content="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png">
     <meta property="og:url" content="https://7sn-17.github.io/mafia/">
     <meta property="og:type" content="website">
 
-    <!-- بطاقات تويتر -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="لعبة مافيا - عُشاق الغموض والذكاء">
-    <meta name="twitter:description" content="عُشاق الغموض والذكاء 🕵️‍♂️🔥. اجمع أصدقاءك وابدأ معركة كشف الخونة في تجربة جماعية ممتعة وبدون إعلانات.">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png">
-
-    <!-- استيراد خط Cairo العربي الفخم -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- استيراد خط Cairo والفونت الإنجليزي المتناسق -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- مكتبة أيقونات Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- مكتبة الجزيئات المتحركة (Particles.js) -->
@@ -32,6 +26,12 @@
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
         }
+
+        /* استثناء أيقونات Font Awesome من وراثة الخط العام لضمان عدم اختفائها */
+        html[dir="ltr"] *:not(.fa, .fa-solid, .fa-brands, .fa-regular, i) {
+            font-family: 'Inter', sans-serif;
+        }
+
         body {
             background-color: #0c100e;
             color: #f1f5f9;
@@ -51,6 +51,41 @@
             left: 0;
             z-index: 1;
             pointer-events: none;
+        }
+
+        /* زر تبديل اللغة المنفصل وغير المدمج */
+        .lang-switch-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            height: 42px;
+            padding: 0 16px;
+            background: rgba(20, 28, 23, 0.85);
+            border: 1px solid rgba(46, 204, 113, 0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 21px;
+            color: #2ecc71;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.25s ease;
+        }
+
+        .lang-switch-btn:hover {
+            background: #2ecc71;
+            color: #0c100e;
+            transform: scale(1.05);
+            border-color: #2ecc71;
+        }
+
+        .lang-switch-btn i {
+            font-size: 1.05rem;
         }
         
         /* حاوية الصفحة الرئيسية */
@@ -77,11 +112,13 @@
             z-index: 10;
             background: #0c100e;
             padding: 0 20px 40px 20px;
-            text-align: right;
             animation: fadeIn 0.3s ease;
         }
 
-        /* الشريط العلوى الثابت الاحترافي (Sticky Top Bar) */
+        html[dir="rtl"] .privacy-container { text-align: right; }
+        html[dir="ltr"] .privacy-container { text-align: left; }
+
+        /* الشريط العلوى الثابت الاحترافي */
         .privacy-top-bar {
             position: sticky;
             top: 0;
@@ -183,9 +220,8 @@
             line-height: 1.8;
         }
 
-        .privacy-container ul {
-            padding-right: 20px;
-        }
+        html[dir="rtl"] .privacy-container ul { padding-right: 20px; padding-left: 0; }
+        html[dir="ltr"] .privacy-container ul { padding-left: 20px; padding-right: 0; }
 
         .back-btn {
             background: #2ecc71;
@@ -237,23 +273,108 @@
         h1 span {
             color: #2ecc71;
         }
-        .description-card {
-            background: rgba(20, 28, 23, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+
+        /* تصميم بطاقة الدور التفاعلية الجديدة */
+        .role-card-container {
+            background: linear-gradient(145deg, rgba(20, 28, 23, 0.85), rgba(12, 16, 14, 0.95));
+            border: 1px solid rgba(46, 204, 113, 0.25);
             backdrop-filter: blur(12px);
-            padding: 20px;
-            border-radius: 16px;
-            color: #94a3b8;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            text-align: right;
+            -webkit-backdrop-filter: blur(12px);
+            padding: 22px;
+            border-radius: 18px;
             width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
         }
-        .description-card strong {
-            color: #e2e8f0;
+        html[dir="rtl"] .role-card-container { text-align: right; }
+        html[dir="ltr"] .role-card-container { text-align: left; }
+
+        .role-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 10px;
+        }
+
+        .role-badge {
+            background: rgba(255, 255, 255, 0.05);
+            color: #2ecc71;
+            font-size: 0.75rem;
             font-weight: 700;
-            display: inline;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
+
+        .role-card-body {
+            min-height: 85px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .role-text-content {
+            color: #cbd5e1;
+            font-size: 0.93rem;
+            line-height: 1.7;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        .role-text-content strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .role-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 10px;
+        }
+
+        .role-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .dot.active {
+            background: #2ecc71;
+            width: 18px;
+            border-radius: 4px;
+        }
+
+        .next-role-btn {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid rgba(46, 204, 113, 0.4);
+            color: #2ecc71;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .next-role-btn:hover {
+            background: #2ecc71;
+            color: #0c100e;
+        }
+
         .stats-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -353,47 +474,73 @@
 
     <div id="particles-js"></div>
 
+    <!-- زر تبديل اللغة (يظهر فقط في الواجهة الرئيسية) -->
+    <button class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()">
+        <i class="fa-solid fa-globe"></i>
+        <span id="langBtnText">AR</span>
+    </button>
+
     <!-- 1. واجهة الصفحة الرئيسية (التحميل) -->
     <div class="wrapper" id="homeScreen">
         <div class="app-icon-container">
             <img src="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png" alt="Mafia App Icon">
         </div>
         
-        <h1>لعبة <span>مافيا</span></h1>
+        <h1 id="mainHeading">لعبة <span>مافيا</span></h1>
         
-        <div class="description-card">
-            <strong>عُشاق الغموض والذكاء والخداع المتقن 🕵️‍♂️🔥</strong><br>
-            اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة. تجربة جماعية تفاعلية ممتعة وبدون إعلانات مزعجة.
+        <!-- بطاقة الدور التفاعلية البديلة للوصف التقليدي -->
+        <div class="role-card-container">
+            <div class="role-card-header">
+               <span class="role-badge" id="cardBadgeTitle">
+                   <i class="fa-solid fa-lightbulb" style="color: #2ecc71;"></i> نبذة سريعة
+               </span>
+                <span style="font-size: 0.78rem; color: #64748b;" id="cardStepIndicator">1 / 3</span>
+            </div>
+            <div class="role-card-body">
+                <div class="role-text-content" id="roleTextContent">
+                    <strong>عُشاق الغموض والذكاء والخداع المتقن 🔥</strong><br>اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة في تجربة جماعية ممتعة.
+                </div>
+            </div>
+            <div class="role-card-footer">
+                <div class="role-dots" id="roleDots">
+                    <div class="dot active" data-index="0"></div>
+                    <div class="dot" data-index="1"></div>
+                    <div class="dot" data-index="2"></div>
+                </div>
+                <button class="next-role-btn" onclick="nextCardInfo()">
+                    <span id="nextBtnText">التالي</span> <i class="fa-solid fa-arrow-left" id="nextBtnIcon"></i>
+                </button>
+            </div>
         </div>
 
         <!-- الإحصائيات -->
         <div class="stats-row">
             <div class="stat-box">
                 <div class="stat-value" id="siteVersion">جاري التحميل...</div>
-                <div class="stat-title">الإصدار</div>
+                <div class="stat-title" id="statVersionTitle">الإصدار</div>
             </div>
             <div class="stat-box">
                 <div class="stat-value" id="siteSize">مناسب</div>
-                <div class="stat-title">الحجم</div>
+                <div class="stat-title" id="statSizeTitle">الحجم</div>
             </div>
             <div class="stat-box">
-                <div class="stat-value">بدون إنترنت</div>
-                <div class="stat-title">التشغيل</div>
+                <div class="stat-value" id="statPlayVal">بدون إنترنت</div>
+                <div class="stat-title" id="statPlayTitle">التشغيل</div>
             </div>
         </div>
 
         <!-- زر التحميل المباشر -->
-        <a href="https://github.com/7sn-17/mafia/releases/latest/download/Mafia.apk" class="download-action-btn">
-            <i class="fa-solid fa-cloud-arrow-down"></i> تحميل النسخة الرسمية (APK)
+        <a href="https://github.com/7sn-17/mafia/releases/latest/download/Mafia.apk" class="download-action-btn" id="downloadBtnContainer">
+            <i class="fa-solid fa-cloud-arrow-down"></i> <span id="downloadBtnText">تحميل النسخة الرسمية (APK)</span>
         </a>
 
         <!-- أزرار التواصل -->
         <div class="social-row">
-            <a href="https://wa.me/17862927607" target="_blank" class="social-link-btn wa">
-                <i class="fa-brands fa-whatsapp fa-lg"></i> واتساب
+            <a href="https://wa.me/17862927607" target="_blank" class="social-link-btn wa" id="waBtnContainer">
+                <i class="fa-brands fa-whatsapp fa-lg"></i> <span id="whatsappText">واتساب</span>
             </a>
-            <a href="https://www.instagram.com/7sn__08" target="_blank" class="social-link-btn ig">
-                <i class="fa-brands fa-instagram fa-lg"></i> إنستغرام
+            <a href="https://www.instagram.com/7sn__08" target="_blank" class="social-link-btn ig" id="igBtnContainer">
+                <i class="fa-brands fa-instagram fa-lg"></i> <span id="instagramText">إنستغرام</span>
             </a>
         </div>
     </div>
@@ -405,60 +552,246 @@
                 <div class="privacy-top-icon">
                     <img src="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png" alt="Icon">
                 </div>
-                <h2>سياسة الخصوصية</h2>
+                <h2 id="privacyNavTitle">سياسة الخصوصية</h2>
             </div>
             <button class="privacy-back-icon-btn" onclick="showHome()" title="العودة">
-                <i class="fa-solid fa-arrow-right"></i>
+                <i class="fa-solid fa-arrow-right" id="backIconDir"></i>
             </button>
         </div>
 
         <div class="privacy-content-box">
-            <div class="update-date">تاريخ آخر تحديث: 19 سبتمبر 2026</div>
+            <div class="update-date" id="privacyDate">تاريخ آخر تحديث: 19 سبتمبر 2026</div>
 
-            <h3>مقدمة عامة</h3>
-            <p>نحن نولي أهمية قصوى لخصوصية مستخدمي تطبيق <strong>مافيا</strong>. تهدف وثيقة سياسة الخصوصية هذه إلى توضيح الممارسات والآلية المتبعة بشأن التعامل مع البيانات والمعلومات عند استخدامك للتطبيق.</p>
+            <h3 id="pSec1Title">مقدمة عامة</h3>
+            <p id="pSec1Text">نحن نولي أهمية قصوى لخصوصية مستخدمي تطبيق <strong>مافيا</strong>. تهدف وثيقة سياسة الخصوصية هذه إلى توضيح الممارسات والآلية المتبعة بشأن التعامل مع البيانات والمعلومات عند استخدامك للتطبيق.</p>
 
-            <h3>1. عدم جمع البيانات الشخصية</h3>
-            <p>تم تصميم تطبيق "مافيا" ليعمل بشكل أساسي كأداة تفاعلية محلية لإدارة جلسات اللعب الجماعية بين الأصدقاء:</p>
-            <ul>
-                <li>لا يتطلب التطبيق تسجيل حسابات مستخدمين أو إدخال كلمات مرور.</li>
-                <li>لا نقوم نهائياً بجمع أي معلومات شخصية قابلة للتحديد (مثل الأسماء، أرقام الهواتف، البريد الإلكتروني، أو المواقع الجغرافية).</li>
+            <h3 id="pSec2Title">1. عدم جمع البيانات الشخصية</h3>
+            <p id="pSec2Sub">تم تصميم تطبيق "مافيا" ليعمل بشكل أساسي كأداة تفاعلية محلية لإدارة جلسات اللعب الجماعية بين الأصدقاء:</p>
+            <ul id="pSec2List">
+                <li id="pSec2Li1">لا يتطلب التطبيق تسجيل حسابات مستخدمين أو إدخال كلمات مرور.</li>
+                <li id="pSec2Li2">لا نقوم نهائياً بجمع أي معلومات شخصية قابلة للتحديد (مثل الأسماء، أرقام الهواتف، البريد الإلكتروني، أو المواقع الجغرافية).</li>
             </ul>
 
-            <h3>2. الإعلانات والتتبع الرقمي</h3>
-            <ul>
-                <li>النسخة الحالية من التطبيق خالية تماماً من أي إعلانات تجارية لضمان تجربة مريحة ومستقرة.</li>
-                <li>لا يتم دمج أي حزم برمجية لأدوات التتبع أو التحليلات الخارجية لمراقبة سلوك المستخدمين.</li>
+            <h3 id="pSec3Title">2. الإعلانات والتتبع الرقمي</h3>
+            <ul id="pSec3List">
+                <li id="pSec3Li1">النسخة الحالية من التطبيق خالية تماماً من أي إعلانات تجارية لضمان تجربة مريحة ومستقرة.</li>
+                <li id="pSec3Li2">لا يتم دمج أي حزم برمجية لأدوات التتبع أو التحليلات الخارجية لمراقبة سلوك المستخدمين.</li>
             </ul>
 
-            <h3>3. أمان وحماية المعلومات</h3>
-            <p>نظرًا لعدم وجود أي عمليات لجمع أو تخزين البيانات للمستخدمين، فلا توجد أي مخاطر تتعلق بتسريب أو مشاركة معلومات شخصية مع أية جهات أو أطراف ثالثة.</p>
+            <h3 id="pSec4Title">3. أمان وحماية المعلومات</h3>
+            <p id="pSec4Text">نظرًا لعدم وجود أي عمليات لجمع أو تخزين البيانات للمستخدمين، فلا توجد أي مخاطر تتعلق بتسريب أو مشاركة معلومات شخصية مع أية جهات أو أطراف ثالثة.</p>
 
-            <h3>4. التعديلات على السياسة</h3>
-            <p>قد يتم تحديث هذه السياسة مستقبلاً في حال تم إطلاق ميزات جديدة. سيتم نشر أي تحديث رسمي فوراً عبر هذه الصفحة.</p>
+            <h3 id="pSec5Title">4. التعديلات على السياسة</h3>
+            <p id="pSec5Text">قد يتم تحديث هذه السياسة مستقبلاً في حال تم إطلاق ميزات جديدة. سيتم نشر أي تحديث رسمي فوراً عبر هذه الصفحة.</p>
 
-            <h3>5. التواصل معنا</h3>
-            <p>لأي استفسارات أو ملاحظات إضافية تتعلق بسياسة الخصوصية، يسعدنا تواصلكم عبر البريد الإلكتروني الرسمي:</p>
+            <h3 id="pSec6Title">5. التواصل معنا</h3>
+            <p id="pSec6Text">لأي استفسارات أو ملاحظات إضافية تتعلق بسياسة الخصوصية، يسعدنا تواصلكم عبر البريد الإلكتروني الرسمي:</p>
             <p><a href="mailto:hasantaha5689@gmail.com" style="color: #38bdf8; font-weight: 700;">hasantaha5689@gmail.com</a></p>
 
             <button class="back-btn" onclick="showHome()">
-                <i class="fa-solid fa-arrow-right"></i> العودة إلى الصفحة الرئيسية
+                <i class="fa-solid fa-arrow-right" id="backBtnIconDir"></i> <span id="backBtnText">العودة إلى الصفحة الرئيسية</span>
             </button>
         </div>
     </div>
 
     <!-- الفوتر العام -->
     <footer id="mainFooter">
-        تم تطوير اللعبة بواسطة <span>حسن المحمد</span> © 2026 <br>
-        <span class="privacy-link" onclick="showPrivacy()">سياسة الخصوصية</span>
+        <span id="footerDevText">تم تطوير اللعبة بواسطة</span> <span style="color: #2ecc71;">حسن المحمد</span> © 2026 <br>
+        <span class="privacy-link" onclick="showPrivacy()" id="footerPrivacyText">سياسة الخصوصية</span>
     </footer>
 
-    <!-- سكربت التحكم وانتقال الشاشات -->
+    <!-- سكربت التحكم الشامل -->
     <script>
+        let currentLang = 'ar';
+        let currentCardIndex = 0;
+
+        const translations = {
+            ar: {
+                pageTitle: "لعبة مافيا - الموقع الرسمي",
+                mainHeading: "لعبة <span>مافيا</span>",
+                cardBadgeTitle: '<i class="fa-solid fa-lightbulb" style="color: #2ecc71;"></i> نبذة سريعة',
+                cards: [
+                    "<strong>عُشاق الغموض والذكاء والخداع المتقن 🔥</strong><br>اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة في تجربة جماعية ممتعة.",
+                    "<strong>معركة ذكاء بدون إنترنت 📴</strong><br>قم بإدارة أدوار اللعبة بسهولة وبدون إعلانات مزعجة، لتستمتع بجلسات السهر والغموض مع أصدقائك.",
+                    "<strong>من هو القاتل بينكم؟ 🎭</strong><br>وزّع الأدوار بسرية تامة، راقب ردود الفعل، واكشف الحقيقة قبل فوات الأوان. حمّل النسخة الآن!"
+                ],
+                nextBtnText: "التالي",
+                statVersionTitle: "الإصدار",
+                statSizeTitle: "الحجم",
+                statPlayVal: "بدون إنترنت",
+                statPlayTitle: "التشغيل",
+                defaultSize: "مناسب",
+                defaultVersion: "v1.2",
+                downloadBtnHTML: '<i class="fa-solid fa-cloud-arrow-down"></i> <span>تحميل النسخة الرسمية (APK)</span>',
+                whatsappHTML: '<i class="fa-brands fa-whatsapp fa-lg"></i> <span>واتساب</span>',
+                instagramHTML: '<i class="fa-brands fa-instagram fa-lg"></i> <span>إنستغرام</span>',
+                privacyNavTitle: "سياسة الخصوصية",
+                privacyDate: "تاريخ آخر تحديث: 19 سبتمبر 2026",
+                pSec1Title: "مقدمة عامة",
+                pSec1Text: "نحن نولي أهمية قصوى لخصوصية مستخدمي تطبيق <strong>مافيا</strong>. تهدف وثيقة سياسة الخصوصية هذه إلى توضيح الممارسات والآلية المتبعة بشأن التعامل مع البيانات والمعلومات عند استخدامك للتطبيق.",
+                pSec2Title: "1. عدم جمع البيانات الشخصية",
+                pSec2Sub: "تم تصميم تطبيق \"مافيا\" ليعمل بشكل أساسي كأداة تفاعلية محلية لإدارة جلسات اللعب الجماعية بين الأصدقاء:",
+                pSec2Li1: "لا يتطلب التطبيق تسجيل حسابات مستخدمين أو إدخال كلمات مرور.",
+                pSec2Li2: "لا نقوم نهائياً بجمع أي معلومات شخصية قابلة للتحديد (مثل الأسماء، أرقام الهواتف، البريد الإلكتروني، أو المواقع الجغرافية).",
+                pSec3Title: "2. الإعلانات والتتبع الرقمي",
+                pSec3Li1: "النسخة الحالية من التطبيق خالية تماماً من أي إعلانات تجارية لضمان تجربة مريحة ومستقرة.",
+                pSec3Li2: "لا يتم دمج أي حزم برمجية لأدوات التتبع أو التحليلات الخارجية لمراقبة سلوك المستخدمين.",
+                pSec4Title: "3. أمان وحماية المعلومات",
+                pSec4Text: "نظرًا لعدم وجود أي عمليات لجمع أو تخزين البيانات للمستخدمين، فلا توجد أي مخاطر تتعلق بتسريب أو مشاركة معلومات شخصية مع أية جهات أو أطراف ثالثة.",
+                pSec5Title: "4. التعديلات على السياسة",
+                pSec5Text: "قد يتم تحديث هذه السياسة مستقبلاً في حال تم إطلاق ميزات جديدة. سيتم نشر أي تحديث رسمي فوراً عبر هذه الصفحة.",
+                pSec6Title: "5. التواصل معنا",
+                pSec6Text: "لأي استفسارات أو ملاحظات إضافية تتعلق بسياسة الخصوصية، يسعدنا تواصلكم عبر البريد الإلكتروني الرسمي:",
+                backBtnText: "العودة إلى الصفحة الرئيسية",
+                footerDevText: "تم تطوير اللعبة بواسطة",
+                footerPrivacyText: "سياسة الخصوصية"
+            },
+            en: {
+                pageTitle: "Mafia Game - Official Website",
+                mainHeading: "<span>Mafia</span> Game",
+                cardBadgeTitle: '<i class="fa-solid fa-lightbulb" style="color: #2ecc71;"></i> Quick Overview',
+                cards: [
+                    "<strong>For lovers of mystery, intelligence, and master deception 🔥</strong><br>Gather your friends, shuffle the cards, and start the battle of planning and exposing traitors.",
+                    "<strong>Offline Intelligence Battle 📴</strong><br>Manage game roles seamlessly and completely ad-free for an ultimate hangout experience with friends.",
+                    "<strong>Who is the traitor among you? 🎭</strong><br>Distribute roles secretly, watch reactions, and uncover the truth before it's too late. Download now!"
+                ],
+                nextBtnText: "Next",
+                statVersionTitle: "Version",
+                statSizeTitle: "Size",
+                statPlayVal: "Offline",
+                statPlayTitle: "Playability",
+                defaultSize: "Optimal",
+                defaultVersion: "v1.2",
+                downloadBtnHTML: '<i class="fa-solid fa-cloud-arrow-down"></i> <span>Download Official APK</span>',
+                whatsappHTML: '<i class="fa-brands fa-whatsapp fa-lg"></i> <span>WhatsApp</span>',
+                instagramHTML: '<i class="fa-brands fa-instagram fa-lg"></i> <span>Instagram</span>',
+                privacyNavTitle: "Privacy Policy",
+                privacyDate: "Last updated: September 19, 2026",
+                pSec1Title: "General Introduction",
+                pSec1Text: "We place utmost importance on the privacy of <strong>Mafia</strong> app users. This privacy policy document aims to clarify the practices and mechanisms regarding data and information handling when using the app.",
+                pSec2Title: "1. No Collection of Personal Data",
+                pSec2Sub: "The \"Mafia\" app is designed primarily as a local interactive tool to manage group game sessions among friends:",
+                pSec2Li1: "The app does not require user account registration or password entry.",
+                pSec2Li2: "We never collect any personally identifiable information (such as names, phone numbers, email addresses, or locations).",
+                pSec3Title: "2. Ads and Digital Tracking",
+                pSec3Li1: "The current version of the app is completely free of any commercial ads to ensure a comfortable and stable experience.",
+                pSec3Li2: "No third-party tracking or analytics software development kits (SDKs) are integrated to monitor user behavior.",
+                pSec4Title: "3. Information Security and Protection",
+                pSec4Text: "Due to the absence of any data collection or storage processes for users, there are no risks regarding the leakage or sharing of personal information with any entities or third parties.",
+                pSec5Title: "4. Policy Modifications",
+                pSec5Text: "This policy may be updated in the future if new features are launched. Any official update will be posted immediately via this page.",
+                pSec6Title: "5. Contact Us",
+                pSec6Text: "For any inquiries or additional feedback regarding the privacy policy, feel free to contact us via the official email:",
+                backBtnText: "Back to Home",
+                footerDevText: "Game developed by",
+                footerPrivacyText: "Privacy Policy"
+            }
+        };
+
+        function updateCardContent() {
+            const t = translations[currentLang];
+            const contentEl = document.getElementById('roleTextContent');
+            const indicatorEl = document.getElementById('cardStepIndicator');
+            
+            contentEl.style.opacity = '0';
+            contentEl.style.transform = 'translateY(5px)';
+            
+            setTimeout(() => {
+                contentEl.innerHTML = t.cards[currentCardIndex];
+                indicatorEl.innerText = `${currentCardIndex + 1} / 3`;
+                contentEl.style.opacity = '1';
+                contentEl.style.transform = 'translateY(0)';
+            }, 150);
+
+            // تحديث النقاط النشطة
+            const dots = document.getElementById('roleDots').getElementsByClassName('dot');
+            for (let i = 0; i < dots.length; i++) {
+                if (i === currentCardIndex) {
+                    dots[i].classList.add('active');
+                } else {
+                    dots[i].classList.remove('active');
+                }
+            }
+        }
+
+        function nextCardInfo() {
+            currentCardIndex = (currentCardIndex + 1) % 3;
+            updateCardContent();
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const t = translations[currentLang];
+            const htmlRoot = document.getElementById('htmlRoot');
+
+            if (currentLang === 'en') {
+                htmlRoot.setAttribute('lang', 'en');
+                htmlRoot.setAttribute('dir', 'ltr');
+                document.getElementById('langBtnText').innerText = 'EN';
+                document.getElementById('backIconDir').className = 'fa-solid fa-arrow-left';
+                document.getElementById('backBtnIconDir').className = 'fa-solid fa-arrow-left';
+                document.getElementById('nextBtnIcon').className = 'fa-solid fa-arrow-right';
+            } else {
+                htmlRoot.setAttribute('lang', 'ar');
+                htmlRoot.setAttribute('dir', 'rtl');
+                document.getElementById('langBtnText').innerText = 'AR';
+                document.getElementById('backIconDir').className = 'fa-solid fa-arrow-right';
+                document.getElementById('backBtnIconDir').className = 'fa-solid fa-arrow-right';
+                document.getElementById('nextBtnIcon').className = 'fa-solid fa-arrow-left';
+            }
+
+            document.getElementById('pageTitle').innerText = t.pageTitle;
+            document.getElementById('mainHeading').innerHTML = t.mainHeading;
+            document.getElementById('cardBadgeTitle').innerHTML = t.cardBadgeTitle;
+            document.getElementById('nextBtnText').innerText = t.nextBtnText;
+            
+            updateCardContent();
+
+            document.getElementById('statVersionTitle').innerText = t.statVersionTitle;
+            document.getElementById('statSizeTitle').innerText = t.statSizeTitle;
+            document.getElementById('statPlayVal').innerText = t.statPlayVal;
+            document.getElementById('statPlayTitle').innerText = t.statPlayTitle;
+            
+            document.getElementById('downloadBtnContainer').innerHTML = t.downloadBtnHTML;
+            document.getElementById('waBtnContainer').innerHTML = t.whatsappHTML;
+            document.getElementById('igBtnContainer').innerHTML = t.instagramHTML;
+
+            document.getElementById('privacyNavTitle').innerText = t.privacyNavTitle;
+            document.getElementById('privacyDate').innerText = t.privacyDate;
+            document.getElementById('pSec1Title').innerText = t.pSec1Title;
+            document.getElementById('pSec1Text').innerHTML = t.pSec1Text;
+            document.getElementById('pSec2Title').innerText = t.pSec2Title;
+            document.getElementById('pSec2Sub').innerText = t.pSec2Sub;
+            
+            document.getElementById('pSec2Li1').innerText = t.pSec2Li1;
+            document.getElementById('pSec2Li2').innerText = t.pSec2Li2;
+
+            document.getElementById('pSec3Title').innerText = t.pSec3Title;
+            const listItems3 = document.getElementById('pSec3List').getElementsByTagName('li');
+            if (listItems3.length >= 2) {
+                listItems3[0].innerText = t.pSec3Li1;
+                listItems3[1].innerText = t.pSec3Li2;
+            }
+
+            document.getElementById('pSec4Title').innerText = t.pSec4Title;
+            document.getElementById('pSec4Text').innerText = t.pSec4Text;
+            document.getElementById('pSec5Title').innerText = t.pSec5Title;
+            document.getElementById('pSec5Text').innerText = t.pSec5Text;
+            document.getElementById('pSec6Title').innerText = t.pSec6Title;
+            document.getElementById('pSec6Text').innerText = t.pSec6Text;
+            document.getElementById('backBtnText').innerText = t.backBtnText;
+
+            document.getElementById('footerDevText').innerText = t.footerDevText;
+            document.getElementById('footerPrivacyText').innerText = t.footerPrivacyText;
+
+            fetchAppInfo();
+        }
+
         function showPrivacy() {
             document.getElementById('homeScreen').style.display = 'none';
             document.getElementById('privacyScreen').style.display = 'block';
             document.getElementById('mainFooter').style.display = 'none';
+            document.getElementById('langSwitchBtn').style.display = 'none';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -466,11 +799,12 @@
             document.getElementById('privacyScreen').style.display = 'none';
             document.getElementById('homeScreen').style.display = 'flex';
             document.getElementById('mainFooter').style.display = 'block';
+            document.getElementById('langSwitchBtn').style.display = 'flex';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // جلب معلومات الإصدار والحجم من جيت هب
         async function fetchAppInfo() {
+            const t = translations[currentLang];
             try {
                 const response = await fetch('https://raw.githubusercontent.com/7sn-17/mafia/main/version.json', { cache: 'no-cache' });
                 if (response.ok) {
@@ -483,31 +817,32 @@
                     }
                 }
             } catch (e) {
-                document.getElementById('siteVersion').innerText = "v1.2";
+                document.getElementById('siteVersion').innerText = t.defaultVersion;
+                document.getElementById('siteSize').innerText = t.defaultSize;
             }
         }
 
         document.addEventListener('DOMContentLoaded', fetchAppInfo);
 
-        // جزيئات الخلفية
+        // إعدادات البارتيكلز الصاعدة من الأسفل للأعلى
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 25, "density": { "enable": true, "value_area": 900 } },
+                "number": { "value": 45, "density": { "enable": true, "value_area": 800 } },
                 "color": { "value": "#2ecc71" },
                 "shape": { "type": "circle" },
-                "opacity": { "value": 0.15, "random": true },
-                "size": { "value": 2, "random": true },
+                "opacity": { "value": 0.35, "random": true },
+                "size": { "value": 3, "random": true },
                 "line_linked": {
                     "enable": true,
-                    "distance": 180,
+                    "distance": 150,
                     "color": "#2ecc71",
-                    "opacity": 0.06,
+                    "opacity": 0.1,
                     "width": 1
                 },
                 "move": {
                     "enable": true,
-                    "speed": 0.8,
-                    "direction": "none",
+                    "speed": 1.5,
+                    "direction": "top",
                     "random": true,
                     "straight": false,
                     "out_mode": "out"
