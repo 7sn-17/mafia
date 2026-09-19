@@ -1,4 +1,4 @@
-package com.mafia.game;
+package com.dev7sn.mafia;
 
 import android.app.Activity;
 import android.os.Build;
