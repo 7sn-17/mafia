@@ -1,8 +1,9 @@
-name: Build Mafia Android Package
+name: Build and Sign Mafia Release
 
 on:
   push:
     branches: [ "main", "master" ]
+  workflow_dispatch: # إضافة هذا السطر لتتمكن من تشغيل البناء يدوياً متى شئت
 
 jobs:
   build:
@@ -35,14 +36,41 @@ jobs:
         sudo rm -f /usr/bin/gradle
         sudo ln -s /opt/gradle/bin/gradle /usr/bin/gradle
 
-    - name: Build APK with Gradle 8.2
+    # 1. بناء تطبيق الإصدار النهائي (بدون توقيع)
+    - name: Build Release APK
       run: |
         gradle wrapper --gradle-version 8.2
         chmod +x gradlew
-        ./gradlew assembleDebug --no-daemon
+        ./gradlew assembleRelease --no-daemon
 
+    # 2. توقيع التطبيق باستخدام الأسرار التي حفظناها (بدون تعديل كود الأندرويد)
+    - name: Sign APK
+      uses: r0adkll/sign-android-release@v1
+      id: sign_app
+      with:
+        releaseDirectory: app/build/outputs/apk/release
+        signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
+        alias: ${{ secrets.KEY_ALIAS }}
+        keyStorePassword: ${{ secrets.STORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+    # 3. إعادة تسمية التطبيق الموقع إلى Mafia.apk
+    - name: Rename APK
+      run: |
+        mv ${{steps.sign_app.outputs.signedReleaseFile}} Mafia.apk
+
+    # 4. رفع الملف النهائي كإصدار (Release) ليتمكن الموقع من تحميله
+    - name: Upload to GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: latest
+        name: "تحديث لعبة مافيا (الإصدار الأخير)"
+        files: Mafia.apk
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    # 5. حفظ نسخة كـ Artifact (للاحتياط كما في ملفك القديم)
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: mafia-apk
-        path: app/build/outputs/apk/debug/Mafia.apk
+        name: Mafia-Signed-APK
+        path: Mafia.apk
