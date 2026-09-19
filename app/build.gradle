@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    namespace 'com.mafia.game'
+    namespace 'com.dev7sn.mafia'
     compileSdk 34
 
     defaultConfig {
         // اسم الحزمة الجديد كلياً ليصبح تطبيقاً فريداً ومستقلاً
-        applicationId "com.mafia"
+        applicationId "com.dev7sn.mafia"
         minSdk 24
         targetSdk 34
         versionCode 3
