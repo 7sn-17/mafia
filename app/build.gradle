@@ -7,7 +7,6 @@ android {
     compileSdk 34
 
     defaultConfig {
-        // اسم الحزمة الجديد كلياً ليصبح تطبيقاً فريداً ومستقلاً
         applicationId "com.dev7sn.mafia"
         minSdk 24
         targetSdk 34
