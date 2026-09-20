@@ -1766,17 +1766,17 @@ footer p .dev-name {
             </a>
 
             <div class="stores-row">
-                <a href="https://apkpure.com/" target="_blank" rel="noopener" class="store-btn apkpure">
+                <a href="https://apkpure.com/p/com.dev7sn.mafia" target="_blank" rel="noopener" class="store-btn apkpure">
                     <div class="store-icon"><img src="https://iili.io/nIrWgsI.jpg" alt="APKPure"></div>
                     <div class="store-text">
-                        <small data-i18n="store.available">قريبًا على</small>
+                        <small data-i18n="store.available.apkpure">متوفر على</small>
                         <b>APKPure</b>
                     </div>
                 </a>
                 <a href="https://uptodown.com/" target="_blank" rel="noopener" class="store-btn uptodown">
                     <div class="store-icon"><img src="https://iili.io/nIrXUpj.png" alt="Uptodown"></div>
                     <div class="store-text">
-                        <small data-i18n="store.available">قريبًا على</small>
+                        <small data-i18n="store.coming.uptodown">قريبًا على</small>
                         <b>Uptodown</b>
                     </div>
                 </a>
@@ -1845,26 +1845,30 @@ footer p .dev-name {
                 <p data-i18n="gallery.subtitle">تصاميم أنيقة وواجهات مدروسة تجعل كل جلسة تجربة فريدة.</p>
             </div>
 
-            <div class="carousel" id="carousel">
-                <div class="carousel-track" id="carouselTrack">
-                    <div class="carousel-slide" data-index="0">
-                        <img src="https://iili.io/nIrFCvV.png" alt="Screenshot 1" draggable="false">
-                    </div>
-                    <div class="carousel-slide" data-index="1">
-                        <img src="https://iili.io/nIrd3CJ.png" alt="Screenshot 2" draggable="false">
-                    </div>
-                    <div class="carousel-slide" data-index="2">
-                        <img src="https://iili.io/nIrKHSR.png" alt="Screenshot 3" draggable="false">
-                    </div>
-                </div>
-            </div>
-
-            <div class="carousel-dots" id="carouselDots">
-                <span data-slide="0"></span>
-                <span class="active" data-slide="1"></span>
-                <span data-slide="2"></span>
-            </div>
+<div class="carousel" id="carousel">
+    <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide" data-index="0">
+            <img src="https://iili.io/nIrFCvV.png" alt="Screenshot 1" draggable="false">
         </div>
+        <div class="carousel-slide" data-index="1">
+            <img src="https://iili.io/nIrd3CJ.png" alt="Screenshot 2" draggable="false">
+        </div>
+        <div class="carousel-slide" data-index="2">
+            <img src="https://iili.io/nIrKHSR.png" alt="Screenshot 3" draggable="false">
+        </div>
+        <div class="carousel-slide" data-index="3">
+            <img src="https://iili.io/nThxAZP.png" alt="Screenshot 4" draggable="false">
+        </div>
+    </div>
+</div>
+
+<div class="carousel-dots" id="carouselDots">
+    <span data-slide="0"></span>
+    <span class="active" data-slide="1"></span>
+    <span data-slide="2"></span>
+    <!-- ✅ أضف هذا السطر الجديد -->
+    <span data-slide="3"></span>
+</div>
     </section>
 
     <!-- TESTIMONIALS -->
@@ -1984,17 +1988,17 @@ footer p .dev-name {
                     </a>
 
                     <div class="stores-row">
-                        <a href="https://apkpure.com/" target="_blank" rel="noopener" class="store-btn apkpure">
+                        <a href="https://apkpure.com/p/com.dev7sn.mafia" target="_blank" rel="noopener" class="store-btn apkpure">
                             <div class="store-icon"><img src="https://iili.io/nIrWgsI.jpg" alt="APKPure"></div>
                             <div class="store-text">
-                                <small data-i18n="store.available">قريبًا على</small>
+                                <small data-i18n="store.available.apkpure">متوفر على</small>
                                 <b>APKPure</b>
                             </div>
                         </a>
                         <a href="https://uptodown.com/" target="_blank" rel="noopener" class="store-btn uptodown">
                             <div class="store-icon"><img src="https://iili.io/nIrXUpj.png" alt="Uptodown"></div>
                             <div class="store-text">
-                                <small data-i18n="store.available">قريبًا على</small>
+                                <small data-i18n="store.coming.uptodown">قريبًا على</small>
                                 <b>Uptodown</b>
                             </div>
                         </a>
@@ -2186,7 +2190,8 @@ const translations = {
         "hero.tagline": 'عُشاق الغموض والذكاء والخداع المتقن 🕵️‍♂️🔥<br>اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة.',
         "stats.version": "إصدار", "stats.size": "حجم", "stats.sessions": "جلسة", "stats.rating": "تقييم",
         "btn.download": "تحميل مباشر (APK)", "btn.learn": "تعرّف أكثر",
-        "store.available": "قريبًا على",
+        "store.available.apkpure": "متوفر على",
+        "store.coming.uptodown": "قريبًا على",
         "features.title": 'لماذا <span>مافيا</span>؟',
         "features.subtitle": "تجربة جماعية متكاملة مصممة لتعيش أجواء الغموض مع أصدقائك بكل سهولة.",
         "feat1.title": "أدوار متنوعة", "feat1.desc": "مافيا، طبيب، محقق، ومواطنون — كل دور له قوة خاصة وتأثير على مجرى اللعبة.",
@@ -2273,7 +2278,8 @@ const translations = {
         "hero.tagline": 'Lovers of mystery, wit, and clever deception 🕵️‍♂️🔥<br>Gather your friends, shuffle the roles, and begin the battle of planning and uncovering traitors.',
         "stats.version": "Version", "stats.size": "Size", "stats.sessions": "Sessions", "stats.rating": "Rating",
         "btn.download": "Direct Download (APK)", "btn.learn": "Learn More",
-        "store.available": "Available on",
+        "store.available.apkpure": "Available on",
+       "store.coming.uptodown": "Coming soon to",
         "features.title": 'Why <span>Mafia</span>?',
         "features.subtitle": "A complete group experience designed to enjoy the mystery with your friends with ease.",
         "feat1.title": "Varied Roles", "feat1.desc": "Mafia, Doctor, Detective, and Citizens — each role has a unique power that impacts the game.",
