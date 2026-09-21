@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لعبة مافيا | عُشاق الغموض والذكاء</title>
+<script>document.documentElement.classList.add('js');</script>
 
 <meta property="og:title" content="لعبة مافيا - عُشاق الغموض والذكاء">
 <meta property="og:description" content="اجمع أصدقاءك وابدأ معركة كشف الخونة. تجربة جماعية ممتعة وبدون إعلانات.">
@@ -39,6 +40,37 @@ body {
     overflow-x: hidden;
     position: relative;
     line-height: 1.6;
+}
+
+/* ================================================
+   SCROLL REVEAL SYSTEM
+================================================ */
+.js .js-reveal {
+    opacity: 0;
+}
+
+.js .js-reveal.is-revealed {
+    animation: revealUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
+}
+
+@keyframes revealUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 45px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .js-reveal,
+    .js .js-reveal.is-revealed {
+        opacity: 1 !important;
+        animation: none !important;
+        transform: none !important;
+    }
 }
 
 /* ============ NAVBAR ============ */
@@ -885,7 +917,6 @@ section {
     background: transparent;
 }
 
-/* خط أخضر متدرج علوي - مثل باقي الأقسام */
 .final-cta::before {
     content: '';
     position: absolute;
@@ -944,7 +975,6 @@ section {
     color: var(--green);
     text-shadow: 0 0 50px var(--green-glow);
 }
-/* خط أخضر متدرج تحت العنوان - مثل باقي الأقسام */
 .final-cta h2::after {
     content: '';
     position: absolute;
@@ -966,7 +996,6 @@ section {
     margin-top: 12px;
 }
 
-/* زر التحميل - توهج دائري معقول */
 .cta-main-btn {
     padding: 18px 48px;
     font-size: 1.08rem;
@@ -986,7 +1015,6 @@ section {
     overflow: visible;
 }
 
-/* توهج دائري خفيف خلف الزر */
 .cta-main-btn::after {
     content: '';
     position: absolute;
@@ -1030,7 +1058,6 @@ section {
     background: var(--green-dark);
 }
 
-/* ميزات سريعة */
 .cta-features {
     display: flex;
     gap: 20px;
@@ -1062,7 +1089,6 @@ section {
     justify-content: center;
 }
 
-/* المتاجر - جنب بعض */
 .final-cta .stores-row {
     margin-top: 22px;
     position: relative;
@@ -1225,7 +1251,6 @@ section {
     transform: scale(1.3) rotate(72deg);
 }
 
-/* APKPure - أخضر */
 .rate-apkpure {
     background: linear-gradient(135deg, rgba(0, 200, 83, 0.15), rgba(0, 200, 83, 0.05));
     border-color: rgba(0, 200, 83, 0.4);
@@ -1241,7 +1266,6 @@ section {
     box-shadow: 0 15px 35px rgba(0, 200, 83, 0.3);
 }
 
-/* Uptodown - أزرق سماوي */
 .rate-uptodown {
     background: linear-gradient(135deg, rgba(0, 170, 213, 0.15), rgba(0, 170, 213, 0.05));
     border-color: rgba(0, 170, 213, 0.4);
@@ -1734,33 +1758,33 @@ footer p .dev-name {
         <div class="hero-icon">
             <img src="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png" alt="Mafia Icon">
         </div>
-        <h1 data-i18n="hero.title">لعبة <span>مافيا</span></h1>
-        <p class="hero-tagline" data-i18n="hero.tagline">عُشاق الغموض والذكاء والخداع المتقن 🕵️‍♂️🔥 اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة.</p>
+        <h1 class="js-reveal" data-i18n="hero.title">لعبة <span>مافيا</span></h1>
+        <p class="hero-tagline js-reveal" data-i18n="hero.tagline">عُشاق الغموض والذكاء والخداع المتقن 🕵️‍♂️🔥 اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة.</p>
 
         <div class="hero-stats">
-            <div class="stat-card">
+            <div class="stat-card js-reveal">
                 <div class="stat-card-icon"><i class="fa-solid fa-code-branch"></i></div>
                 <div class="stat-card-num" id="statVersion">1.2</div>
                 <div class="stat-card-lbl" data-i18n="stats.version">إصدار</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card js-reveal">
                 <div class="stat-card-icon"><i class="fa-solid fa-database"></i></div>
                 <div class="stat-card-num" id="statSize">2.24 MB</div>
                 <div class="stat-card-lbl" data-i18n="stats.size">حجم</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card js-reveal">
                 <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
                 <div class="stat-card-num">+100</div>
                 <div class="stat-card-lbl" data-i18n="stats.sessions">جلسة</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card js-reveal">
                 <div class="stat-card-icon"><i class="fa-solid fa-star"></i></div>
                 <div class="stat-card-num">4.8</div>
                 <div class="stat-card-lbl" data-i18n="stats.rating">تقييم</div>
             </div>
         </div>
 
-        <div class="hero-stack">
+        <div class="hero-stack js-reveal">
             <a href="https://github.com/7sn-17/mafia/releases/latest/download/Mafia.apk" class="btn btn-primary btn-download">
                 <i class="fa-solid fa-cloud-arrow-down"></i> <span data-i18n="btn.download">تحميل مباشر (APK)</span>
             </a>
@@ -1791,43 +1815,43 @@ footer p .dev-name {
     <!-- FEATURES -->
     <section id="features">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title js-reveal">
                 <h2 data-i18n="features.title">لماذا <span>مافيا</span>؟</h2>
                 <p data-i18n="features.subtitle">تجربة جماعية متكاملة مصممة لتعيش أجواء الغموض مع أصدقائك بكل سهولة.</p>
             </div>
 
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card js-reveal">
                     <div class="feature-num">01</div>
                     <div class="feature-icon"><i class="fa-solid fa-masks-theater"></i></div>
                     <h3 data-i18n="feat1.title">أدوار متنوعة</h3>
                     <p data-i18n="feat1.desc">مافيا، طبيب، محقق، ومواطنون — كل دور له قوة خاصة وتأثير على مجرى اللعبة.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card js-reveal">
                     <div class="feature-num">02</div>
                     <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
                     <h3 data-i18n="feat2.title">تحكم سلس وسريع</h3>
                     <p data-i18n="feat2.desc">واجهة بسيطة وأنيقة تتيح إدارة الجلسة بضغطة زر، بدون أي تعقيد أو إعدادات معقدة.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card js-reveal">
                     <div class="feature-num">03</div>
                     <div class="feature-icon"><i class="fa-solid fa-wifi"></i></div>
                     <h3 data-i18n="feat3.title">بدون إنترنت</h3>
                     <p data-i18n="feat3.desc">العب في أي مكان — في المنزل، الرحلة، أو الجلسة مع الأصدقاء، بدون الحاجة لاتصال.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card js-reveal">
                     <div class="feature-num">04</div>
                     <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
                     <h3 data-i18n="feat4.title">خصوصية تامة</h3>
                     <p data-i18n="feat4.desc">لا تسجيل، لا حسابات، لا تتبع. نلتزم بحماية خصوصيتك بشكل كامل وشفاف.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card js-reveal">
                     <div class="feature-num">05</div>
                     <div class="feature-icon"><i class="fa-solid fa-users-rectangle"></i></div>
                     <h3 data-i18n="feat5.title">جماعية تفاعلية</h3>
                     <p data-i18n="feat5.desc">مثالية للمجموعات من 4 إلى 30 لاعباً، مع إدارة كاملة للأدوار وجولات اللعب.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card js-reveal">
                     <div class="feature-num">06</div>
                     <div class="feature-icon"><i class="fa-solid fa-face-smile"></i></div>
                     <h3 data-i18n="feat6.title">بدون إعلانات</h3>
@@ -1840,12 +1864,12 @@ footer p .dev-name {
     <!-- GALLERY -->
     <section id="gallery">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title js-reveal">
                 <h2 data-i18n="gallery.title">لمحة من <span>اللعب</span></h2>
                 <p data-i18n="gallery.subtitle">تصاميم أنيقة وواجهات مدروسة تجعل كل جلسة تجربة فريدة.</p>
             </div>
 
-<div class="carousel" id="carousel">
+<div class="carousel js-reveal" id="carousel">
     <div class="carousel-track" id="carouselTrack">
         <div class="carousel-slide" data-index="0">
             <img src="https://iili.io/nIrFCvV.png" alt="Screenshot 1" draggable="false">
@@ -1866,7 +1890,6 @@ footer p .dev-name {
     <span data-slide="0"></span>
     <span class="active" data-slide="1"></span>
     <span data-slide="2"></span>
-    <!-- ✅ أضف هذا السطر الجديد -->
     <span data-slide="3"></span>
 </div>
     </section>
@@ -1874,13 +1897,13 @@ footer p .dev-name {
     <!-- TESTIMONIALS -->
     <section id="reviews">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title js-reveal">
                 <h2 data-i18n="reviews.title">ماذا قال <span>اللاعبون</span>؟</h2>
                 <p data-i18n="reviews.subtitle">تجارب حقيقية من مجتمع اللعبة.</p>
             </div>
 
             <div class="testimonials-grid">
-                <div class="testimonial">
+                <div class="testimonial js-reveal">
                     <div class="quote-mark"><i class="fa-solid fa-quote-right"></i></div>
                     <div class="stars">★★★★★</div>
                     <p data-i18n="rev1.text">"أفضل لعبة مافيا عربية لعبتها! التصميم نظيف والأدوار متوازنة جداً. أصدقائي مدمنين عليها."</p>
@@ -1895,7 +1918,7 @@ footer p .dev-name {
                     </div>
                 </div>
 
-                <div class="testimonial">
+                <div class="testimonial js-reveal">
                     <div class="quote-mark"><i class="fa-solid fa-quote-right"></i></div>
                     <div class="stars">★★★★★</div>
                     <p data-i18n="rev2.text">"واجهة أنيقة جداً وسريعة، وما فيها إعلانات. صراحة تجربة احترافية تستحق التحميل."</p>
@@ -1910,7 +1933,7 @@ footer p .dev-name {
                     </div>
                 </div>
 
-                <div class="testimonial">
+                <div class="testimonial js-reveal">
                     <div class="quote-mark"><i class="fa-solid fa-quote-right"></i></div>
                     <div class="stars">★★★★</div>
                     <p data-i18n="rev3.text">"نلعبها كل نهاية أسبوع مع الشباب. الأدوار واضحة والتوزيع عادل. شيء رهيب!"</p>
@@ -1931,34 +1954,34 @@ footer p .dev-name {
     <!-- FAQ -->
     <section id="faq">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title js-reveal">
                 <h2 data-i18n="faq.title">الأسئلة <span>الشائعة</span></h2>
                 <p data-i18n="faq.subtitle">كل ما تريد معرفته قبل التحميل.</p>
             </div>
 
             <div class="faq-list">
-                <div class="faq-item">
+                <div class="faq-item js-reveal">
                     <button class="faq-question">
                         <span data-i18n="faq.q1">هل اللعبة مجانية بالكامل؟</span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer" data-i18n="faq.a1">نعم، اللعبة مجانية بالكامل ولا تحتوي على أي إعلانات أو عمليات شراء داخلية.</div>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item js-reveal">
                     <button class="faq-question">
                         <span data-i18n="faq.q2">كم عدد اللاعبين المطلوب؟</span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer" data-i18n="faq.a2">اللعبة مصممة لمجموعة من 4 إلى 30 لاعباً، ويمكن ضبط عدد اللاعبين بسهولة من داخل التطبيق.</div>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item js-reveal">
                     <button class="faq-question">
                         <span data-i18n="faq.q3">هل تحتاج اتصال بالإنترنت؟</span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer" data-i18n="faq.a3">لا، التطبيق يعمل بالكامل بدون إنترنت. يمكنك اللعب في أي مكان وفي أي وقت.</div>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item js-reveal">
                     <button class="faq-question">
                         <span data-i18n="faq.q4">من أين أحمّل اللعبة؟</span>
                         <i class="fa-solid fa-chevron-down"></i>
@@ -1974,20 +1997,20 @@ footer p .dev-name {
         <div class="container">
             <div class="final-cta">
                 <div class="cta-content">
-                    <div class="cta-badge">
+                    <div class="cta-badge js-reveal">
                         <i class="fa-solid fa-heart"></i>
                         <span data-i18n="cta.badge">تجربة يطورها شغف اللاعبين</span>
                     </div>
 
-                    <h2 data-i18n="cta.title">جاهز <span>للانطلاق</span>؟</h2>
-                    <p data-i18n="cta.subtitle">حمّل النسخة الرسمية الآن وابدأ أول جلسة مع أصدقائك.</p>
+                    <h2 class="js-reveal" data-i18n="cta.title">جاهز <span>للانطلاق</span>؟</h2>
+                    <p class="js-reveal" data-i18n="cta.subtitle">حمّل النسخة الرسمية الآن وابدأ أول جلسة مع أصدقائك.</p>
 
-                    <a href="https://github.com/7sn-17/mafia/releases/latest/download/Mafia.apk" class="btn btn-primary cta-main-btn">
+                    <a href="https://github.com/7sn-17/mafia/releases/latest/download/Mafia.apk" class="btn btn-primary cta-main-btn js-reveal">
                         <i class="fa-solid fa-cloud-arrow-down"></i>
                         <span data-i18n="cta.download">تحميل APK مباشر</span>
                     </a>
 
-                    <div class="stores-row">
+                    <div class="stores-row js-reveal">
                         <a href="https://apkpure.com/p/com.dev7sn.mafia" target="_blank" rel="noopener" class="store-btn apkpure">
                             <div class="store-icon"><img src="https://iili.io/nIrWgsI.jpg" alt="APKPure"></div>
                             <div class="store-text">
@@ -2004,13 +2027,13 @@ footer p .dev-name {
                         </a>
                     </div>
 
-                    <div class="cta-features">
+                    <div class="cta-features js-reveal">
                         <span><i class="fa-solid fa-check"></i> <span data-i18n="cta.f1">مجاني بالكامل</span></span>
                         <span><i class="fa-solid fa-check"></i> <span data-i18n="cta.f2">بدون إعلانات</span></span>
                         <span><i class="fa-solid fa-check"></i> <span data-i18n="cta.f3">بدون إنترنت</span></span>
                     </div>
 
-                    <div class="rate-section">
+                    <div class="rate-section js-reveal">
                         <p class="rate-title" data-i18n="cta.rateTitle">
                             <i class="fa-solid fa-star"></i>
                             أعجبتك اللعبة؟ قيّمها على المتجر
@@ -2040,7 +2063,7 @@ footer p .dev-name {
                     </div>
 
                     <!-- QR قابل للتحميل -->
-                    <div class="qr-downloadable" id="qrDownload">
+                    <div class="qr-downloadable js-reveal" id="qrDownload">
                         <div class="qr-header">
                             <i class="fa-solid fa-qrcode"></i>
                             <span data-i18n="cta.qrScan">امسح الرمز للتحميل السريع</span>
@@ -2454,12 +2477,11 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 
 /* ============ Fetch app info from version.json ============ */
 async function fetchAppInfo() {
-    // الملف موجود في الجذر الرئيسي للموقع - مسار نسبي
     const sources = [
-        'version.json',                                    // الأولوية: نفس المجلد
-        './version.json',                                  // احتياطي
-        'https://7sn-17.github.io/mafia/version.json',     // احتياطي: الرابط الكامل
-        'https://raw.githubusercontent.com/7sn-17/mafia/main/version.json' // احتياطي أخير
+        'version.json',
+        './version.json',
+        'https://7sn-17.github.io/mafia/version.json',
+        'https://raw.githubusercontent.com/7sn-17/mafia/main/version.json'
     ];
 
     for (const url of sources) {
@@ -2473,31 +2495,26 @@ async function fetchAppInfo() {
             
             const data = await res.json();
             
-            // تحديث الإصدار
             if (data?.version) {
                 const versionEl = document.getElementById('statVersion');
                 if (versionEl) versionEl.innerText = data.version;
             }
             
-            // تحديث الحجم
             if (data?.size) {
                 const sizeEl = document.getElementById('statSize');
                 if (sizeEl) sizeEl.innerText = data.size;
             }
             
-            // تحديث رابط التحميل إن وُجد
             if (data?.url) {
                 document.querySelectorAll('a[href*="Mafia.apk"], a[href*="releases/latest"]').forEach(link => {
                     // اترك الروابط كما هي أو حدّثها حسب الحاجة
                 });
             }
             
-            // نجح - اخرج من الحلقة
             console.log('✅ تم تحميل معلومات الإصدار:', data);
             return data;
             
         } catch (e) {
-            // جرب المصدر التالي
             continue;
         }
     }
@@ -2505,10 +2522,7 @@ async function fetchAppInfo() {
     console.warn('⚠️ تعذر تحميل version.json - سيتم استخدام القيم الافتراضية');
 }
 
-// تشغيل فوري عند تحميل الصفحة + إعادة المحاولة
 document.addEventListener('DOMContentLoaded', fetchAppInfo);
-
-// إعادة المحاولة بعد 3 ثواني (في حال فشل الاتصال الأول)
 setTimeout(fetchAppInfo, 3000);
 
 /* ============ CAROUSEL ============ */
@@ -2841,6 +2855,61 @@ function showToast(message, iconClass = 'fa-circle-check') {
         toast.style.transform = 'translateX(-50%) translateY(120px)';
     }, 2600);
 }
+
+/* ============ SCROLL REVEAL ============ */
+(function initScrollReveal() {
+    // Fallback: if IntersectionObserver isn't supported, show everything
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.js-reveal').forEach(el => {
+            el.classList.remove('js-reveal');
+        });
+        return;
+    }
+
+    // Respect prefers-reduced-motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return; // CSS handles it
+    }
+
+    // Apply staggered delays per group
+    const delayGroups = [
+        { sel: '.hero h1',              base: 100,  step: 0 },
+        { sel: '.hero-tagline',         base: 250,  step: 0 },
+        { sel: '.hero-stats .stat-card', base: 400, step: 100 },
+        { sel: '.hero-stack',           base: 900,  step: 0 },
+        { sel: '.feature-card',         base: 0,    step: 90 },
+        { sel: '.testimonial',          base: 0,    step: 120 },
+        { sel: '.faq-item',             base: 0,    step: 80 },
+        { sel: '.cta-content > .js-reveal', base: 0, step: 100 }
+    ];
+
+    delayGroups.forEach(group => {
+        document.querySelectorAll(group.sel).forEach((el, i) => {
+            el.style.setProperty('--reveal-delay', (group.base + i * group.step) + 'ms');
+        });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+
+            el.classList.add('is-revealed');
+            observer.unobserve(el);
+
+            // Cleanup after animation so :hover effects work perfectly
+            el.addEventListener('animationend', () => {
+                el.classList.remove('js-reveal', 'is-revealed');
+                el.style.removeProperty('--reveal-delay');
+            }, { once: true });
+        });
+    }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -60px 0px'
+    });
+
+    document.querySelectorAll('.js-reveal').forEach(el => observer.observe(el));
+})();
 </script>
 
 </body>
