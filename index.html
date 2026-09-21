@@ -43,33 +43,67 @@ body {
 }
 
 /* ================================================
-   SCROLL REVEAL SYSTEM
+   SCROLL REVEAL SYSTEM - V2
+   - 7 أنواع حركة لكل نوع عنصر
+   - مدة 600ms + منحنى موحد
 ================================================ */
-.js .js-reveal {
-    opacity: 0;
-}
+.js .js-reveal { opacity: 0; }
 
 .js .js-reveal.is-revealed {
-    animation: revealUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
+    animation: revealUp 0.6s cubic-bezier(0.25, 0.8, 0.35, 1) var(--reveal-delay, 0ms) both;
 }
 
+/* تعديلات لكل نوع */
+.js .js-reveal.reveal-down.is-revealed    { animation-name: revealDown; }
+.js .js-reveal.reveal-scale.is-revealed   { animation-name: revealScale; }
+.js .js-reveal.reveal-left.is-revealed    { animation-name: revealLeft; }
+.js .js-reveal.reveal-right.is-revealed   { animation-name: revealRight; }
+.js .js-reveal.reveal-fade.is-revealed    { animation-name: revealFade; animation-duration: 0.55s; }
+.js .js-reveal.reveal-carousel.is-revealed{ animation-name: revealCarousel; animation-duration: 0.7s; }
+.js .js-reveal.reveal-blur.is-revealed    { animation-name: revealBlur; animation-duration: 0.7s; }
+
+/* Keyframes */
 @keyframes revealUp {
-    from {
-        opacity: 0;
-        transform: translate3d(0, 45px, 0);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
+    from { opacity: 0; transform: translate3d(0, 40px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes revealDown {
+    from { opacity: 0; transform: translate3d(0, -40px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes revealScale {
+    from { opacity: 0; transform: translate3d(0, 40px, 0) scale(0.9); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes revealLeft {
+    from { opacity: 0; transform: translate3d(-40px, 0, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes revealRight {
+    from { opacity: 0; transform: translate3d(40px, 0, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes revealFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes revealCarousel {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+@keyframes revealBlur {
+    from { opacity: 0; filter: blur(8px); transform: translate3d(0, 20px, 0); }
+    to   { opacity: 1; filter: blur(0);   transform: translate3d(0, 0, 0); }
 }
 
+/* احترام إعدادات المستخدم */
 @media (prefers-reduced-motion: reduce) {
     .js .js-reveal,
     .js .js-reveal.is-revealed {
         opacity: 1 !important;
         animation: none !important;
         transform: none !important;
+        filter: none !important;
     }
 }
 
@@ -187,6 +221,9 @@ body {
     padding: 120px 20px 60px;
     gap: 18px;
 }
+
+/* wrapper للـ hero-icon لتفادي تعارض floatY مع reveal */
+.hero-icon-wrap { display: inline-block; }
 
 .hero-icon {
     width: 110px; height: 110px;
@@ -1755,8 +1792,11 @@ footer p .dev-name {
 <div id="homeScreen">
 
     <header class="hero">
-        <div class="hero-icon">
-            <img src="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png" alt="Mafia Icon">
+        <!-- hero-icon: fade فقط لأن floatY يستخدم transform -->
+        <div class="hero-icon-wrap js-reveal reveal-fade">
+            <div class="hero-icon">
+                <img src="https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher.png" alt="Mafia Icon">
+            </div>
         </div>
         <h1 class="js-reveal" data-i18n="hero.title">لعبة <span>مافيا</span></h1>
         <p class="hero-tagline js-reveal" data-i18n="hero.tagline">عُشاق الغموض والذكاء والخداع المتقن 🕵️‍♂️🔥 اجمع أصدقاءك، اخلط الأوراق، وابدأ معركة التخطيط وكشف الخونة.</p>
@@ -1815,43 +1855,45 @@ footer p .dev-name {
     <!-- FEATURES -->
     <section id="features">
         <div class="container">
-            <div class="section-title js-reveal">
+            <!-- section-title: reveal-blur (فخم) -->
+            <div class="section-title js-reveal reveal-blur">
                 <h2 data-i18n="features.title">لماذا <span>مافيا</span>؟</h2>
                 <p data-i18n="features.subtitle">تجربة جماعية متكاملة مصممة لتعيش أجواء الغموض مع أصدقائك بكل سهولة.</p>
             </div>
 
             <div class="features-grid">
-                <div class="feature-card js-reveal">
+                <!-- feature-card: reveal-scale + stagger 100ms -->
+                <div class="feature-card js-reveal reveal-scale">
                     <div class="feature-num">01</div>
                     <div class="feature-icon"><i class="fa-solid fa-masks-theater"></i></div>
                     <h3 data-i18n="feat1.title">أدوار متنوعة</h3>
                     <p data-i18n="feat1.desc">مافيا، طبيب، محقق، ومواطنون — كل دور له قوة خاصة وتأثير على مجرى اللعبة.</p>
                 </div>
-                <div class="feature-card js-reveal">
+                <div class="feature-card js-reveal reveal-scale">
                     <div class="feature-num">02</div>
                     <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
                     <h3 data-i18n="feat2.title">تحكم سلس وسريع</h3>
                     <p data-i18n="feat2.desc">واجهة بسيطة وأنيقة تتيح إدارة الجلسة بضغطة زر، بدون أي تعقيد أو إعدادات معقدة.</p>
                 </div>
-                <div class="feature-card js-reveal">
+                <div class="feature-card js-reveal reveal-scale">
                     <div class="feature-num">03</div>
                     <div class="feature-icon"><i class="fa-solid fa-wifi"></i></div>
                     <h3 data-i18n="feat3.title">بدون إنترنت</h3>
                     <p data-i18n="feat3.desc">العب في أي مكان — في المنزل، الرحلة، أو الجلسة مع الأصدقاء، بدون الحاجة لاتصال.</p>
                 </div>
-                <div class="feature-card js-reveal">
+                <div class="feature-card js-reveal reveal-scale">
                     <div class="feature-num">04</div>
                     <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
                     <h3 data-i18n="feat4.title">خصوصية تامة</h3>
                     <p data-i18n="feat4.desc">لا تسجيل، لا حسابات، لا تتبع. نلتزم بحماية خصوصيتك بشكل كامل وشفاف.</p>
                 </div>
-                <div class="feature-card js-reveal">
+                <div class="feature-card js-reveal reveal-scale">
                     <div class="feature-num">05</div>
                     <div class="feature-icon"><i class="fa-solid fa-users-rectangle"></i></div>
                     <h3 data-i18n="feat5.title">جماعية تفاعلية</h3>
                     <p data-i18n="feat5.desc">مثالية للمجموعات من 4 إلى 30 لاعباً، مع إدارة كاملة للأدوار وجولات اللعب.</p>
                 </div>
-                <div class="feature-card js-reveal">
+                <div class="feature-card js-reveal reveal-scale">
                     <div class="feature-num">06</div>
                     <div class="feature-icon"><i class="fa-solid fa-face-smile"></i></div>
                     <h3 data-i18n="feat6.title">بدون إعلانات</h3>
@@ -1864,12 +1906,13 @@ footer p .dev-name {
     <!-- GALLERY -->
     <section id="gallery">
         <div class="container">
-            <div class="section-title js-reveal">
+            <div class="section-title js-reveal reveal-blur">
                 <h2 data-i18n="gallery.title">لمحة من <span>اللعب</span></h2>
                 <p data-i18n="gallery.subtitle">تصاميم أنيقة وواجهات مدروسة تجعل كل جلسة تجربة فريدة.</p>
             </div>
 
-<div class="carousel js-reveal" id="carousel">
+<!-- carousel: reveal-carousel (fade + scale) -->
+<div class="carousel js-reveal reveal-carousel" id="carousel">
     <div class="carousel-track" id="carouselTrack">
         <div class="carousel-slide" data-index="0">
             <img src="https://iili.io/nIrFCvV.png" alt="Screenshot 1" draggable="false">
@@ -1897,13 +1940,14 @@ footer p .dev-name {
     <!-- TESTIMONIALS -->
     <section id="reviews">
         <div class="container">
-            <div class="section-title js-reveal">
+            <div class="section-title js-reveal reveal-blur">
                 <h2 data-i18n="reviews.title">ماذا قال <span>اللاعبون</span>؟</h2>
                 <p data-i18n="reviews.subtitle">تجارب حقيقية من مجتمع اللعبة.</p>
             </div>
 
+            <!-- testimonials: reveal-right / reveal-left بالتناوب -->
             <div class="testimonials-grid">
-                <div class="testimonial js-reveal">
+                <div class="testimonial js-reveal reveal-right">
                     <div class="quote-mark"><i class="fa-solid fa-quote-right"></i></div>
                     <div class="stars">★★★★★</div>
                     <p data-i18n="rev1.text">"أفضل لعبة مافيا عربية لعبتها! التصميم نظيف والأدوار متوازنة جداً. أصدقائي مدمنين عليها."</p>
@@ -1918,7 +1962,7 @@ footer p .dev-name {
                     </div>
                 </div>
 
-                <div class="testimonial js-reveal">
+                <div class="testimonial js-reveal reveal-left">
                     <div class="quote-mark"><i class="fa-solid fa-quote-right"></i></div>
                     <div class="stars">★★★★★</div>
                     <p data-i18n="rev2.text">"واجهة أنيقة جداً وسريعة، وما فيها إعلانات. صراحة تجربة احترافية تستحق التحميل."</p>
@@ -1933,7 +1977,7 @@ footer p .dev-name {
                     </div>
                 </div>
 
-                <div class="testimonial js-reveal">
+                <div class="testimonial js-reveal reveal-right">
                     <div class="quote-mark"><i class="fa-solid fa-quote-right"></i></div>
                     <div class="stars">★★★★</div>
                     <p data-i18n="rev3.text">"نلعبها كل نهاية أسبوع مع الشباب. الأدوار واضحة والتوزيع عادل. شيء رهيب!"</p>
@@ -1954,34 +1998,35 @@ footer p .dev-name {
     <!-- FAQ -->
     <section id="faq">
         <div class="container">
-            <div class="section-title js-reveal">
+            <div class="section-title js-reveal reveal-blur">
                 <h2 data-i18n="faq.title">الأسئلة <span>الشائعة</span></h2>
                 <p data-i18n="faq.subtitle">كل ما تريد معرفته قبل التحميل.</p>
             </div>
 
+            <!-- faq-item: reveal-fade (بسيط) -->
             <div class="faq-list">
-                <div class="faq-item js-reveal">
+                <div class="faq-item js-reveal reveal-fade">
                     <button class="faq-question">
                         <span data-i18n="faq.q1">هل اللعبة مجانية بالكامل؟</span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer" data-i18n="faq.a1">نعم، اللعبة مجانية بالكامل ولا تحتوي على أي إعلانات أو عمليات شراء داخلية.</div>
                 </div>
-                <div class="faq-item js-reveal">
+                <div class="faq-item js-reveal reveal-fade">
                     <button class="faq-question">
                         <span data-i18n="faq.q2">كم عدد اللاعبين المطلوب؟</span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer" data-i18n="faq.a2">اللعبة مصممة لمجموعة من 4 إلى 30 لاعباً، ويمكن ضبط عدد اللاعبين بسهولة من داخل التطبيق.</div>
                 </div>
-                <div class="faq-item js-reveal">
+                <div class="faq-item js-reveal reveal-fade">
                     <button class="faq-question">
                         <span data-i18n="faq.q3">هل تحتاج اتصال بالإنترنت؟</span>
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer" data-i18n="faq.a3">لا، التطبيق يعمل بالكامل بدون إنترنت. يمكنك اللعب في أي مكان وفي أي وقت.</div>
                 </div>
-                <div class="faq-item js-reveal">
+                <div class="faq-item js-reveal reveal-fade">
                     <button class="faq-question">
                         <span data-i18n="faq.q4">من أين أحمّل اللعبة؟</span>
                         <i class="fa-solid fa-chevron-down"></i>
@@ -2062,7 +2107,6 @@ footer p .dev-name {
                         </div>
                     </div>
 
-                    <!-- QR قابل للتحميل -->
                     <div class="qr-downloadable js-reveal" id="qrDownload">
                         <div class="qr-header">
                             <i class="fa-solid fa-qrcode"></i>
@@ -2507,7 +2551,7 @@ async function fetchAppInfo() {
             
             if (data?.url) {
                 document.querySelectorAll('a[href*="Mafia.apk"], a[href*="releases/latest"]').forEach(link => {
-                    // اترك الروابط كما هي أو حدّثها حسب الحاجة
+                    // اترك الروابط كما هي
                 });
             }
             
@@ -2711,7 +2755,7 @@ setTimeout(fetchAppInfo, 3000);
     checkVisibility();
 })();
 
-/* ============ QR Code - تحميل مع 3 محاولات ============ */
+/* ============ QR Code ============ */
 document.getElementById('qrDownload').addEventListener('click', async () => {
     const qrUrl = 'https://iili.io/nI6W5lt.png';
     const fileName = 'Mafia_apk.png';
@@ -2856,31 +2900,37 @@ function showToast(message, iconClass = 'fa-circle-check') {
     }, 2600);
 }
 
-/* ============ SCROLL REVEAL ============ */
+/* ================================================
+   SCROLL REVEAL — V2 (كل الأنواع السبعة)
+================================================ */
 (function initScrollReveal() {
-    // Fallback: if IntersectionObserver isn't supported, show everything
+    // Fallback للمتصفحات القديمة
     if (!('IntersectionObserver' in window)) {
         document.querySelectorAll('.js-reveal').forEach(el => {
-            el.classList.remove('js-reveal');
+            el.classList.remove('js-reveal','reveal-down','reveal-scale','reveal-left','reveal-right','reveal-fade','reveal-carousel','reveal-blur');
         });
         return;
     }
 
-    // Respect prefers-reduced-motion
+    // احترام prefers-reduced-motion — CSS يعالج الأمر
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        return; // CSS handles it
+        return;
     }
 
-    // Apply staggered delays per group
+    /* -------- Stagger: تأخيرات تراكمية لكل مجموعة -------- */
     const delayGroups = [
-        { sel: '.hero h1',              base: 100,  step: 0 },
-        { sel: '.hero-tagline',         base: 250,  step: 0 },
-        { sel: '.hero-stats .stat-card', base: 400, step: 100 },
-        { sel: '.hero-stack',           base: 900,  step: 0 },
-        { sel: '.feature-card',         base: 0,    step: 90 },
-        { sel: '.testimonial',          base: 0,    step: 120 },
-        { sel: '.faq-item',             base: 0,    step: 80 },
-        { sel: '.cta-content > .js-reveal', base: 0, step: 100 }
+        // Hero: ظهور فوري متتابع عند تحميل الصفحة
+        { sel: '.hero-icon-wrap',          base: 50,   step: 0   },
+        { sel: '.hero h1',                 base: 180,  step: 0   },
+        { sel: '.hero-tagline',            base: 340,  step: 0   },
+        { sel: '.hero-stats .stat-card',   base: 480,  step: 100 },
+        { sel: '.hero-stack',              base: 950,  step: 0   },
+
+        // الأقسام: تظهر عند السيرول
+        { sel: '.feature-card',            base: 0,    step: 100 }, // 100ms بين كل بطاقة
+        { sel: '.testimonial',             base: 0,    step: 120 }, // 120ms بين كل شهادة
+        { sel: '.faq-item',                base: 0,    step: 80  }, // 80ms بين كل سؤال
+        { sel: '.cta-content > .js-reveal', base: 0,   step: 100 }  // 100ms بين عناصر CTA
     ];
 
     delayGroups.forEach(group => {
@@ -2889,6 +2939,7 @@ function showToast(message, iconClass = 'fa-circle-check') {
         });
     });
 
+    /* -------- Observer -------- */
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
@@ -2897,9 +2948,19 @@ function showToast(message, iconClass = 'fa-circle-check') {
             el.classList.add('is-revealed');
             observer.unobserve(el);
 
-            // Cleanup after animation so :hover effects work perfectly
+            // تنظيف بعد انتهاء الحركة → hover يعمل بشكل مثالي
             el.addEventListener('animationend', () => {
-                el.classList.remove('js-reveal', 'is-revealed');
+                el.classList.remove(
+                    'js-reveal',
+                    'is-revealed',
+                    'reveal-down',
+                    'reveal-scale',
+                    'reveal-left',
+                    'reveal-right',
+                    'reveal-fade',
+                    'reveal-carousel',
+                    'reveal-blur'
+                );
                 el.style.removeProperty('--reveal-delay');
             }, { once: true });
         });
