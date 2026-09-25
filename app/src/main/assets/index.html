@@ -626,7 +626,579 @@
 .footer-content .social-icon[title="WhatsApp"]:hover {
     color: #25d366;
 }
-        
+      
+/* ========== الأزرار المزدوجة — تصميم أنيق ومتوازن ========== */
+.dual-buttons-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0 4px;
+}
+
+.dual-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 12px;
+    background: linear-gradient(145deg, rgba(14, 34, 24, 0.85), rgba(6, 18, 12, 0.9));
+    border: 1.5px solid rgba(46, 204, 113, 0.3);
+    border-radius:40px;
+    color: #d8ecd8;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+
+.dual-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(46, 204, 113, 0.15), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+}
+
+.dual-btn:hover::before { opacity: 1; }
+
+.dual-btn:hover {
+    border-color: #2ecc71;
+    color: #fff;
+    background: linear-gradient(145deg, rgba(20, 46, 32, 0.9), rgba(8, 24, 16, 0.95));
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), 0 0 15px rgba(46, 204, 113, 0.2);
+    transform: translateY(-1px);
+}
+
+.dual-btn:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.dual-btn i {
+    font-size: 1rem;
+    color: #2ecc71;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+}
+
+.dual-btn:hover i {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 6px rgba(46, 204, 113, 0.6));
+}
+
+.dual-btn span {
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+/* ========== إخفاء الجزيئات في شاشة الملاحظات ========== */
+body.hide-particles .bg-particles,
+body.hide-particles .particles-background {
+    display: none !important;
+}
+
+/* ========== شاشة الملاحظات - محسّنة للأداء ========== */
+.feedback-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+.feedback-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.feedback-header-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 14px;
+    background: radial-gradient(circle, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.05) 100%);
+    border: 2px solid rgba(46, 204, 113, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(46, 204, 113, 0.3), inset 0 0 20px rgba(46, 204, 113, 0.1);
+}
+
+.feedback-header-icon i {
+    font-size: 1.9rem;
+    color: #2ecc71;
+}
+
+.feedback-title {
+    color: #2ecc71;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin: 8px 0;
+    letter-spacing: 0.3px;
+}
+
+.feedback-subtitle {
+    color: #a0b8a0;
+    font-size: 0.88rem;
+    font-family: 'Tajawal', sans-serif;
+    line-height: 1.6;
+    padding: 0 10px;
+}
+
+.feedback-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #c0d8c0;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    padding-right: 4px;
+}
+
+.feedback-label i {
+    color: #2ecc71;
+    font-size: 0.85rem;
+    width: 16px;
+    text-align: center;
+}
+
+.feedback-label .required-star {
+    color: #e74c3c;
+    margin-right: auto;
+    font-size: 1rem;
+}
+
+/* ⚡ حقول الإدخال - أداء فائق للكتابة */
+.feedback-input-wrapper {
+    background: rgba(8, 22, 14, 0.7);
+    border: 1.5px solid rgba(26, 188, 156, 0.25);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+}
+
+.feedback-input-wrapper:focus-within {
+    border-color: #2ecc71;
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.2);
+}
+
+.feedback-input-wrapper input,
+.feedback-input-wrapper textarea {
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    color: #fff !important;
+    font-size: 0.95rem !important;
+    font-family: 'Tajawal', 'Readex Pro', sans-serif !important;
+    font-weight: 500 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    resize: none !important;
+    box-shadow: none !important;
+    text-align: right !important;
+    line-height: 1.5;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: none !important;
+    touch-action: manipulation;
+    will-change: auto;
+}
+
+.feedback-input-wrapper input::placeholder,
+.feedback-input-wrapper textarea::placeholder {
+    color: #5a7a5a;
+    font-weight: 400;
+}
+
+.feedback-input-wrapper textarea {
+    min-height: 110px;
+}
+
+/* إصلاح autofill في المتصفحات */
+.feedback-input-wrapper input:-webkit-autofill,
+.feedback-input-wrapper input:-webkit-autofill:hover,
+.feedback-input-wrapper input:-webkit-autofill:focus,
+.feedback-input-wrapper textarea:-webkit-autofill {
+    -webkit-text-fill-color: #fff !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(8, 22, 14, 0.9) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.feedback-counter {
+    text-align: left;
+    color: #7aad7a;
+    font-size: 0.72rem;
+    font-family: 'Cairo', sans-serif;
+    margin-top: -10px;
+    margin-bottom: 16px;
+    padding-left: 4px;
+    font-weight: 600;
+}
+
+.feedback-counter.warning {
+    color: #f39c12;
+}
+
+.feedback-submit-btn {
+    width: 100%;
+    background: linear-gradient(180deg, #1fc88a 0%, #0d5f4a 100%);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 15px 20px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    font-family: 'Cairo', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 6px 0 #073828, 0 10px 22px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.3px;
+    margin-bottom: 10px;
+    transition: transform 0.1s, opacity 0.2s;
+    touch-action: manipulation;
+}
+
+.feedback-submit-btn:hover:not(:disabled) {
+    background: linear-gradient(180deg, #28d896 0%, #107554 100%);
+}
+
+.feedback-submit-btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.4), 0 2px 0 #073828;
+}
+
+.feedback-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.feedback-back-btn {
+    width: 100%;
+    background: transparent;
+    color: #b0c8b0;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'Cairo', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.15s, border-color 0.15s;
+    letter-spacing: 0.3px;
+    touch-action: manipulation;
+}
+
+.feedback-back-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.feedback-back-btn:active {
+    transform: scale(0.98);
+}
+
+.feedback-status {
+    text-align: center;
+    margin-top: 16px;
+    min-height: 24px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    font-family: 'Cairo', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.feedback-status i {
+    font-size: 1.1rem;
+}
+
+/* ========== نافذة المشاركة السفلية (Bottom Sheet) ========== */
+.share-sheet-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 99999;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeInOverlay 0.25s ease forwards;
+}
+
+@keyframes fadeInOverlay {
+    to { opacity: 1; }
+}
+
+.share-sheet {
+    width: 100%;
+    max-width: 480px;
+    background: linear-gradient(180deg, #0e2418 0%, #06120b 100%);
+    border-top-left-radius: 26px;
+    border-top-right-radius: 26px;
+    border: 1.5px solid rgba(46, 204, 113, 0.25);
+    border-bottom: none;
+    padding: 14px 18px 26px;
+    transform: translateY(100%);
+    animation: slideUpSheet 0.35s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+    box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.7);
+    font-family: 'Cairo', sans-serif;
+}
+
+@keyframes slideUpSheet {
+    to { transform: translateY(0); }
+}
+
+.share-sheet-handle {
+    width: 44px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+}
+
+.share-sheet-title {
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+}
+
+.share-sheet-subtitle {
+    color: #a0b8a0;
+    font-size: 0.82rem;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Tajawal', sans-serif;
+}
+
+.share-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.share-item {
+    background: transparent;
+    border: none;
+    padding: 8px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #d8ecd8;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+}
+
+.share-item:active {
+    transform: scale(0.9);
+}
+
+.share-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #fff;
+    transition: all 0.25s;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    font-weight: 900;
+}
+
+.share-item:hover .share-icon {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.5);
+}
+
+.share-icon.whatsapp { background: linear-gradient(145deg, #25D366 0%, #128C7E 100%); }
+.share-icon.telegram { background: linear-gradient(145deg, #2AABEE 0%, #1C7DB8 100%); }
+.share-icon.facebook { background: linear-gradient(145deg, #1877F2 0%, #0E4D9E 100%); }
+.share-icon.twitter { background: linear-gradient(145deg, #1c1c1c 0%, #000000 100%); border: 1px solid rgba(255, 255, 255, 0.15); }
+.share-icon.copy { background: linear-gradient(145deg, #16a085 0%, #0e6655 100%); }
+.share-icon.native { background: linear-gradient(145deg, #8e44ad 0%, #5e2c72 100%); }
+.share-icon.instagram { background: linear-gradient(145deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+.share-icon.email { background: linear-gradient(145deg, #ea4335 0%, #a02920 100%); }
+
+.share-cancel-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Cairo', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.share-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.share-cancel-btn:active {
+    transform: scale(0.97);
+}
+
+@media (max-width: 380px) {
+    .share-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .share-icon { width: 46px; height: 46px; font-size: 1.3rem; }
+}
+
+/* ========== نظام Toast احترافي ========== */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: calc(100% - 30px);
+    max-width: 420px;
+    pointer-events: none;
+}
+
+.toast-item {
+    background: linear-gradient(145deg, rgba(14, 34, 24, 0.98), rgba(6, 18, 12, 0.98));
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 0 25px rgba(46, 204, 113, 0.15);
+    font-family: 'Cairo', sans-serif;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+    animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    pointer-events: auto;
+    position: relative;
+    overflow: hidden;
+    border-right: 4px solid #2ecc71;
+}
+
+.toast-item.toast-success { border-right-color: #2ecc71; box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 25px rgba(46, 204, 113, 0.25); }
+.toast-item.toast-error { border-right-color: #e74c3c; box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 25px rgba(231, 76, 60, 0.25); }
+.toast-item.toast-warning { border-right-color: #f39c12; box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 25px rgba(243, 156, 18, 0.25); }
+.toast-item.toast-info { border-right-color: #3498db; box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 25px rgba(52, 152, 219, 0.25); }
+
+.toast-item.removing {
+    animation: toastOut 0.3s ease forwards;
+}
+
+@keyframes toastIn {
+    0% { opacity: 0; transform: translateY(-30px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toastOut {
+    0% { opacity: 1; transform: translateY(0) scale(1); max-height: 100px; margin-bottom: 0; }
+    100% { opacity: 0; transform: translateY(-30px) scale(0.95); max-height: 0; margin-bottom: -10px; }
+}
+
+.toast-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.15rem;
+    color: #fff;
+}
+
+.toast-success .toast-icon { background: linear-gradient(145deg, #1fc88a, #0d5f4a); box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
+.toast-error .toast-icon { background: linear-gradient(145deg, #ff6b5b, #b8332a); box-shadow: 0 0 15px rgba(231, 76, 60, 0.5); }
+.toast-warning .toast-icon { background: linear-gradient(145deg, #ffb340, #b87700); box-shadow: 0 0 15px rgba(243, 156, 18, 0.5); }
+.toast-info .toast-icon { background: linear-gradient(145deg, #5dade2, #21618c); box-shadow: 0 0 15px rgba(52, 152, 219, 0.5); }
+
+.toast-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast-title {
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+    letter-spacing: 0.3px;
+}
+
+.toast-message {
+    font-size: 0.78rem;
+    color: #b0c8b0;
+    font-weight: 500;
+    line-height: 1.4;
+    font-family: 'Tajawal', sans-serif;
+}
+
+.toast-success .toast-title { color: #2ecc71; }
+.toast-error .toast-title { color: #ff7a6a; }
+.toast-warning .toast-title { color: #f5b041; }
+.toast-info .toast-title { color: #5dade2; }
+
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 3px;
+    background: #2ecc71;
+    border-radius: 0 0 16px 0;
+    animation: toastProgress linear forwards;
+}
+
+.toast-error .toast-progress { background: #e74c3c; }
+.toast-warning .toast-progress { background: #f39c12; }
+.toast-info .toast-progress { background: #3498db; }
+
+@keyframes toastProgress {
+    0% { width: 100%; }
+    100% { width: 0%; }
+}
     </style>
 </head>
 <body>
@@ -840,6 +1412,517 @@ window.addEventListener("DOMContentLoaded", function () {
             function confirmExit() { showModal({ icon: '🚪', message: 'هل أنت متأكد من الخروج؟<br><span style="font-size:0.8rem;color:#90b890;">سيتم فقد تقدم اللعبة الحالية.</span>', confirmText: 'نعم، اخرج', cancelCallback: () => {}, callback: () => { restartGame(); } }); }
 
             function startGameAfterNames() { const valid = persistentNames.filter(n => n.trim()); if (valid.length < 4) { showModal({ icon: '⚠️', message: 'يلزم 4 لاعبين على الأقل.' }); return; } state.playerNames = valid; state.numPlayers = valid.length; state.revealRoleOnDeath = gameConfig.revealRoleOnDeath.enabled; state.mafiaRadar = gameConfig.mafiaRadar.enabled; state.silencerEnabled = gameConfig.silencer.enabled; const dist = getRoleDistribution(state.numPlayers, state.mafiaCount, roleConfig); if (dist.civilian < 0) { showModal({ icon: '⚠️', message: 'عدد الأدوار يتجاوز عدد اللاعبين.' }); return; } const roles = []; for (let i = 0; i < dist.mafia; i++) roles.push('Mafia'); if (dist.doctor) roles.push('Doctor'); if (dist.investigator) roles.push('Investigator'); if (dist.distracter) roles.push('Distracter'); if (dist.joker) roles.push('Joker'); if (dist.avenger) roles.push('Avenger'); if (dist.doppelganger) roles.push('Doppelganger'); if (dist.guardian) roles.push('Guardian'); if (dist.politician) roles.push('Politician'); if (dist.sniper) roles.push('Sniper'); while (roles.length < state.numPlayers) roles.push('Civilian'); state.roles = shuffle(roles); state.players = state.roles.map((r, i) => ({ name: state.playerNames[i] || `لاعب ${i + 1}`, role: r, alive: true, doppelgangerTarget: null, doppelgangerChosen: false })); state.mafiaMembers = state.players.filter(p => p.role === 'Mafia').map(p => p.name); state.passIndex = 0; state.gameOver = false; state.winner = null; state.history = []; state.nightNumber = 1; state.mafiaVotes = {}; state.doctorTarget = null; state.doctorLastTarget = null; state.distracterTarget = null; state.distracterActor = null; state.investigatorTarget = null; state.investigatorResult = null; state.guardianTarget = null; state.lastDeath = null; state.lastSave = null; state.lastExecuted = null; state.distracterBlockedMafia = false; state.mafiaDisagreed = false; state.mafiaSkippedKill = false; state.doctorBlocked = false; state.votes = {}; state.revoteCandidates = []; state.revoteCount = 0; state.avengerRevengePending = null; state.discussionTimer = null; state.discussionSeconds = 60; state.silenceCooldown = 0; state.silenceAvailable = false; state.silenceTarget = null; state.silencedPlayer = null; state.silenceUsedThisNight = false; state.silenceChosenMafia = null; state.sniperTarget = null; state.sniperExposed = null; state.lastSniperEvent = null; if (state.discussionAnimationFrame) cancelAnimationFrame(state.discussionAnimationFrame); state.discussionAnimationFrame = null; document.body.classList.add('morning-bg'); changeScreen('seating'); }
+     
+// ========== 🆕 نظام المشاركة المخصص (نسخة محسّنة) ==========
+
+// 📝 الرسالة المنسّقة — أسطر مرتبة + إيموجي
+const SHARE_TEXT = ` جرب لعبة مافيا!
+لعبة جماعية ممتعة للخداع والاستنتاج 🕵️‍♂️
+اجمع أصدقاءك واكشف من هو المافيا!
+حمّلها الآن مجاناً 👇`;
+
+const SHARE_URL = 'https://7sn-17.github.io/mafia';
+const SHARE_FULL = `${SHARE_TEXT}\n${SHARE_URL}`;
+
+function openShareSheet() {
+    // احذف أي نافذة سابقة
+    document.querySelectorAll('.share-sheet-overlay').forEach(el => el.remove());
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'share-sheet-overlay';
+    overlay.innerHTML = `
+        <div class="share-sheet">
+            <div class="share-sheet-handle"></div>
+            <div class="share-sheet-title">نشر اللعبة</div>
+            <div class="share-sheet-subtitle">شارك مافيا مع أصدقائك واجمع الفريق</div>
+            <div class="share-grid">
+                <a class="share-item" data-share="whatsapp" href="javascript:void(0)">
+                    <div class="share-icon whatsapp"><i class="fa-brands fa-whatsapp"></i></div>
+                    <span>واتساب</span>
+                </a>
+                <a class="share-item" data-share="telegram" href="javascript:void(0)">
+                    <div class="share-icon telegram"><i class="fa-brands fa-telegram"></i></div>
+                    <span>تيليجرام</span>
+                </a>
+                <a class="share-item" data-share="facebook" href="javascript:void(0)">
+                    <div class="share-icon facebook"><i class="fa-brands fa-facebook-f"></i></div>
+                    <span>فيسبوك</span>
+                </a>
+                <a class="share-item" data-share="twitter" href="javascript:void(0)">
+                    <div class="share-icon twitter">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </div>
+                    <span>X</span>
+                </a>
+                <a class="share-item" data-share="instagram" href="javascript:void(0)">
+                    <div class="share-icon instagram"><i class="fa-brands fa-instagram"></i></div>
+                    <span>انستقرام</span>
+                </a>
+                <a class="share-item" data-share="email" href="javascript:void(0)">
+                    <div class="share-icon email"><i class="fa-solid fa-envelope"></i></div>
+                    <span>إيميل</span>
+                </a>
+                <button class="share-item" data-share="copy">
+                    <div class="share-icon copy"><i class="fa-solid fa-copy"></i></div>
+                    <span>نسخ</span>
+                </button>
+                <button class="share-item" data-share="native">
+                    <div class="share-icon native"><i class="fa-solid fa-ellipsis"></i></div>
+                    <span>المزيد</span>
+                </button>
+            </div>
+            <button class="share-cancel-btn" id="shareCancelBtn">إلغاء</button>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeShareSheet(overlay);
+    });
+    
+    overlay.querySelector('#shareCancelBtn').addEventListener('click', () => {
+        closeShareSheet(overlay);
+    });
+    
+    overlay.querySelectorAll('[data-share]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const type = btn.getAttribute('data-share');
+            handleShareAction(type);
+            closeShareSheet(overlay);
+        });
+    });
+}
+
+function closeShareSheet(overlay) {
+    if (!overlay) return;
+    overlay.style.transition = 'opacity 0.2s';
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.remove(), 200);
+}
+
+function handleShareAction(type) {
+    const encodedText = encodeURIComponent(SHARE_FULL);
+    const encodedUrl = encodeURIComponent(SHARE_URL);
+    const encodedTextOnly = encodeURIComponent(SHARE_TEXT);
+    
+    let shareUrl = '';
+    
+    switch(type) {
+        case 'whatsapp':
+            shareUrl = `https://wa.me/?text=${encodedText}`;
+            break;
+        case 'telegram':
+            shareUrl = `https://t.me/share/url?url=${encodedUrl}&text=${encodedTextOnly}`;
+            break;
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedTextOnly}`;
+            break;
+        case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?text=${encodedTextOnly}&url=${encodedUrl}`;
+            break;
+        case 'email':
+            shareUrl = `mailto:?subject=${encodeURIComponent('مافيا - لعبة الغموض والذكاء')}&body=${encodedText}`;
+            break;
+        case 'instagram':
+            // انستقرام لا يدعم المشاركة المباشرة عبر الرابط → ننسخ النص ثم نفتح التطبيق
+            copyShareToClipboard();
+            setTimeout(() => {
+                window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
+            }, 700);
+            return;
+        case 'copy':
+            copyShareToClipboard();
+            return;
+        case 'native':
+            if (navigator.share) {
+                navigator.share({
+                    title: 'مافيا - لعبة الغموض والذكاء',
+                    text: SHARE_TEXT,
+                    url: SHARE_URL
+                }).catch(() => {});
+            } else {
+                copyShareToClipboard();
+            }
+            return;
+    }
+    
+    if (shareUrl) {
+        window.open(shareUrl, '_blank', 'noopener,noreferrer');
+    }
+}
+
+function copyShareToClipboard() {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(SHARE_FULL).then(() => {
+            showShareToast('تم نسخ رابط اللعبة بنجاح');
+        }).catch(() => {
+            legacyCopy(SHARE_FULL);
+        });
+    } else {
+        legacyCopy(SHARE_FULL);
+    }
+}
+
+function legacyCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand('copy');
+        showShareToast('تم نسخ رابط اللعبة بنجاح');
+    } catch (e) {
+        showShareToast('تعذّر النسخ، الرابط: ' + SHARE_URL, true);
+    }
+    document.body.removeChild(textarea);
+}
+
+function showShareToast(message, isError = false) {
+    document.querySelectorAll('.share-toast').forEach(el => el.remove());
+    
+    const toast = document.createElement('div');
+    toast.className = 'share-toast';
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: ${isError ? 'rgba(180, 30, 30, 0.95)' : 'rgba(10, 30, 20, 0.95)'};
+        color: ${isError ? '#fff' : '#2ecc71'};
+        padding: 14px 24px;
+        border-radius: 40px;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        z-index: 999999;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px ${isError ? 'rgba(231, 76, 60, 0.4)' : 'rgba(46, 204, 113, 0.3)'};
+        border: 1.5px solid ${isError ? '#e74c3c' : '#2ecc71'};
+        max-width: 85%;
+        text-align: center;
+        opacity: 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    `;
+    toast.innerHTML = `<i class="fa-solid ${isError ? 'fa-circle-xmark' : 'fa-circle-check'}" style="font-size: 1.1rem;"></i><span>${message}</span>`;
+    document.body.appendChild(toast);
+    
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+    });
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+     
+     // ========== 🆕 نظام Toast احترافي ==========
+function showToast(message, type = 'success', title = null, duration = 4000) {
+    // ✅ إغلاق الكيبورد تلقائياً إن كان مفتوحاً
+    if (document.activeElement && 
+        (document.activeElement.tagName === 'INPUT' || 
+         document.activeElement.tagName === 'TEXTAREA')) {
+        document.activeElement.blur();
+    }
+    
+    // أنشئ حاوية Toast إذا لم تكن موجودة
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+    
+    // الإعدادات حسب النوع
+    const config = {
+        success: { icon: 'fa-circle-check', defaultTitle: 'تم بنجاح' },
+        error:   { icon: 'fa-circle-xmark', defaultTitle: 'خطأ' },
+        warning: { icon: 'fa-triangle-exclamation', defaultTitle: 'تنبيه' },
+        info:    { icon: 'fa-circle-info', defaultTitle: 'معلومة' }
+    };
+    
+    const cfg = config[type] || config.info;
+    const displayTitle = title || cfg.defaultTitle;
+    
+    // إنشاء الـ Toast
+    const toast = document.createElement('div');
+    toast.className = `toast-item toast-${type}`;
+    toast.innerHTML = `
+        <div class="toast-icon">
+            <i class="fa-solid ${cfg.icon}"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">${displayTitle}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+        <div class="toast-progress" style="animation-duration: ${duration}ms;"></div>
+    `;
+    
+    container.appendChild(toast);
+    
+    // إزالة الـ Toast بعد المدة
+    const removeToast = () => {
+        if (!toast.parentNode) return;
+        toast.classList.add('removing');
+        setTimeout(() => {
+            if (toast.parentNode) toast.remove();
+            // احذف الحاوية إذا كانت فارغة
+            if (container && container.children.length === 0) {
+                container.remove();
+            }
+        }, 300);
+    };
+    
+    setTimeout(removeToast, duration);
+    
+    // إغلاق عند النقر
+    toast.addEventListener('click', removeToast);
+    
+    // تشغيل صوت خفيف حسب النوع
+    if (type === 'success') playBellSound();
+    else if (type === 'error') playSound(220, 0.15, 0.3);
+    else if (type === 'warning') playSound(440, 0.15, 0.25);
+}
+     
+function renderFeedback(el) {
+    el.innerHTML = `
+        <div class="feedback-container">
+            <div class="feedback-header">
+                <div class="feedback-header-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div class="feedback-title">الملاحظات والاقتراحات</div>
+                <div class="feedback-subtitle">
+                    نقدّر رأيك! شاركنا اقتراحاتك أو ملاحظاتك لتحسين التطبيق
+                </div>
+            </div>
+
+            <div class="feedback-label">
+                <i class="fa-solid fa-user"></i>
+                <span>الاسم</span>
+                <span class="required-star">*</span>
+            </div>
+            <div class="feedback-input-wrapper">
+                <input type="text" id="fbName" placeholder="اكتب اسمك هنا" maxlength="50" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            </div>
+
+            <div class="feedback-label">
+                <i class="fa-solid fa-envelope"></i>
+                <span>البريد الإلكتروني</span>
+                <span class="required-star">*</span>
+            </div>
+            <div class="feedback-input-wrapper">
+                <input type="email" id="fbEmail" placeholder="example@email.com" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" dir="ltr" style="text-align: right !important;">
+            </div>
+
+            <div class="feedback-label">
+                <i class="fa-solid fa-comment-dots"></i>
+                <span>الرسالة</span>
+                <span class="required-star">*</span>
+            </div>
+            <div class="feedback-input-wrapper">
+                <textarea id="fbMessage" placeholder="اكتب رسالتك هنا بالتفصيل..." maxlength="1000" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+            </div>
+            <div class="feedback-counter" id="fbCounter">0 / 1000 حرف</div>
+
+            <button class="feedback-submit-btn" id="fbSubmitBtn">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span id="fbBtnText">إرسال الرسالة</span>
+            </button>
+
+            <button class="feedback-back-btn" id="fbBackBtn">
+                <i class="fa-solid fa-arrow-right"></i>
+                <span>رجوع للقائمة الرئيسية</span>
+            </button>
+        </div>
+    `;
+
+    const nameInput = el.querySelector('#fbName');
+    const emailInput = el.querySelector('#fbEmail');
+    const messageInput = el.querySelector('#fbMessage');
+    const counter = el.querySelector('#fbCounter');
+    const submitBtn = el.querySelector('#fbSubmitBtn');
+    const submitBtnText = el.querySelector('#fbBtnText');
+    const backBtn = el.querySelector('#fbBackBtn');
+
+    messageInput.addEventListener('input', () => {
+        const len = messageInput.value.length;
+        counter.textContent = `${len} / 1000 حرف`;
+        counter.classList.toggle('warning', len > 900);
+    });
+
+    backBtn.addEventListener('click', () => {
+        changeScreen('managePlayers');
+    });
+
+    submitBtn.addEventListener('click', async () => {
+        const name = nameInput.value.trim();
+        const email = emailInput.value.trim();
+        const message = messageInput.value.trim();
+
+        // ✅ التحقق: جميع الحقول إجبارية
+        if (!name) {
+            showToast('الرجاء إدخال الاسم', 'warning', 'حقل فارغ');
+            return;
+        }
+
+        if (!email) {
+            showToast('الرجاء إدخال البريد الإلكتروني', 'warning', 'حقل فارغ');
+            return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showToast('البريد الإلكتروني غير صحيح', 'error', 'صيغة خاطئة');
+            return;
+        }
+
+        if (!message) {
+            showToast('الرجاء كتابة الرسالة', 'warning', 'حقل فارغ');
+            return;
+        }
+
+        if (message.length < 5) {
+            showToast('الرسالة قصيرة جداً (5 أحرف على الأقل)', 'warning', 'رسالة قصيرة');
+            return;
+        }
+
+        // تعطيل الزر أثناء الإرسال
+        submitBtn.disabled = true;
+        submitBtnText.textContent = 'جاري الإرسال...';
+        submitBtn.querySelector('i').className = 'fa-solid fa-spinner fa-spin';
+
+        // ═══════ جمع معلومات الجهاز ═══════
+        const ua = navigator.userAgent;
+
+        // المتصفح
+        let browserName = 'غير معروف';
+        if (ua.indexOf('Edg') > -1) browserName = 'Edge';
+        else if (ua.indexOf('OPR') > -1 || ua.indexOf('Opera') > -1) browserName = 'Opera';
+        else if (ua.indexOf('Chrome') > -1) browserName = 'Chrome';
+        else if (ua.indexOf('Safari') > -1) browserName = 'Safari';
+        else if (ua.indexOf('Firefox') > -1) browserName = 'Firefox';
+        else if (ua.indexOf('SamsungBrowser') > -1) browserName = 'Samsung Browser';
+
+        // نوع الجهاز
+let deviceType = 'كمبيوتر';
+if (/iPhone/i.test(ua)) deviceType = 'iPhone';
+else if (/iPad/i.test(ua)) deviceType = 'iPad';
+else if (/iPod/i.test(ua)) deviceType = 'iPod';
+else if (/Android/i.test(ua)) {
+    // محاولة استخراج اسم الموديل من userAgent
+    // النمط: "Android X.X; Model Name) " أو "Android X.X; Model Name Build"
+    let match = ua.match(/Android[\s\S]*?;\s*([^;)]+?)(?:\s+Build|\))/i);
+    if (match && match[1]) {
+        let model = match[1].trim();
+        // تنظيف: إزالة كلمات عامة مثل "wv" (WebView)
+        model = model.replace(/\swv$/i, '').trim();
+        // إذا كان الموديل معروفاً، استخدمه
+        if (model.length > 1) {
+            // إذا لم يكن الاسم يحتوي على اسم الشركة، حاول إضافتها
+            if (/^SM-/i.test(model)) deviceType = 'Samsung ' + model;
+            else if (/^Pixel/i.test(model)) deviceType = 'Google ' + model;
+            else if (/^Redmi/i.test(model)) deviceType = 'Xiaomi ' + model;
+            else if (/^Mi\s/i.test(model) || /^M20/i.test(model)) deviceType = 'Xiaomi ' + model;
+            else if (/^Huawei/i.test(model) || /^HONOR/i.test(model)) deviceType = model;
+            else if (/^CPH/i.test(model) || /^OPPO/i.test(model)) deviceType = 'OPPO ' + model;
+            else deviceType = model;
+        } else {
+            deviceType = 'أندرويد';
+        }
+    } else {
+        deviceType = 'أندرويد';
+    }
+}
+else if (/Mobile/i.test(ua)) deviceType = 'جوال';
+else if (/Tablet/i.test(ua)) deviceType = 'تابلت';
+else if (/Macintosh|Mac OS X/i.test(ua)) deviceType = 'Mac';
+else if (/Windows/i.test(ua)) deviceType = 'Windows';
+else if (/Linux/i.test(ua)) deviceType = 'Linux';
+
+        // التاريخ والوقت
+        const now = new Date();
+        const sentDate = now.toLocaleString('ar-EG', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+
+        try {
+            // ═══════ محاولة جلب الموقع ═══════
+            let location = 'غير معروف';
+            try {
+                const locResponse = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
+                if (locResponse.ok) {
+                    const locData = await locResponse.json();
+                    const parts = [];
+                    if (locData.city) parts.push(locData.city);
+                    if (locData.region) parts.push(locData.region);
+                    if (locData.country_name) parts.push(locData.country_name);
+                    if (parts.length) location = parts.join('، ');
+                }
+            } catch (e) {
+                console.log('تعذّر جلب الموقع');
+            }
+
+            // ═══════ إرسال إلى EmailJS ═══════
+            const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    service_id: 'service_y3l6uzo',
+                    template_id: 'template_4kflo8k',
+                    user_id: 'LCfCM7S0Kvz7U2L4F',
+                    template_params: {
+                        name: name,
+                        email: email,
+                        message: message,
+                        app_version: (typeof GAME_CURRENT_VERSION !== 'undefined' ? GAME_CURRENT_VERSION : 'غير معروف'),
+                        browser: browserName,
+                        device_type: deviceType,
+                        location: location,
+                        sent_date: sentDate,
+                        to_email: 'hasantaha5689@gmail.com'
+                    }
+                })
+            });
+
+if (response.ok) {
+    // ✅ انتقل للشاشة الرئيسية ثم اظهر التوست
+    changeScreen('managePlayers');
+    setTimeout(() => {
+        showToast('شكراً لك! وصلتنا رسالتك وسنقرأها بعناية', 'success', 'تم الإرسال بنجاح');
+    }, 400);
+}else {
+                throw new Error('فشل الإرسال');
+            }
+        } catch (error) {
+            // ❌ فشل
+            showToast('تعذّر إرسال الرسالة. تأكد من اتصالك بالإنترنت ثم حاول مرة أخرى', 'error', 'فشل الإرسال', 5000);
+
+            submitBtn.disabled = false;
+            submitBtnText.textContent = 'إرسال الرسالة';
+            submitBtn.querySelector('i').className = 'fa-solid fa-paper-plane';
+        }
+    });
+}
+     
             function restartGame() { 
                 closeAllModals(); 
                 if (state.discussionAnimationFrame) { cancelAnimationFrame(state.discussionAnimationFrame); state.discussionAnimationFrame = null; }
@@ -1042,46 +2125,65 @@ if (state.sniperTarget) {
             function showInvestigatorResult(targetName, isMafia) { const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; const box = document.createElement('div'); box.className = 'modal-box'; box.innerHTML = `<div style="font-size:2rem;margin-bottom:8px;">🕵️ نتيجة التحقيق</div><div class="result-icon-large">${isMafia ? '🔴' : '🟢'}</div><div class="result-text" style="color:${isMafia ? '#e74c3c' : '#2ecc71'};">${targetName}</div><div style="font-weight:700;font-size:1.1rem;margin-top:8px;color:#fff;">${isMafia ? 'ينتمي إلى <span style="color:#e74c3c;">المافيا</span> ⚠️' : '<span style="color:#2ecc71;">مواطن شريف</span> ✅'}</div><p style="color:#bbb;font-size:0.85rem;margin-top:12px;">تذكّر: الجوكر يظهر كمواطن، وقد يكذب اللاعب!</p><button class="btn confirm-btn" style="background:#fff;color:#0a1a0a;margin-top:15px;">فهمت</button>`; overlay.appendChild(box); document.body.appendChild(overlay); box.querySelector('.confirm-btn').addEventListener('click', () => overlay.remove()); }
 
             function changeScreen(newScreen) {
-                if (state.discussionAnimationFrame) { cancelAnimationFrame(state.discussionAnimationFrame); state.discussionAnimationFrame = null; }
-                if (state.discussionTimer) { clearInterval(state.discussionTimer); state.discussionTimer = null; }
-                const app = document.getElementById('app');
-                let content = app.querySelector('#content');
-                let exitBtn = app.querySelector('.btn-exit');
-                if (newScreen !== 'managePlayers') {
-                    if (!exitBtn) {
-                        exitBtn = document.createElement('button');
-                        exitBtn.className = 'btn-exit';
-                        exitBtn.title = 'خروج';
-                        exitBtn.innerHTML = '✕';
-                        exitBtn.addEventListener('click', confirmExit);
-                        app.appendChild(exitBtn);
-                    }
-                } else {
-                    if (exitBtn) exitBtn.remove();
-                }
-                if (!content) { app.innerHTML = '<div id="content"></div>'; content = app.querySelector('#content'); }
-                const currentScreenEl = content.querySelector('.screen-content');
-                const buildNewScreen = () => { content.innerHTML = '<div class="screen-content transition-in"></div>'; const screenEl = content.querySelector('.screen-content'); state.screen = newScreen; renderScreenInto(screenEl); saveState(); };
-                if (currentScreenEl) { currentScreenEl.classList.add('transition-out'); currentScreenEl.addEventListener('animationend', function handler() { currentScreenEl.removeEventListener('animationend', handler); buildNewScreen(); }, { once: true }); } else { buildNewScreen(); }
-            }
+    if (state.discussionAnimationFrame) { cancelAnimationFrame(state.discussionAnimationFrame); state.discussionAnimationFrame = null; }
+    if (state.discussionTimer) { clearInterval(state.discussionTimer); state.discussionTimer = null; }
+    
+    // ✅ إظهار/إخفاء الجزيئات حسب الشاشة
+    if (newScreen === 'feedback') {
+        document.body.classList.add('hide-particles');
+    } else {
+        document.body.classList.remove('hide-particles');
+    }
+    
+    const app = document.getElementById('app');
+    let content = app.querySelector('#content');
+    let exitBtn = app.querySelector('.btn-exit');
+    if (newScreen !== 'managePlayers' && newScreen !== 'feedback') {
+        if (!exitBtn) {
+            exitBtn = document.createElement('button');
+            exitBtn.className = 'btn-exit';
+            exitBtn.title = 'خروج';
+            exitBtn.innerHTML = '✕';
+            exitBtn.addEventListener('click', confirmExit);
+            app.appendChild(exitBtn);
+        }
+    } else {
+        if (exitBtn) exitBtn.remove();
+    }
+    if (!content) { app.innerHTML = '<div id="content"></div>'; content = app.querySelector('#content'); }
+    const currentScreenEl = content.querySelector('.screen-content');
+    const buildNewScreen = () => { content.innerHTML = '<div class="screen-content transition-in"></div>'; const screenEl = content.querySelector('.screen-content'); state.screen = newScreen; renderScreenInto(screenEl); saveState(); };
+    if (currentScreenEl) { currentScreenEl.classList.add('transition-out'); currentScreenEl.addEventListener('animationend', function handler() { currentScreenEl.removeEventListener('animationend', handler); buildNewScreen(); }, { once: true }); } else { buildNewScreen(); }
+}
 
             const updateUI = () => { const content = document.getElementById('content'); if (content) { const screenEl = content.querySelector('.screen-content'); if (screenEl) { screenEl.innerHTML = ''; renderScreenInto(screenEl); } } saveState(); };
 
-            function renderScreenInto(el) { switch (state.screen) { case 'managePlayers': renderManagePlayers(el); break; case 'managePlayersOld': renderManagePlayersOld(el); break; case 'setup': renderSetup(el); break; case 'seating': renderSeating(el); break; case 'roleShow': renderRoleShow(el); break; case 'blankPass': renderBlankPass(el); break; case 'nightIntro': renderNightIntro(el); break; case 'nightPassPhone': renderNightPassPhone(el); break; case 'nightAction': renderNightAction(el); break; case 'nightResults': renderNightResults(el); break; case 'discussion': renderDiscussion(el); break; case 'votingIntro': renderVotingIntro(el); break; case 'voting': renderVoting(el); break; case 'executionResult': renderExecResult(el); break; case 'noExecution': renderNoExec(el); break; case 'gameOver': renderGameOver(el); break; case 'avengerRevenge': renderAvengerRevenge(el); break; case 'howToPlay': renderHowToPlay(el); break; default: renderManagePlayers(el); } }
-
-            function renderManagePlayers(el) { 
+            function renderScreenInto(el) { switch (state.screen) { case 'managePlayers': renderManagePlayers(el); break; case 'managePlayersOld': renderManagePlayersOld(el); break; case 'setup': renderSetup(el); break; case 'seating': renderSeating(el); break; case 'roleShow': renderRoleShow(el); break; case 'blankPass': renderBlankPass(el); break; case 'nightIntro': renderNightIntro(el); break; case 'nightPassPhone': renderNightPassPhone(el); break; case 'nightAction': renderNightAction(el); break; case 'nightResults': renderNightResults(el); break; case 'discussion': renderDiscussion(el); break; case 'votingIntro': renderVotingIntro(el); break; case 'voting': renderVoting(el); break; case 'executionResult': renderExecResult(el); break; case 'noExecution': renderNoExec(el); break; case 'gameOver': renderGameOver(el); break; case 'avengerRevenge': renderAvengerRevenge(el); break; case 'howToPlay': renderHowToPlay(el); break; case 'feedback': renderFeedback(el); break; default: renderManagePlayers(el); } }
+        
+function renderManagePlayers(el) { 
     el.innerHTML = `
         <div style="text-align:center; position: relative; min-height: calc(100vh - 30px); display: flex; flex-direction: column; padding-bottom: 0;">
             
-            <!-- المحتوى الرئيسي في الوسط (كما هو بدون تغيير) -->
-            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+            <!-- المحتوى الرئيسي في الوسط (كما كان الأصلي) -->
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; width: 100%;">
                 <h1 class="main-title">مافيا</h1>
                 <div class="subtitle-main">لعبة الغموض والذكاء</div>
                 <button class="btn-start-primary" id="startGameMainBtn">ابدأ اللعبة</button>
                 <button class="btn-how-to-play" id="howToPlayBtn">كيفية اللعب</button>
+
+<div class="dual-buttons-row">
+    <button class="dual-btn" id="feedbackBtn">
+        <i class="fa-solid fa-envelope"></i>
+        <span>ملاحظاتك</span>
+    </button>
+    <button class="dual-btn" id="shareBtn">
+        <i class="fa-solid fa-share-nodes"></i>
+        <span>مشاركة اللعبة</span>
+    </button>
+</div>
             </div>
 
-            <!-- التذييل في الأسفل بتصميم النموذج -->
+            <!-- التذييل في الأسفل (كما كان الأصلي) -->
             <div class="footer-section" style="margin-top: auto; padding-bottom: 30px;">
                 <div class="divider-line"></div>
                 <div class="footer-content">
@@ -1108,7 +2210,15 @@ if (state.sniperTarget) {
     
     el.querySelector('#howToPlayBtn').addEventListener('click', () => { 
         changeScreen('howToPlay'); 
-    }); 
+    });
+    
+    el.querySelector('#feedbackBtn').addEventListener('click', () => { 
+        changeScreen('feedback'); 
+    });
+
+    el.querySelector('#shareBtn').addEventListener('click', () => { 
+        openShareSheet();
+    });
 }
 
             // Enhanced RoleShow with mild fog effect (local only)
@@ -1690,7 +2800,7 @@ function updateNextButtonState(){const nextBtn=document.getElementById('toSetupB
 
     <!-- ===================== كود نظام التحديثات (JavaScript) ===================== -->
     <script>
-        const GAME_CURRENT_VERSION = "1.4";
+        const GAME_CURRENT_VERSION = "1.5";
 
         async function checkGitHubUpdates() {
             try {
