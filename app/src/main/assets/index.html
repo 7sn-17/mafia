@@ -150,6 +150,41 @@
         .player-item.selected-avenger::after { content: '⚔️'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
         .player-item.selected-doppelganger { background: rgba(108,92,231,0.25) !important; color: #fff !important; border-color: #6c5ce7 !important; font-weight: 700; box-shadow: 0 0 18px rgba(108,92,231,0.45); transform: scale(1.02); }
         .player-item.selected-doppelganger::after { content: '🎭'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
+        /* ===== التعديل 14: إضافة CSS للسياسي والقناص ===== */
+        .player-item.selected-politician { 
+            background: rgba(162,155,254,0.25) !important; 
+            color: #fff !important; 
+            border-color: #a29bfe !important; 
+            font-weight: 700; 
+            box-shadow: 0 0 18px rgba(162,155,254,0.45); 
+            transform: scale(1.02); 
+        }
+        .player-item.selected-politician::after { 
+            content: '👔'; 
+            position: absolute; 
+            left: 12px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            font-size: 1.2rem; 
+        }
+
+        .player-item.selected-sniper { 
+            background: rgba(22,160,133,0.25) !important; 
+            color: #fff !important; 
+            border-color: #16a085 !important; 
+            font-weight: 700; 
+            box-shadow: 0 0 18px rgba(22,160,133,0.45); 
+            transform: scale(1.02); 
+        }
+        .player-item.selected-sniper::after { 
+            content: '🎯'; 
+            position: absolute; 
+            left: 12px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            font-size: 1.2rem; 
+        }
+        /* ===== نهاية التعديل 14 ===== */
         .selected-summary { background: rgba(0,0,0,0.4); border-radius: 12px; padding: 10px 14px; margin: 10px 0; text-align: center; font-size: 0.9rem; color: #e0e0e0; }
         .btn-radar-skip { background: rgba(231, 76, 60, 0.08) !important; border: 2px solid #f39c12 !important; color: #f39c12 !important; box-shadow: 0 0 15px rgba(243, 156, 18, 0.4), 0 0 5px rgba(255, 255, 255, 0.3); }
         .role-card-premium { background: linear-gradient(160deg, #f0f8f2 0%, #e0f0e4 55%, #c8e0cc 100%); border-radius: 18px; padding: 20px; margin: 14px 0; border: 3px solid #1abc9c; box-shadow: 0 12px 30px rgba(0,0,0,0.5); text-align: center; color: #0a1a0a; }
@@ -523,6 +558,7 @@
     font-size: 0.85rem;
     color: #d0e0d0;
     border-right: 3px solid var(--emerald-light, #2ecc71);
+    white-space: pre-line;
 }
 
 .update-changelog strong {
@@ -601,7 +637,7 @@
     <div class="loader-content-box">
         <div class="loader-logo-wrapper">
             <!-- الرابط الصحيح والمباشر المأخوذ من مستودع mafia الخاص بك -->
-            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/7sn-17/mafia/main/icon.png&w=150&h=150&fit=cover" alt="أيقونة مافيا" class="loader-logo" onerror="this.src='https://raw.githubusercontent.com/7sn-17/mafia/master/icon.png'">
+            <img src="https://cdn.jsdelivr.net/gh/7sn-17/mafia@main/app/src/main/res/mipmap/ic_launcher_round.png" alt="أيقونة مافيا" class="loader-logo" onerror="this.src='https://raw.githubusercontent.com/7sn-17/mafia/main/app/src/main/res/mipmap/ic_launcher_round.png'">
         </div>
         <div class="loader-title">مافيا</div>
         <div class="loader-subtitle" id="loadingStatus">جاري تهيئة أجواء اللعبة والغموض...</div>
@@ -749,7 +785,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
             function loadPersistentNames() { try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) return JSON.parse(raw); } catch (e) {} return []; }
             function savePersistentNames(arr) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch (e) {} }
-            function loadRoleConfig() { try { const raw = localStorage.getItem(ROLE_CONFIG_KEY); if (raw) return JSON.parse(raw); } catch (e) {} return { investigator: { enabled: false, icon: '🕵️', name: 'محقق', desc: 'يكشف هوية لاعب كل ليلة' }, distracter: { enabled: false, icon: '🚫', name: 'مُعطِّل', desc: 'يعطل قدرة لاعب ليلاً' }, joker: { enabled: false, icon: '🃏', name: 'جوكر', desc: 'يفوز إذا أُعدم بالتصويت' }, avenger: { enabled: false, icon: '⚔️', name: 'منتقم', desc: 'إذا أُعدم يأخذ معه لاعباً' }, doppelganger: { enabled: false, icon: '🎭', name: 'منتحل شخصية', desc: 'يرث دور لاعب يختاره عند موته' }, guardian: { enabled: false, icon: '🛡️', name: 'حارس', desc: 'اختر كل ليلة شخصاً لحمايته من الإعدام' } }; }
+            function loadRoleConfig() { try { const raw = localStorage.getItem(ROLE_CONFIG_KEY); if (raw) return JSON.parse(raw); } catch (e) {} return { investigator: { enabled: false, icon: '🕵️', name: 'محقق', desc: 'يكشف هوية لاعب كل ليلة' }, distracter: { enabled: false, icon: '🚫', name: 'مُعطِّل', desc: 'يعطل قدرة لاعب ليلاً' }, joker: { enabled: false, icon: '🃏', name: 'جوكر', desc: 'يفوز إذا أُعدم بالتصويت' }, avenger: { enabled: false, icon: '⚔️', name: 'منتقم', desc: 'إذا أُعدم يأخذ معه لاعباً' }, doppelganger: { enabled: false, icon: '🎭', name: 'منتحل شخصية', desc: 'يرث دور لاعب يختاره عند موته' }, guardian: { enabled: false, icon: '🛡️', name: 'حارس', desc: 'اختر كل ليلة شخصاً لحمايته من الإعدام' }, politician: { enabled: false, icon: '👔', name: 'سياسي', desc: 'صوته يُحتسب صوتين في التصويت' }, sniper: { enabled: false, icon: '🎯', name: 'قناص', desc: 'يستهدف لاعباً كل ليلة من الليلة الثانية' } }; }
             function saveRoleConfig(config) { try { localStorage.setItem(ROLE_CONFIG_KEY, JSON.stringify(config)); } catch (e) {} }
             function loadGameConfig() { try { const raw = localStorage.getItem(GAME_CONFIG_KEY); if (raw) return JSON.parse(raw); } catch (e) {} return { revealRoleOnDeath: { enabled: true, icon: '👁️', name: 'كشف هوية المُقصى', desc: 'الهوية مكشوفة للجميع', reverseDesc: 'الهوية مخفية تماماً' }, mafiaRadar: { enabled: false, icon: '🎯', name: 'رادار الاغتيال', desc: 'ترى تصويب زملائك المافيا', reverseDesc: 'وضع أعمى - لا ترى شيئاً' }, silencer: { enabled: false, icon: '🔇', name: 'إسكات', desc: 'يمكن للمافيا إسكات لاعب كل جولتين', reverseDesc: 'لا يوجد إسكات' } }; }
             function saveGameConfig(config) { try { localStorage.setItem(GAME_CONFIG_KEY, JSON.stringify(config)); } catch (e) {} }
@@ -786,12 +822,14 @@ window.addEventListener("DOMContentLoaded", function () {
                 'Joker': { emoji: '🃏', color: '#f39c12', name: 'جوكر', desc: 'اجعلهم يعدمونك لتفوز وحدك!', icon: '🃏' },
                 'Avenger': { emoji: '⚔️', color: '#c0392b', name: 'منتقم', desc: 'إذا أُعدمت، ستأخذ شخصاً معك إلى القبر', icon: '⚔️' },
                 'Doppelganger': { emoji: '🎭', color: '#6c5ce7', name: 'منتحل شخصية', desc: 'اختر لاعباً لترث دوره عند موته', icon: '🎭' },
-                'Guardian': { emoji: '🛡️', color: '#1abc9c', name: 'حارس', desc: 'اختر كل ليلة شخصاً لحمايته من الإعدام', icon: '🛡️' }
+                'Guardian': { emoji: '🛡️', color: '#1abc9c', name: 'حارس', desc: 'اختر كل ليلة شخصاً لحمايته من الإعدام', icon: '🛡️' },
+                'Politician': { emoji: '👔', color: '#a29bfe', name: 'سياسي', desc: 'صوته يُحتسب صوتين في التصويت', icon: '👔' },
+                'Sniper': { emoji: '🎯', color: '#16a085', name: 'قناص', desc: 'يستهدف لاعباً كل ليلة من الليلة الثانية', icon: '🎯' }
             };
 
             function getRoleColorClass(role) { const map = { 'Mafia': 'role-mafia-color', 'Civilian': 'role-citizen-color', 'Doctor': 'role-doctor-color', 'Distracter': 'role-distracter-color', 'Investigator': 'role-investigator-color', 'Joker': 'role-joker-color', 'Avenger': 'role-avenger-color', 'Doppelganger': 'role-doppelganger-color', 'Guardian': 'role-guardian-color' }; return map[role] || 'role-citizen-color'; }
 
-            function getRoleDistribution(n, mafiaCount, config) { const mafia = Math.min(mafiaCount, Math.floor(n / 2.5)); const doctor = n >= 5 ? 1 : 0; let opt = 0; const add = {}; for (const [k, r] of Object.entries(config)) { if (r.enabled) { add[k] = 1; opt++; } else add[k] = 0; } const civilian = n - mafia - doctor - opt; return { mafia, doctor, investigator: add.investigator || 0, distracter: add.distracter || 0, joker: add.joker || 0, avenger: add.avenger || 0, doppelganger: add.doppelganger || 0, guardian: add.guardian || 0, civilian: Math.max(0, civilian) }; }
+            function getRoleDistribution(n, mafiaCount, config) { const mafia = Math.min(mafiaCount, Math.floor(n / 2.5)); const doctor = n >= 5 ? 1 : 0; let opt = 0; const add = {}; for (const [k, r] of Object.entries(config)) { if (r.enabled) { add[k] = 1; opt++; } else add[k] = 0; } const civilian = n - mafia - doctor - opt; return { mafia, doctor, investigator: add.investigator || 0, distracter: add.distracter || 0, joker: add.joker || 0, avenger: add.avenger || 0, doppelganger: add.doppelganger || 0, guardian: add.guardian || 0, politician: add.politician || 0, sniper: add.sniper || 0, civilian: Math.max(0, civilian) }; }
 
             function checkWinCondition() { const am = alivePlayers().filter(p => p.role === 'Mafia').length; const an = alivePlayers().filter(p => p.role !== 'Mafia').length; if (am === 0) { state.winner = 'المواطنون'; state.gameOver = true; return true; } if (am >= an) { state.winner = 'المافيا'; state.gameOver = true; return true; } return false; }
 
@@ -801,13 +839,12 @@ window.addEventListener("DOMContentLoaded", function () {
 
             function confirmExit() { showModal({ icon: '🚪', message: 'هل أنت متأكد من الخروج؟<br><span style="font-size:0.8rem;color:#90b890;">سيتم فقد تقدم اللعبة الحالية.</span>', confirmText: 'نعم، اخرج', cancelCallback: () => {}, callback: () => { restartGame(); } }); }
 
-            function startGameAfterNames() { const valid = persistentNames.filter(n => n.trim()); if (valid.length < 4) { showModal({ icon: '⚠️', message: 'يلزم 4 لاعبين على الأقل.' }); return; } state.playerNames = valid; state.numPlayers = valid.length; state.revealRoleOnDeath = gameConfig.revealRoleOnDeath.enabled; state.mafiaRadar = gameConfig.mafiaRadar.enabled; state.silencerEnabled = gameConfig.silencer.enabled; const dist = getRoleDistribution(state.numPlayers, state.mafiaCount, roleConfig); if (dist.civilian < 0) { showModal({ icon: '⚠️', message: 'عدد الأدوار يتجاوز عدد اللاعبين.' }); return; } const roles = []; for (let i = 0; i < dist.mafia; i++) roles.push('Mafia'); if (dist.doctor) roles.push('Doctor'); if (dist.investigator) roles.push('Investigator'); if (dist.distracter) roles.push('Distracter'); if (dist.joker) roles.push('Joker'); if (dist.avenger) roles.push('Avenger'); if (dist.doppelganger) roles.push('Doppelganger'); if (dist.guardian) roles.push('Guardian'); while (roles.length < state.numPlayers) roles.push('Civilian'); state.roles = shuffle(roles); state.players = state.roles.map((r, i) => ({ name: state.playerNames[i] || `لاعب ${i + 1}`, role: r, alive: true, doppelgangerTarget: null, doppelgangerChosen: false })); state.mafiaMembers = state.players.filter(p => p.role === 'Mafia').map(p => p.name); state.passIndex = 0; state.gameOver = false; state.winner = null; state.history = []; state.nightNumber = 1; state.mafiaVotes = {}; state.doctorTarget = null; state.doctorLastTarget = null; state.distracterTarget = null; state.distracterActor = null; state.investigatorTarget = null; state.investigatorResult = null; state.guardianTarget = null; state.lastDeath = null; state.lastSave = null; state.lastExecuted = null; state.distracterBlockedMafia = false; state.mafiaDisagreed = false; state.mafiaSkippedKill = false; state.doctorBlocked = false; state.votes = {}; state.revoteCandidates = []; state.revoteCount = 0; state.avengerRevengePending = null; state.discussionTimer = null; state.discussionSeconds = 60; state.silenceCooldown = 0; state.silenceAvailable = false; state.silenceTarget = null; state.silencedPlayer = null; state.silenceUsedThisNight = false; state.silenceChosenMafia = null; if (state.discussionAnimationFrame) cancelAnimationFrame(state.discussionAnimationFrame); state.discussionAnimationFrame = null; document.body.classList.add('morning-bg'); changeScreen('seating'); }
-
+            function startGameAfterNames() { const valid = persistentNames.filter(n => n.trim()); if (valid.length < 4) { showModal({ icon: '⚠️', message: 'يلزم 4 لاعبين على الأقل.' }); return; } state.playerNames = valid; state.numPlayers = valid.length; state.revealRoleOnDeath = gameConfig.revealRoleOnDeath.enabled; state.mafiaRadar = gameConfig.mafiaRadar.enabled; state.silencerEnabled = gameConfig.silencer.enabled; const dist = getRoleDistribution(state.numPlayers, state.mafiaCount, roleConfig); if (dist.civilian < 0) { showModal({ icon: '⚠️', message: 'عدد الأدوار يتجاوز عدد اللاعبين.' }); return; } const roles = []; for (let i = 0; i < dist.mafia; i++) roles.push('Mafia'); if (dist.doctor) roles.push('Doctor'); if (dist.investigator) roles.push('Investigator'); if (dist.distracter) roles.push('Distracter'); if (dist.joker) roles.push('Joker'); if (dist.avenger) roles.push('Avenger'); if (dist.doppelganger) roles.push('Doppelganger'); if (dist.guardian) roles.push('Guardian'); if (dist.politician) roles.push('Politician'); if (dist.sniper) roles.push('Sniper'); while (roles.length < state.numPlayers) roles.push('Civilian'); state.roles = shuffle(roles); state.players = state.roles.map((r, i) => ({ name: state.playerNames[i] || `لاعب ${i + 1}`, role: r, alive: true, doppelgangerTarget: null, doppelgangerChosen: false })); state.mafiaMembers = state.players.filter(p => p.role === 'Mafia').map(p => p.name); state.passIndex = 0; state.gameOver = false; state.winner = null; state.history = []; state.nightNumber = 1; state.mafiaVotes = {}; state.doctorTarget = null; state.doctorLastTarget = null; state.distracterTarget = null; state.distracterActor = null; state.investigatorTarget = null; state.investigatorResult = null; state.guardianTarget = null; state.lastDeath = null; state.lastSave = null; state.lastExecuted = null; state.distracterBlockedMafia = false; state.mafiaDisagreed = false; state.mafiaSkippedKill = false; state.doctorBlocked = false; state.votes = {}; state.revoteCandidates = []; state.revoteCount = 0; state.avengerRevengePending = null; state.discussionTimer = null; state.discussionSeconds = 60; state.silenceCooldown = 0; state.silenceAvailable = false; state.silenceTarget = null; state.silencedPlayer = null; state.silenceUsedThisNight = false; state.silenceChosenMafia = null; state.sniperTarget = null; state.sniperExposed = null; state.lastSniperEvent = null; if (state.discussionAnimationFrame) cancelAnimationFrame(state.discussionAnimationFrame); state.discussionAnimationFrame = null; document.body.classList.add('morning-bg'); changeScreen('seating'); }
             function restartGame() { 
                 closeAllModals(); 
                 if (state.discussionAnimationFrame) { cancelAnimationFrame(state.discussionAnimationFrame); state.discussionAnimationFrame = null; }
                 if (state.discussionTimer) { clearInterval(state.discussionTimer); state.discussionTimer = null; }
-                Object.assign(state, { screen: 'managePlayers', players: [], numPlayers: 6, mafiaCount: 2, roles: [], mafiaMembers: [], passIndex: 0, gameOver: false, winner: null, playerNames: [], mafiaVotes: {}, doctorTarget: null, doctorLastTarget: null, distracterTarget: null, distracterActor: null, investigatorTarget: null, investigatorResult: null, guardianTarget: null, lastDeath: null, lastSave: null, lastExecuted: null, distracterBlockedMafia: false, mafiaDisagreed: false, mafiaSkippedKill: false, doctorBlocked: false, votes: {}, revoteCandidates: [], revoteCount: 0, history: [], nightNumber: 1, tieMethod: 'revote', mandatoryVoting: false, revealRoleOnDeath: true, mafiaRadar: false, avengerRevengePending: null, discussionTimer: null, discussionSeconds: 60, silencerEnabled: false, silenceCooldown: 0, silenceAvailable: false, silenceTarget: null, silencedPlayer: null, silenceUsedThisNight: false, silenceChosenMafia: null, discussionAnimationFrame: null });
+                Object.assign(state, { screen: 'managePlayers', players: [], numPlayers: 6, mafiaCount: 2, roles: [], mafiaMembers: [], passIndex: 0, gameOver: false, winner: null, playerNames: [], mafiaVotes: {}, doctorTarget: null, doctorLastTarget: null, distracterTarget: null, distracterActor: null, investigatorTarget: null, investigatorResult: null, guardianTarget: null, lastDeath: null, lastSave: null, lastExecuted: null, distracterBlockedMafia: false, mafiaDisagreed: false, mafiaSkippedKill: false, doctorBlocked: false, votes: {}, revoteCandidates: [], revoteCount: 0, history: [], nightNumber: 1, tieMethod: 'revote', mandatoryVoting: false, revealRoleOnDeath: true, mafiaRadar: false, avengerRevengePending: null, discussionTimer: null, discussionSeconds: 60, silencerEnabled: false, silenceCooldown: 0, silenceAvailable: false, silenceTarget: null, silencedPlayer: null, silenceUsedThisNight: false, silenceChosenMafia: null, sniperTarget: null, sniperExposed: null, lastSniperEvent: null, discussionAnimationFrame: null });
                 document.body.classList.remove('morning-bg');
                 roleConfig = loadRoleConfig();
                 gameConfig = loadGameConfig();
@@ -826,6 +863,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 state.doctorBlocked = false;
                 state.lastDeath = null;
                 state.lastSave = null;
+                state.lastSniperEvent = null;
                 const events = [];
 
                 if (state.distracterTarget && state.distracterActor) {
@@ -869,6 +907,41 @@ window.addEventListener("DOMContentLoaded", function () {
                     }
                 }
 
+// ===== منطق القناص =====
+if (state.sniperTarget) {
+    const sniper = state.players.find(p => p.alive && p.role === 'Sniper');
+    const target = state.players.find(p => p.name === state.sniperTarget);
+    
+    if (sniper && target && sniper.name !== target.name) {
+        const isDoctorProtected = (state.doctorTarget === target.name) && !state.doctorBlocked;
+        const isDistracterBlocked = (state.distracterTarget === sniper.name);
+        
+        if (isDistracterBlocked) {
+            events.push({ type: 'info', text: `تم تعطيل القناص ${sniper.name} هذه الليلة، ولم يتمكن من الاستهداف.` });
+        } else if (target.role === 'Mafia') {
+            if (!isDoctorProtected) {
+                target.alive = false;
+                events.push({ type: 'death', text: `القناص ${sniper.name} أصاب هدفه بدقة، وسقط ${target.name} من صفوف المافيا.` });
+                state.sniperExposed = sniper.name;
+                state.lastSniperEvent = { type: 'death', text: `أصاب القناص هدفه بدقة، وسقط <strong>${target.name}</strong> من صفوف المافيا.` };
+                checkDoppelgangerInheritance(target.name);
+            } else {
+                events.push({ type: 'info', text: `استهدف القناص ${target.name}، لكن يد الطبيب كانت أسرع وأنقذته.` });
+                state.lastSniperEvent = { type: 'save', text: `استهدف القناص <strong>${target.name}</strong>، لكن يد الطبيب كانت أسرع وأنقذته.` };
+            }
+        } else if (target.name === mafiaTarget) {
+            events.push({ type: 'info', text: `تصادف أن القناص والمافيا استهدفا الشخص نفسه (${target.name}) في هذه الليلة.` });
+            state.lastSniperEvent = { type: 'info', text: `تصادف أن القناص والمافيا استهدفا الشخص نفسه (<strong>${target.name}</strong>) في هذه الليلة.` };
+        } else {
+            sniper.alive = false;
+            events.push({ type: 'death', text: `أخطأ القناص ${sniper.name} في التصويب وأصاب ${target.name} من المواطنين، فتم إعدامه.` });
+            state.lastSniperEvent = { type: 'death', text: `أخطأ القناص في التصويب، فتم إعدامه بعد أن أصاب مواطناً بريئاً.` };
+            checkDoppelgangerInheritance(sniper.name);
+        }
+    }
+    state.sniperTarget = null;
+}
+
                 if (state.silencerEnabled && state.silenceTarget && !state.distracterBlockedMafia) {
                     state.silencedPlayer = state.silenceTarget;
                     events.push({ type: 'silence', text: `🔇 تم إسكات ${state.silenceTarget} بواسطة المافيا` });
@@ -897,7 +970,12 @@ window.addEventListener("DOMContentLoaded", function () {
                     else parts.push(`<div class="morning-result-item morning-result-death">💀 وجدنا <strong>${state.lastDeath}</strong> مقتولاً. غادر المدينة.</div>`);
                 }
                 if (state.lastSave) parts.push(`<div class="morning-result-item morning-result-save">💚 كاد <strong>${state.lastSave}</strong> أن يُقتل، لكن الطبيب تدخل وأنقذه!</div>`);
-                if (!state.lastDeath && !state.lastSave) {
+             if (state.lastSniperEvent) {
+    const sCls = state.lastSniperEvent.type === 'death' ? 'morning-result-death' :
+                 state.lastSniperEvent.type === 'save' ? 'morning-result-save' : 'morning-result-info';
+    parts.push(`<div class="morning-result-item ${sCls}">${state.lastSniperEvent.text}</div>`);
+}
+   if (!state.lastDeath && !state.lastSave && !state.lastSniperEvent) {
                     if (state.mafiaSkippedKill) parts.push('<div class="morning-result-item morning-result-info">🌙 المافيا لم تقتل أحداً هذه الليلة.</div>');
                     else if (state.mafiaDisagreed) parts.push('<div class="morning-result-item morning-result-info">🤷 لم تتفق المافيا على الضحية.</div>');
                     else parts.push('<div class="morning-result-item morning-result-info">🌙 المافيا لم تقتل أحداً هذه الليلة.</div>');
@@ -907,8 +985,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 return parts.join('');
             }
 
-            function startNight() { if (state.gameOver) return; if (state.silencerEnabled) { if (state.silenceCooldown > 0) { state.silenceCooldown--; } state.silenceAvailable = (state.silenceCooldown === 0 && state.nightNumber % 2 === 0); } state.silenceUsedThisNight = false; state.silenceTarget = null; state.silencedPlayer = null; state.silenceChosenMafia = null; if (state.silencerEnabled && state.silenceAvailable) { const aliveMafia = alivePlayers().filter(p => p.role === 'Mafia'); if (aliveMafia.length > 0) { state.silenceChosenMafia = aliveMafia[Math.floor(Math.random() * aliveMafia.length)].name; } } state.passIndex = 0; state.mafiaVotes = {}; state.doctorTarget = null; state.distracterTarget = null; state.distracterActor = null; state.investigatorTarget = null; state.investigatorResult = null; state.guardianTarget = null; state.lastDeath = null; state.lastSave = null; state.distracterBlockedMafia = false; state.mafiaDisagreed = false; state.mafiaSkippedKill = false; state.doctorBlocked = false; document.body.classList.remove('morning-bg'); changeScreen('nightIntro'); }
-
+            function startNight() { if (state.gameOver) return; if (state.silencerEnabled) { if (state.silenceCooldown > 0) { state.silenceCooldown--; } state.silenceAvailable = (state.silenceCooldown === 0 && state.nightNumber % 2 === 0); } state.silenceUsedThisNight = false; state.silenceTarget = null; state.silencedPlayer = null; state.silenceChosenMafia = null; if (state.silencerEnabled && state.silenceAvailable) { const aliveMafia = alivePlayers().filter(p => p.role === 'Mafia'); if (aliveMafia.length > 0) { state.silenceChosenMafia = aliveMafia[Math.floor(Math.random() * aliveMafia.length)].name; } } state.passIndex = 0; state.mafiaVotes = {}; state.doctorTarget = null; state.distracterTarget = null; state.distracterActor = null; state.investigatorTarget = null; state.investigatorResult = null; state.guardianTarget = null; state.sniperTarget = null; state.lastDeath = null; state.lastSave = null; state.lastSniperEvent = null; state.distracterBlockedMafia = false; state.mafiaDisagreed = false; state.mafiaSkippedKill = false; state.doctorBlocked = false; document.body.classList.remove('morning-bg'); changeScreen('nightIntro'); }
             function nextNightPlayer() { state.passIndex++; const alives = alivePlayers(); if (state.passIndex >= alives.length) { resolveNight(); if (checkWinCondition()) { changeScreen('gameOver'); return; } document.body.classList.add('morning-bg'); changeScreen('nightResults'); } else { changeScreen('nightPassPhone'); } }
 
             function startVotingPhase(candidates = null) {
@@ -927,7 +1004,14 @@ window.addEventListener("DOMContentLoaded", function () {
                 const alives = alivePlayers();
                 const vc = {}; let skipCount = 0;
                 alives.forEach(p => { vc[p.name] = 0; });
-                Object.entries(state.votes).forEach(([v, t]) => { if (t === null || t === undefined) skipCount++; else if (alives.find(p => p.name === t)) vc[t] = (vc[t] || 0) + 1; });
+                Object.entries(state.votes).forEach(([v, t]) => { 
+                    if (t === null || t === undefined) skipCount++; 
+                    else if (alives.find(p => p.name === t)) {
+                        const voter = state.players.find(p => p.name === v);
+                        const weight = (voter && voter.role === 'Politician') ? 2 : 1;
+                        vc[t] = (vc[t] || 0) + weight;
+                    }
+                });
                 const mv = Math.max(...Object.values(vc), 0);
                 const tc = Object.keys(vc).filter(n => vc[n] === mv && alives.find(p => p.name === n));
                 if (mv === 0 || mv <= skipCount) {
@@ -1111,9 +1195,17 @@ window.addEventListener("DOMContentLoaded", function () {
 
             function renderNightPassPhone(el) { const alives = alivePlayers(); if (state.passIndex >= alives.length) { nextNightPlayer(); return; } const p = alives[state.passIndex]; el.innerHTML = `<div class="phase-header">🌃 مرحلة الليل</div><h2>سلم الجوال إلى</h2><div style="text-align:center;font-size:1.8rem;color:#fff;font-weight:800;">${escapeHtml(p.name)}</div><button class="btn" id="rnb">أنا ${escapeHtml(p.name)}</button>`; el.querySelector('#rnb').addEventListener('click', () => changeScreen('nightAction')); }
 
-            function renderNightAction(el) { const alives = alivePlayers(); if (state.passIndex >= alives.length) { nextNightPlayer(); return; } const p = alives[state.passIndex]; const r = p.role; const v = roleVisuals[r]; if (r === 'Investigator' && state.distracterTarget === p.name) { showModal({ icon: '🕵️‍♂️', message: `تم تعطيلك، لم تستطع التحقق الليلة.`, callback: () => nextNightPlayer() }); return; } if (r === 'Guardian' && state.distracterTarget === p.name) { showModal({ icon: '🛡️', message: `تم تعطيلك، لم تستطع حماية أحد الليلة.`, callback: () => nextNightPlayer() }); return; } if (r === 'Doppelganger' && !p.doppelgangerChosen && state.distracterTarget === p.name) { showModal({ icon: '🎭', message: `تم تعطيلك، لم تستطع اختيار هدف الليلة.`, callback: () => nextNightPlayer() }); return; } if (r === 'Civilian' || r === 'Joker' || r === 'Avenger' || (r === 'Doppelganger' && p.doppelgangerChosen)) { renderFakeNightAction(el, p.name, v.name); return; } if (r === 'Doppelganger' && !p.doppelgangerChosen) { renderDoppelgangerChoice(el, p); return; } if (r === 'Mafia') { const isSilenceMafia = state.silencerEnabled && state.silenceAvailable && !state.silenceUsedThisNight && p.name === state.silenceChosenMafia; if (isSilenceMafia) { renderMafiaSilenceAction(el, p); } else { renderMafiaNormalAction(el, p); } return; } let ah = '', lt = [], labelColor = '#fff', selectedClass = 'selected'; if (r === 'Doctor') { ah = '💉 اختر لاعباً لحمايته'; lt = alives.map(pl => pl.name); labelColor = '#3498db'; selectedClass = 'selected-doctor'; } else if (r === 'Distracter') { ah = '🚫 اختر لاعباً لتعطيله'; lt = alives.filter(pl => pl.name !== p.name).map(pl => pl.name); labelColor = '#8e44ad'; selectedClass = 'selected-distracter'; } else if (r === 'Investigator') { ah = '🔍 اختر لاعباً للتحقق من هويته'; lt = alives.filter(pl => pl.name !== p.name).map(pl => pl.name); labelColor = '#e67e22'; selectedClass = 'selected-investigator'; } else if (r === 'Guardian') { ah = '🛡️ اختر شخصاً تظن أن المدينة ستحاول إعدامه غداً لتحميه:'; lt = alives.map(pl => pl.name); labelColor = '#1abc9c'; selectedClass = 'selected-guardian'; } let listItemsHTML = ''; for (const n of lt) { const safeN = escapeHtml(n); let extraClass = ''; if (r === 'Doctor' && n === state.doctorLastTarget) extraClass = ' doctor-blocked-target'; listItemsHTML += `<li class="player-item${extraClass}" data-name="${safeN}"${(r === 'Doctor' && n === state.doctorLastTarget) ? ' data-disabled="true"' : ''}>${safeN}</li>`; } el.innerHTML = `<div class="phase-header" style="color:#fff; background: rgba(0,0,0,0.6);">🌃 ${v.name}</div><div style="text-align:center;font-weight:700;color:#fff;">${escapeHtml(p.name)}</div><p style="color:${labelColor}; font-weight:700; font-size:1.2rem; margin:10px 0; text-shadow: 0 0 5px rgba(0,0,0,0.8);">${ah}</p><ul class="player-list">${listItemsHTML}</ul>${r === 'Guardian' ? '<button class="btn btn-danger btn-sm" id="skipGuardianBtn">🚫 تخطي</button>' : ''}<button class="btn" id="cab" disabled>تأكيد</button>`; let sel = null; el.querySelectorAll('.player-item:not([data-disabled])').forEach(item => { item.addEventListener('click', () => { el.querySelectorAll('.player-item').forEach(e => { e.classList.remove('selected', 'selected-doctor', 'selected-distracter', 'selected-investigator', 'selected-guardian'); }); item.classList.add(selectedClass); sel = item.dataset.name; el.querySelector('#cab').disabled = false; }); }); el.querySelector('#cab').addEventListener('click', () => { if (!sel && r !== 'Guardian') return; if (r === 'Doctor') { state.doctorTarget = sel; state.doctorLastTarget = sel; } else if (r === 'Distracter') { state.distracterTarget = sel; state.distracterActor = p.name; } else if (r === 'Investigator') { state.investigatorTarget = sel; const tr = state.players.find(pl => pl.name === sel)?.role; const im = tr === 'Mafia'; state.investigatorResult = { target: sel, isMafia: im }; nextNightPlayer(); setTimeout(() => showInvestigatorResult(sel, im), 200); return; } else if (r === 'Guardian') state.guardianTarget = sel; nextNightPlayer(); }); if (r === 'Guardian') el.querySelector('#skipGuardianBtn')?.addEventListener('click', () => { state.guardianTarget = null; nextNightPlayer(); }); }
+            function renderNightAction(el) { const alives = alivePlayers(); if (state.passIndex >= alives.length) { nextNightPlayer(); return; } const p = alives[state.passIndex]; const r = p.role; const v = roleVisuals[r]; if (r === 'Investigator' && state.distracterTarget === p.name) { showModal({ icon: '🕵️‍♂️', message: `تم تعطيلك، لم تستطع التحقق الليلة.`, callback: () => nextNightPlayer() }); return; } if (r === 'Guardian' && state.distracterTarget === p.name) { showModal({ icon: '🛡️', message: `تم تعطيلك، لم تستطع حماية أحد الليلة.`, callback: () => nextNightPlayer() }); return; } if (r === 'Doppelganger' && !p.doppelgangerChosen && state.distracterTarget === p.name) { showModal({ icon: '🎭', message: `تم تعطيلك، لم تستطع اختيار هدف الليلة.`, callback: () => nextNightPlayer() }); return; } if (r === 'Civilian' || r === 'Joker' || r === 'Avenger' || r === 'Politician' || (r === 'Doppelganger' && p.doppelgangerChosen)) { renderFakeNightAction(el, p.name, v.name); return; } if (r === 'Doppelganger' && !p.doppelgangerChosen) { renderDoppelgangerChoice(el, p); return; } if (r === 'Sniper') { renderSniperAction(el, p); return; } if (r === 'Mafia') { const isSilenceMafia = state.silencerEnabled && state.silenceAvailable && !state.silenceUsedThisNight && p.name === state.silenceChosenMafia; if (isSilenceMafia) { renderMafiaSilenceAction(el, p); } else { renderMafiaNormalAction(el, p); } return; } let ah = '', lt = [], labelColor = '#fff', selectedClass = 'selected'; if (r === 'Doctor') { ah = '💉 اختر لاعباً لحمايته'; lt = alives.map(pl => pl.name); labelColor = '#3498db'; selectedClass = 'selected-doctor'; } else if (r === 'Distracter') { ah = '🚫 اختر لاعباً لتعطيله'; lt = alives.filter(pl => pl.name !== p.name).map(pl => pl.name); labelColor = '#8e44ad'; selectedClass = 'selected-distracter'; } else if (r === 'Investigator') { ah = '🔍 اختر لاعباً للتحقق من هويته'; lt = alives.filter(pl => pl.name !== p.name).map(pl => pl.name); labelColor = '#e67e22'; selectedClass = 'selected-investigator'; } else if (r === 'Guardian') { ah = '🛡️ اختر شخصاً تظن أن المدينة ستحاول إعدامه غداً لتحميه:'; lt = alives.map(pl => pl.name); labelColor = '#1abc9c'; selectedClass = 'selected-guardian'; } let listItemsHTML = ''; for (const n of lt) { const safeN = escapeHtml(n); let extraClass = ''; if (r === 'Doctor' && n === state.doctorLastTarget) extraClass = ' doctor-blocked-target'; listItemsHTML += `<li class="player-item${extraClass}" data-name="${safeN}"${(r === 'Doctor' && n === state.doctorLastTarget) ? ' data-disabled="true"' : ''}>${safeN}</li>`; } el.innerHTML = `<div class="phase-header" style="color:#fff; background: rgba(0,0,0,0.6);">🌃 ${v.name}</div><div style="text-align:center;font-weight:700;color:#fff;">${escapeHtml(p.name)}</div><p style="color:${labelColor}; font-weight:700; font-size:1.2rem; margin:10px 0; text-shadow: 0 0 5px rgba(0,0,0,0.8);">${ah}</p><ul class="player-list">${listItemsHTML}</ul>${r === 'Guardian' ? '<button class="btn btn-danger btn-sm" id="skipGuardianBtn">🚫 تخطي</button>' : ''}<button class="btn" id="cab" disabled>تأكيد</button>`; let sel = null; el.querySelectorAll('.player-item:not([data-disabled])').forEach(item => { item.addEventListener('click', () => { el.querySelectorAll('.player-item').forEach(e => { e.classList.remove('selected', 'selected-doctor', 'selected-distracter', 'selected-investigator', 'selected-guardian'); }); item.classList.add(selectedClass); sel = item.dataset.name; el.querySelector('#cab').disabled = false; }); }); el.querySelector('#cab').addEventListener('click', () => { if (!sel && r !== 'Guardian') return; if (r === 'Doctor') { state.doctorTarget = sel; state.doctorLastTarget = sel; } else if (r === 'Distracter') { state.distracterTarget = sel; state.distracterActor = p.name; } else if (r === 'Investigator') { state.investigatorTarget = sel; const tr = state.players.find(pl => pl.name === sel)?.role; const im = tr === 'Mafia'; state.investigatorResult = { target: sel, isMafia: im }; nextNightPlayer(); setTimeout(() => showInvestigatorResult(sel, im), 200); return; } else if (r === 'Guardian') state.guardianTarget = sel; nextNightPlayer(); }); if (r === 'Guardian') el.querySelector('#skipGuardianBtn')?.addEventListener('click', () => { state.guardianTarget = null; nextNightPlayer(); }); }
 
-            function renderMafiaNormalAction(el, p) { const alives = alivePlayers(); const otherMafiaVotes = {}; let teammateSkipped = false; if (state.mafiaRadar && state.mafiaMembers.length > 1) { for (const [voter, target] of Object.entries(state.mafiaVotes)) { if (voter !== p.name) { if (target && target !== null) otherMafiaVotes[target] = (otherMafiaVotes[target] || 0) + 1; else teammateSkipped = true; } } } const targetList = alives.filter(pl => pl.name !== p.name && !state.mafiaMembers.includes(pl.name)); let listItemsHTML = ''; for (const n of targetList) { const safeN = escapeHtml(n.name); let extraClass = ''; if (otherMafiaVotes[n.name] && otherMafiaVotes[n.name] > 0) extraClass = ' mafia-target-hint'; listItemsHTML += `<li class="player-item${extraClass}" data-name="${safeN}">${safeN}</li>`; } el.innerHTML = `<div class="phase-header" style="color:#fff; background: rgba(0,0,0,0.6);">🌃 مافيا</div><div style="text-align:center;font-weight:700;color:#fff;">${escapeHtml(p.name)}</div><p style="color:#e74c3c; font-weight:700; font-size:1.2rem; margin:10px 0; text-align:center;">🎯 اختر لاعباً لقتله</p><ul class="player-list">${listItemsHTML}</ul><button class="btn btn-danger btn-sm ${teammateSkipped ? 'btn-radar-skip' : ''}" id="skb">${teammateSkipped ? '⏭️ الزميل تخطى' : '🚫 تخطي القتل'}</button><button class="btn" id="cab" disabled>تأكيد</button>`; let sel = null; el.querySelectorAll('.player-item').forEach(item => { item.addEventListener('click', () => { el.querySelectorAll('.player-item').forEach(e => e.classList.remove('selected-kill')); item.classList.add('selected-kill'); sel = item.dataset.name; el.querySelector('#cab').disabled = false; }); }); el.querySelector('#cab').addEventListener('click', () => { if (sel) state.mafiaVotes[p.name] = sel; nextNightPlayer(); }); el.querySelector('#skb').addEventListener('click', () => { state.mafiaVotes[p.name] = null; nextNightPlayer(); }); }
+            function renderMafiaNormalAction(el, p) { const alives = alivePlayers(); const otherMafiaVotes = {}; let teammateSkipped = false; if (state.mafiaRadar && state.mafiaMembers.length > 1) { for (const [voter, target] of Object.entries(state.mafiaVotes)) { if (voter !== p.name) { if (target && target !== null) otherMafiaVotes[target] = (otherMafiaVotes[target] || 0) + 1; else teammateSkipped = true; } } } const targetList = alives.filter(pl => pl.name !== p.name && !state.mafiaMembers.includes(pl.name)); let listItemsHTML = ''; for (const n of targetList) { const safeN = escapeHtml(n.name); 
+                // تمييز القناص المكشوف
+                if (state.sniperExposed && n.name === state.sniperExposed) {
+                    listItemsHTML += `<li class="player-item mafia-target-hint" data-name="${safeN}" style="border-right: 4px solid #e74c3c;">
+                        🎯 ${safeN} <span style="color:#e74c3c; font-size:0.7rem;">(القناص المكشوف)</span>
+                    </li>`;
+                    continue;
+                }
+                let extraClass = ''; if (otherMafiaVotes[n.name] && otherMafiaVotes[n.name] > 0) extraClass = ' mafia-target-hint'; listItemsHTML += `<li class="player-item${extraClass}" data-name="${safeN}">${safeN}</li>`; } el.innerHTML = `<div class="phase-header" style="color:#fff; background: rgba(0,0,0,0.6);">🌃 مافيا</div><div style="text-align:center;font-weight:700;color:#fff;">${escapeHtml(p.name)}</div><p style="color:#e74c3c; font-weight:700; font-size:1.2rem; margin:10px 0; text-align:center;">🎯 اختر لاعباً لقتله</p><ul class="player-list">${listItemsHTML}</ul><button class="btn btn-danger btn-sm ${teammateSkipped ? 'btn-radar-skip' : ''}" id="skb">${teammateSkipped ? '⏭️ الزميل تخطى' : '🚫 تخطي القتل'}</button><button class="btn" id="cab" disabled>تأكيد</button>`; let sel = null; el.querySelectorAll('.player-item').forEach(item => { item.addEventListener('click', () => { el.querySelectorAll('.player-item').forEach(e => e.classList.remove('selected-kill')); item.classList.add('selected-kill'); sel = item.dataset.name; el.querySelector('#cab').disabled = false; }); }); el.querySelector('#cab').addEventListener('click', () => { if (sel) state.mafiaVotes[p.name] = sel; nextNightPlayer(); }); el.querySelector('#skb').addEventListener('click', () => { state.mafiaVotes[p.name] = null; nextNightPlayer(); }); }
 
             function renderMafiaSilenceAction(el, p) {
                 const alives = alivePlayers();
@@ -1192,6 +1284,81 @@ window.addEventListener("DOMContentLoaded", function () {
                 });
             }
 
+            function renderSniperAction(el, p) {
+                const canShoot = state.nightNumber >= 2;
+                const alives = alivePlayers().filter(pl => pl.name !== p.name);
+                const isExposed = state.sniperExposed === p.name;
+                
+                if (!canShoot) {
+                    el.innerHTML = `
+                        <div class="phase-header" style="color:#fff;background:rgba(0,0,0,0.6);">🌃 قناص</div>
+                        <div style="text-align:center;font-weight:700;color:#fff;">${escapeHtml(p.name)}</div>
+                        <div style="text-align:center;font-size:3rem;margin:20px 0;">🎯</div>
+                        <p style="color:#16a085;font-weight:700;text-align:center;margin:14px 0;">
+                            لا يمكنك الاستهداف في الليلة الأولى. راقب وانتظر.
+                        </p>
+                        <button class="btn" id="skipSniperBtn">تخطي الليلة ▸</button>
+                    `;
+                    el.querySelector('#skipSniperBtn').addEventListener('click', () => {
+                        state.sniperTarget = null;
+                        nextNightPlayer();
+                    });
+                    return;
+                }
+                
+                let exposedWarning = '';
+                if (isExposed) {
+                    exposedWarning = `
+                        <div style="background:rgba(231,76,60,0.2); border:2px solid #e74c3c; border-radius:14px; padding:12px; margin:10px 0; text-align:center;">
+                            <div style="font-size:1.8rem;">⚠️</div>
+                            <p style="color:#fff; font-weight:700; margin:6px 0;">أنت مكشوف للمافيا!</p>
+                            <p style="color:#f5a5a0; font-size:0.85rem;">قد يقتلونك الليلة. لكنك تستطيع الاستهداف حتى لو قُتلت.</p>
+                        </div>
+                    `;
+                }
+                
+                let listHTML = '';
+                alives.forEach(pl => {
+                    const isMafia = pl.role === 'Mafia';
+                    const hint = isExposed ? '' : '';
+                    listHTML += `<li class="player-item" data-name="${escapeHtml(pl.name)}">${escapeHtml(pl.name)}${hint}</li>`;
+                });
+                
+                el.innerHTML = `
+                    <div class="phase-header" style="color:#fff;background:rgba(0,0,0,0.6);">🌃 قناص</div>
+                    <div style="text-align:center;font-weight:700;color:#fff;">${escapeHtml(p.name)}</div>
+                    ${exposedWarning}
+                    <p style="color:#16a085;font-weight:700;text-align:center;margin:14px 0;">
+                        🎯 اختر لاعباً لاستهدافه<br>
+                        <span style="font-size:0.8rem; color:#f39c12;">⚠️ تحذير: إن أخطأت ستُعدم فوراً!</span>
+                    </p>
+                    <ul class="player-list">${listHTML}</ul>
+                    <button class="btn btn-danger btn-sm" id="skipSniperBtn">🚫 عدم الاستهداف</button>
+                    <button class="btn" id="cabSniper" disabled>🎯 إطلاق النار</button>
+                `;
+                
+                let sel = null;
+                el.querySelectorAll('.player-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        el.querySelectorAll('.player-item').forEach(e => e.classList.remove('selected'));
+                        item.classList.add('selected');
+                        sel = item.dataset.name;
+                        el.querySelector('#cabSniper').disabled = false;
+                    });
+                });
+                
+                el.querySelector('#cabSniper').addEventListener('click', () => {
+                    if (!sel) return;
+                    state.sniperTarget = sel;
+                    nextNightPlayer();
+                });
+                
+                el.querySelector('#skipSniperBtn').addEventListener('click', () => {
+                    state.sniperTarget = null;
+                    nextNightPlayer();
+                });
+            }
+
             function renderFakeNightAction(el, playerName, roleName) { const namesList = []; for (let i = 0; i < 5; i++) namesList.push(playerName); let listHTML = ''; namesList.forEach(name => listHTML += `<li class="player-item" data-name="${escapeHtml(name)}">${escapeHtml(name)}</li>`); el.innerHTML = `<div class="phase-header" style="color:#fff; background: rgba(0,0,0,0.6);">🌃 ${roleName}</div><div style="text-align:center;font-weight:700;color:#fff;">${escapeHtml(playerName)}</div><p style="color:#fff; font-weight:700; font-size:1.2rem; margin:10px 0; text-align:center;">اختر شخصاً:</p><ul class="player-list">${listHTML}</ul><button class="btn" id="fcb" disabled>تأكيد</button>`; el.querySelectorAll('.player-item').forEach(item => { item.addEventListener('click', () => { el.querySelectorAll('.player-item').forEach(e => e.classList.remove('selected')); item.classList.add('selected'); el.querySelector('#fcb').disabled = false; }); }); el.querySelector('#fcb').addEventListener('click', () => nextNightPlayer()); }
 
             function renderDoppelgangerChoice(el, player) { const alives = alivePlayers().filter(p => p.name !== player.name); let listHTML = ''; alives.forEach(p => listHTML += `<li class="player-item" data-name="${escapeHtml(p.name)}">${escapeHtml(p.name)}</li>`); el.innerHTML = `<div class="phase-header" style="color:#fff; background: rgba(0,0,0,0.6);">🎭 منتحل شخصية</div><div style="text-align:center;font-weight:700;color:#fff;">${escapeHtml(player.name)}</div><p style="color:#6c5ce7; font-weight:700; font-size:1.2rem; margin:10px 0; text-align:center;">اختر لاعباً لترث دوره عند موته:</p><ul class="player-list">${listHTML}</ul><button class="btn btn-danger btn-sm" id="skipBtn">تخطي الاختيار</button><button class="btn" id="dcb" disabled>تأكيد الاختيار</button>`; let sel = null; el.querySelectorAll('.player-item').forEach(item => { item.addEventListener('click', () => { el.querySelectorAll('.player-item').forEach(e => e.classList.remove('selected-doppelganger')); item.classList.add('selected-doppelganger'); sel = item.dataset.name; el.querySelector('#dcb').disabled = false; }); }); el.querySelector('#dcb').addEventListener('click', () => { if (sel) { player.doppelgangerTarget = sel; player.doppelgangerChosen = true; } nextNightPlayer(); }); el.querySelector('#skipBtn').addEventListener('click', () => nextNightPlayer()); }
@@ -1254,23 +1421,23 @@ window.addEventListener("DOMContentLoaded", function () {
             function renderVotingIntro(el) { el.innerHTML = `<div style="text-align:center;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;"><div style="font-size:5rem;">🗳️</div><h2>مرحلة التصويت</h2><p style="color:var(--text-muted);">سيتم تمرير الجوال للتصويت على من تريدون إقصاءه.</p><button class="btn" id="svb">ابدأ التصويت</button></div>`; el.querySelector('#svb').addEventListener('click', () => { state.passIndex = 0; changeScreen('voting'); }); }
 
             function renderVoting(el) {
-                const alives = alivePlayers();
-                if (state.passIndex >= alives.length) { tallyVotes(); return; }
-                const p = alives[state.passIndex];
-                const cand = state.revoteCandidates.length ? state.revoteCandidates : alives.map(pl => pl.name);
-                const mafiaAliveCount = alives.filter(pl => pl.role === 'Mafia').length;
-                const nonMafiaAliveCount = alives.length - mafiaAliveCount;
-                const isCritical = mafiaAliveCount >= nonMafiaAliveCount - 1;
-                let criticalWarningHTML = '';
-                if (isCritical) criticalWarningHTML = `<div class="critical-warning-card"><div style="font-size:2.5rem; margin-bottom:6px;">⚠️</div><p style="color:#fff; font-weight:800; font-size:1rem; margin:4px 0; text-shadow:0 0 8px rgba(255,255,255,0.3);">تحذير: يجب عليكم اخراج مافيا الآن لكي لا تخسروا!</p></div>`;
-                let skipButtonHTML = '';
-                if (!state.mandatoryVoting) skipButtonHTML = isCritical ? `<button class="btn btn-danger btn-sm btn-skip-critical" id="svb2">⚠️ 🚫 تخطي</button>` : `<button class="btn btn-danger btn-sm" id="svb2">🚫 تخطي</button>`;
-                el.innerHTML = `<h2>🗳️ التصويت</h2>${criticalWarningHTML}<p style="text-align:center;color:#2ecc71;">اختر من تريد إقصاءه</p><p style="text-align:center;color:#fff;font-weight:700;">${escapeHtml(p.name)}</p>${state.revoteCandidates.length ? `<p style="text-align:center;color:#2ecc71;">🔄 إعادة تصويت ${state.revoteCount + 1}/2</p>` : ''}<ul class="player-list">${cand.map(n => `<li class="player-item" data-name="${escapeHtml(n)}">${escapeHtml(n)}</li>`).join('')}</ul>${skipButtonHTML}<button class="btn" id="cvb" disabled>تأكيد التصويت</button>`;
-                let s = null;
-                el.querySelectorAll('.player-item').forEach(item => { item.addEventListener('click', () => { el.querySelectorAll('.player-item').forEach(e => e.classList.remove('selected')); item.classList.add('selected'); s = item.dataset.name; el.querySelector('#cvb').disabled = false; }); });
-                el.querySelector('#cvb').addEventListener('click', () => { if (s) castVote(p.name, s); });
-                if (!state.mandatoryVoting) el.querySelector('#svb2')?.addEventListener('click', () => castVote(p.name, null));
-            }
+    const alives = alivePlayers();
+    if (state.passIndex >= alives.length) { tallyVotes(); return; }
+    const p = alives[state.passIndex];
+    const cand = (state.revoteCandidates.length ? state.revoteCandidates : alives.map(pl => pl.name)).filter(n => n !== p.name);
+    const mafiaAliveCount = alives.filter(pl => pl.role === 'Mafia').length;
+    const nonMafiaAliveCount = alives.length - mafiaAliveCount;
+    const isCritical = mafiaAliveCount >= nonMafiaAliveCount - 1;
+    let criticalWarningHTML = '';
+    if (isCritical) criticalWarningHTML = `<div class="critical-warning-card"><div style="font-size:2.5rem; margin-bottom:6px;">⚠️</div><p style="color:#fff; font-weight:800; font-size:1rem; margin:4px 0; text-shadow:0 0 8px rgba(255,255,255,0.3);">تحذير: يجب عليكم اخراج مافيا الآن لكي لا تخسروا!</p></div>`;
+    let skipButtonHTML = '';
+    if (!state.mandatoryVoting) skipButtonHTML = isCritical ? `<button class="btn btn-danger btn-sm btn-skip-critical" id="svb2">⚠️ 🚫 تخطي</button>` : `<button class="btn btn-danger btn-sm" id="svb2">🚫 تخطي</button>`;
+    el.innerHTML = `<h2>🗳️ التصويت</h2>${criticalWarningHTML}<p style="text-align:center;color:#2ecc71;">اختر من تريد إقصاءه</p><p style="text-align:center;color:#fff;font-weight:700;">${escapeHtml(p.name)}</p>${state.revoteCandidates.length ? `<p style="text-align:center;color:#2ecc71;">🔄 إعادة تصويت ${state.revoteCount + 1}/2</p>` : ''}<ul class="player-list">${cand.map(n => `<li class="player-item" data-name="${escapeHtml(n)}">${escapeHtml(n)}</li>`).join('')}</ul>${skipButtonHTML}<button class="btn" id="cvb" disabled>تأكيد التصويت</button>`;
+    let s = null;
+    el.querySelectorAll('.player-item').forEach(item => { item.addEventListener('click', () => { el.querySelectorAll('.player-item').forEach(e => e.classList.remove('selected')); item.classList.add('selected'); s = item.dataset.name; el.querySelector('#cvb').disabled = false; }); });
+    el.querySelector('#cvb').addEventListener('click', () => { if (s) castVote(p.name, s); });
+    if (!state.mandatoryVoting) el.querySelector('#svb2')?.addEventListener('click', () => castVote(p.name, null));
+}
 
             function renderExecResult(el) {
                 const l = state.lastExecuted;
@@ -1393,7 +1560,34 @@ window.addEventListener("DOMContentLoaded", function () {
                     { icon: '🛡️', name: 'حارس', team: 'المواطنون', teamClass: 'team-citizen', color: '#1abc9c', desc: 'يحمي شخصاً من الإعدام.', clickable: true, modal: { icon: '🛡️', name: 'حارس', color: '#1abc9c', details: [ { icon: '🌙', text: 'كل ليلة يختار شخصاً لحمايته.' }, { icon: '🗳️', text: 'الحماية ضد <strong style="color:#e74c3c;">التصويت</strong> فقط (الإعدام).' }, { icon: '🔫', text: 'لا يحمي من رصاص المافيا!' }, { icon: '☀️', text: 'الحماية تنتهي مع نهاية اليوم التالي.' } ] } },
                     { icon: '⚔️', name: 'منتقم', team: 'المواطنون', teamClass: 'team-citizen', color: '#c0392b', desc: 'إذا أُعدم يختار شخصاً يموت معه.', clickable: true, modal: { icon: '⚔️', name: 'منتقم', color: '#c0392b', details: [ { icon: '🗳️', text: 'قدرته تعمل فقط إذا قُتل عن طريق <strong style="color:#e74c3c;">التصويت</strong>.' }, { icon: '🔫', text: 'إذا مات ليلاً برصاص المافيا: لا ينتقم.' }, { icon: '⚔️', text: 'يختار ضحيته فوراً عند إعدامه.' } ] } },
                     { icon: '🎭', name: 'منتحل شخصية', team: 'محايد', teamClass: 'team-neutral', color: '#6c5ce7', desc: 'يختار لاعباً، عند موته يرث دوره.', clickable: true, modal: { icon: '🎭', name: 'منتحل شخصية', color: '#6c5ce7', details: [ { icon: '🎯', text: 'في أي ليلة يختار لاعباً (يمكنه التخطي). ليس محصوراً في الليلة الأولى.' }, { icon: '💀', text: 'عند موت ذلك اللاعب يرث دوره وفريقه.' }, { icon: '🔄', text: 'مثال: اختار مافيا ← أصبح مافيا. اختار طبيب ← أصبح طبيب.' }, { icon: '⚠️', text: 'إذا مات قبل أن يرث، يخسر.' } ] } },
-                    { icon: '🃏', name: 'جوكر', team: 'محايد', teamClass: 'team-neutral', color: '#f39c12', desc: 'يفوز منفرداً إذا أُعدم.', clickable: true, modal: { icon: '🃏', name: 'جوكر', color: '#f39c12', details: [ { icon: '🎯', text: 'لا ينتمي لأحد. لا يقتل ولا يحمي.' }, { icon: '🗳️', text: 'هدفه الوحيد: أن يتم إعدامه بالتصويت.' }, { icon: '🏆', text: 'إذا أُعدم: <strong style="color:#f39c12;">يفوز منفرداً</strong>.' }, { icon: '🕵️', text: 'يظهر للمحقق كمواطن.' } ] } }
+                    { icon: '🃏', name: 'جوكر', team: 'محايد', teamClass: 'team-neutral', color: '#f39c12', desc: 'يفوز منفرداً إذا أُعدم.', clickable: true, modal: { icon: '🃏', name: 'جوكر', color: '#f39c12', details: [ { icon: '🎯', text: 'لا ينتمي لأحد. لا يقتل ولا يحمي.' }, { icon: '🗳️', text: 'هدفه الوحيد: أن يتم إعدامه بالتصويت.' }, { icon: '🏆', text: 'إذا أُعدم: <strong style="color:#f39c12;">يفوز منفرداً</strong>.' }, { icon: '🕵️', text: 'يظهر للمحقق كمواطن.' } ] } },
+                    { 
+                        icon: '👔', name: 'سياسي', team: 'المواطنون', teamClass: 'team-citizen', color: '#a29bfe', 
+                        desc: 'صوته يُحتسب صوتين في التصويت.', clickable: true, 
+                        modal: { 
+                            icon: '👔', name: 'سياسي', color: '#a29bfe', 
+                            details: [ 
+                                { icon: '🗳️', text: 'عندما يصوّت السياسي، يُحتسب صوته <strong style="color:#a29bfe;">صوتين تلقائياً</strong>.' }, 
+                                { icon: '🎭', text: 'لا يُكشف أمره لأحد. يعمل بصمت.' }, 
+                                { icon: '⚠️', text: '<strong style="color:#f39c12;">نصيحة:</strong> إن عرفت المدينة من هو السياسي، احمِه!' }, 
+                                { icon: '🎯', text: 'قوته الحقيقية في حسم التصويتات المتقاربة.' } 
+                            ] 
+                        } 
+                    },
+                    { 
+                        icon: '🎯', name: 'قناص', team: 'المواطنون', teamClass: 'team-citizen', color: '#16a085', 
+                        desc: 'يستهدف لاعباً كل ليلة من الليلة الثانية.', clickable: true, 
+                        modal: { 
+                            icon: '🎯', name: 'قناص', color: '#16a085', 
+                            details: [ 
+                                { icon: '🌙', text: 'يستيقظ كل ليلة من <strong style="color:#16a085;">الليلة الثانية</strong> ليختار هدفاً.' }, 
+                                { icon: '✅', text: 'إذا أصاب <strong style="color:#e74c3c;">مافيا</strong>: تُقتل المافيا، لكن القناص يُكشف للمافيا.' }, 
+                                { icon: '❌', text: 'إذا أصاب <strong style="color:#2ecc71;">مواطناً</strong>: يُعدم القناص فوراً!' }, 
+                                { icon: '💉', text: 'إذا حمى الطبيب الهدف: يُلغى الاستهداف.' }, 
+                                { icon: '⚠️', text: 'حتى لو انكشف، يستمر القناص بالاستهداف <strong>طالما هو على قيد الحياة</strong>.' } 
+                            ] 
+                        } 
+                    }
                 ];
                 const grid = el.querySelector('#rolesGridHowTo');
                 if (grid) {
@@ -1475,11 +1669,11 @@ function updateNextButtonState(){const nextBtn=document.getElementById('toSetupB
             <h2>تحديث جديد</h2>
             <p class="update-desc">يجب عليك التحديث للاستمرار في اللعب.</p>
             
-            <div class="update-versions-info">
-                <span class="current-ver">الإصدار الحالي: <b id="currentVerText">1.2</b></span>
-                <span class="arrow-ver"><i class="fa-solid fa-arrow-left"></i></span>
-                <span class="latest-ver">الإصدار الجديد: <b id="latestVerText">1.3</b></span>
-            </div>
+<div class="update-versions-info">
+    <span class="current-ver">الإصدار الحالي: <b id="currentVerText">—</b></span>
+    <span class="arrow-ver"><i class="fa-solid fa-arrow-left"></i></span>
+    <span class="latest-ver">الإصدار الجديد: <b id="latestVerText">—</b></span>
+</div>
 
             <div class="update-changelog" id="updateChangelogBox" style="display: none;">
                 <strong>ما الجديد في هذا التحديث:</strong>
@@ -1496,7 +1690,7 @@ function updateNextButtonState(){const nextBtn=document.getElementById('toSetupB
 
     <!-- ===================== كود نظام التحديثات (JavaScript) ===================== -->
     <script>
-        const GAME_CURRENT_VERSION = "1.3";
+        const GAME_CURRENT_VERSION = "1.4";
 
         async function checkGitHubUpdates() {
             try {
@@ -1539,36 +1733,38 @@ function updateNextButtonState(){const nextBtn=document.getElementById('toSetupB
             return false;
         }
 
-        function showUpdateModal(data) {
-            const modal = document.getElementById('update-modal');
-            if (!modal) return;
-            
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            modal.onclick = (e) => { e.stopPropagation(); };
-            
-            const currentVerEl = document.getElementById('currentVerText');
-            const latestVerEl = document.getElementById('latestVerText');
-            const changelogBox = document.getElementById('updateChangelogBox');
-            const changelogText = document.getElementById('changelogText');
-            const downloadBtn = document.getElementById('downloadUpdateBtn');
+function showUpdateModal(data) {
+    const modal = document.getElementById('update-modal');
+    if (!modal) return;
+    
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    modal.onclick = (e) => { e.stopPropagation(); };
+    
+    const latestVerEl = document.getElementById('latestVerText');
+    const changelogBox = document.getElementById('updateChangelogBox');
+    const changelogText = document.getElementById('changelogText');
+    const downloadBtn = document.getElementById('downloadUpdateBtn');
 
-            if (currentVerEl) currentVerEl.innerText = GAME_CURRENT_VERSION;
-            if (latestVerEl) latestVerEl.innerText = data.version;
-            
-            if (data.changelog && changelogBox && changelogText) {
-                changelogText.innerText = data.changelog;
-                changelogBox.style.display = 'block';
-            }
-            
-            if (data.url && downloadBtn) {
-                downloadBtn.href = data.url;
-            }
-        }
+    // currentVerText تم تعبئته مسبقاً عند تحميل الصفحة
+    if (latestVerEl) latestVerEl.innerText = data.version;
+    
+    if (data.changelog && changelogBox && changelogText) {
+        changelogText.innerText = data.changelog;
+        changelogBox.style.display = 'block';
+    }
+    
+    if (data.url && downloadBtn) {
+        downloadBtn.href = data.url;
+    }
+}
 
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(checkGitHubUpdates, 2000);
-        });
+// تعبئة الإصدار الحالي تلقائياً عند تحميل الصفحة
+window.addEventListener('DOMContentLoaded', () => {
+    const currentVerEl = document.getElementById('currentVerText');
+    if (currentVerEl) currentVerEl.innerText = GAME_CURRENT_VERSION;
+    setTimeout(checkGitHubUpdates, 2000);
+});
     </script>
 
 </body>
