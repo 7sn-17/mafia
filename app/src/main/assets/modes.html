@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#040d0a">
+<title>مافيا - اختر وضع اللعب</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                emerald: {400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b',950:'#022c22'},
+                darkbg: '#040d0a',
+            },
+            fontFamily: {sans:['Tajawal','Cairo','sans-serif'],cairo:['Cairo','sans-serif']}
+        }
+    }
+}
+</script>
+
+<style>
+body{font-family:'Tajawal',sans-serif;background-color:#040d0a;color:#fff;min-height:100vh;overflow-x:hidden;user-select:none;-webkit-tap-highlight-color:transparent}
+.ambient-bg{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;background:radial-gradient(circle at 20% 25%,rgba(16,185,129,0.22) 0%,transparent 45%),radial-gradient(circle at 80% 75%,rgba(5,150,105,0.18) 0%,transparent 50%),radial-gradient(circle at 50% 50%,rgba(2,44,34,0.5) 0%,transparent 65%)}
+.particles{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,0.12) 1px,transparent 0);background-size:24px 24px;opacity:0.6;z-index:0}
+.glass-panel{background:rgba(8,28,21,0.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(16,185,129,0.25);box-shadow:0 12px 35px -5px rgba(0,0,0,0.85)}
+.neon-card{transition:all 0.35s cubic-bezier(0.4,0,0.2,1);position:relative;cursor:pointer}
+.neon-card:hover{transform:translateY(-4px);border-color:rgba(16,185,129,0.6);box-shadow:0 0 25px rgba(16,185,129,0.25),inset 0 0 15px rgba(16,185,129,0.1)}
+.neon-card:active{transform:scale(0.98)}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#040d0a}
+::-webkit-scrollbar-thumb{background:#10b981;border-radius:4px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.animate-fade-in{animation:fadeIn 0.4s ease-out forwards}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(10,30,20,0.98);color:#6ee7b7;padding:12px 22px;border-radius:40px;font-family:'Cairo',sans-serif;font-weight:700;font-size:0.85rem;z-index:9999;border:1.5px solid rgba(16,185,129,0.5);box-shadow:0 10px 30px rgba(0,0,0,0.5);opacity:0;transition:all 0.3s ease;pointer-events:none;backdrop-filter:blur(10px);display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body class="flex flex-col min-h-screen relative justify-between overflow-x-hidden select-none">
+
+<div class="ambient-bg"></div>
+<div class="particles"></div>
+
+<div class="relative z-10 flex flex-col justify-between min-h-screen max-w-md md:max-w-xl lg:max-w-2xl mx-auto px-4 py-6 w-full">
+
+    <!-- رأس الصفحة -->
+    <header class="w-full mb-6">
+        <div class="flex items-center justify-between mb-2">
+            <button onclick="goBack()" class="flex items-center justify-center w-11 h-11 rounded-2xl glass-panel text-emerald-400 hover:text-white hover:border-emerald-500 transition-all active:scale-95 shadow-md" title="رجوع للرئيسية">
+                <i class="fa-solid fa-arrow-right text-lg"></i>
+            </button>
+            
+            <div class="text-center">
+                <h1 class="text-3xl font-black tracking-wide text-white font-cairo flex items-center justify-center gap-2">
+                    <span class="text-emerald-500 drop-shadow-[0_0_12px_rgba(16,185,129,0.5)]"><i class="fa-solid fa-user-ninja"></i></span> مافيا
+                </h1>
+                <p class="text-xs text-emerald-400/90 font-semibold tracking-wider mt-0.5">اختر أسلوب التحدي واللعب</p>
+            </div>
+
+            <div class="w-11 h-11"></div>
+        </div>
+    </header>
+
+    <!-- المحتوى -->
+    <main class="flex-1 flex flex-col justify-center my-auto">
+
+        <div class="flex flex-col gap-6 animate-fade-in">
+
+            <!-- بطاقة اللعب المحلي -->
+            <div onclick="startClassicMode()" class="neon-card rounded-3xl overflow-hidden glass-panel border border-emerald-500/30 group">
+                
+                <div class="h-28 bg-gradient-to-r from-emerald-950 via-emerald-900/90 to-black p-5 flex items-end justify-between relative overflow-hidden">
+                    <div class="absolute right-[-10px] top-[-10px] opacity-10 text-9xl text-emerald-300 pointer-events-none">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <span class="bg-black/60 backdrop-blur-md text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-500/30 flex items-center gap-1.5 shadow-md">
+                        <i class="fa-solid fa-mobile-screen-button text-xs"></i> جهاز واحد
+                    </span>
+
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-black flex items-center justify-center text-xl font-black shadow-lg shadow-emerald-500/40 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                </div>
+
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <h3 class="text-xl font-black text-white group-hover:text-emerald-400 transition-colors">اللعب المحلي (كلاسيكي)</h3>
+                        <span class="text-xs text-emerald-400/80 font-bold"><i class="fa-solid fa-user-group text-xs"></i> 4 - 30 لاعب</span>
+                    </div>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-5">
+                        التجربة الكلاسيكية المحبوبة لجمع الأصدقاء. كشف الأدوار السرية، النقاش، الخداع، والتحقيق الجماعي على نفس الهاتف.
+                    </p>
+                    
+                    <button class="w-full py-3 rounded-2xl bg-emerald-950/60 hover:bg-emerald-500 hover:text-black border border-emerald-500/40 text-emerald-300 font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-md">
+                        <span>ابدأ اللعب الجماعي</span>
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- بطاقة قصص المافيا -->
+            <div onclick="startStoryMode()" class="neon-card rounded-3xl overflow-hidden glass-panel border border-emerald-500/40 group">
+                
+                <div class="h-28 bg-gradient-to-r from-emerald-900 via-teal-950 to-black p-5 flex items-end justify-between relative overflow-hidden">
+                    <div class="absolute right-[-10px] top-[-10px] opacity-15 text-9xl text-emerald-300 pointer-events-none">
+                        <i class="fa-solid fa-mask"></i>
+                    </div>
+
+                    <span class="bg-black/60 backdrop-blur-md text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-500/30 flex items-center gap-1.5 shadow-md">
+                        <i class="fa-solid fa-user text-xs"></i> لاعب واحد
+                    </span>
+
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-300 text-black flex items-center justify-center text-xl font-black shadow-lg shadow-emerald-500/50 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-scroll"></i>
+                    </div>
+                </div>
+
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <h3 class="text-xl font-black text-white group-hover:text-emerald-300 transition-colors">قصص المافيا</h3>
+                        <span class="text-xs text-teal-300 font-bold"><i class="fa-solid fa-diagram-project text-xs"></i> مسارات متعددة</span>
+                    </div>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-5">
+                        قصص تفاعلية مشوقة. اتخذ قرارات مصيرية معقدة، واجه زعماء العصابات، واكتشف سيناريوهات مختلفة بناءً على اختياراتك.
+                    </p>
+
+                    <button class="w-full py-3 rounded-2xl bg-emerald-500 text-black hover:bg-emerald-400 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/30 transition-all">
+                        <span>خوض القصص التفاعلية</span>
+                        <i class="fa-solid fa-play text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+'use strict';
+
+function startClassicMode(){
+    try { localStorage.setItem('mafia_open_mode', 'classic'); } catch(e) {}
+    window.location.href = 'index.html';
+}
+
+function startStoryMode(){
+    window.location.href = 'mafia_stories.html';
+}
+
+function goBack(){
+    window.location.href = 'index.html';
+}
+</script>
+
+</body>
+</html>
